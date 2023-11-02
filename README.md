@@ -31,7 +31,7 @@ pnpm install
 ### Build packages
 
 ```bash
-pnpm build
+pnpm run build
 ```
 
 ## Development
@@ -45,7 +45,7 @@ pnpm build
 - Start the protocol coordination server:
 
 ```bash
-pnpm start:server
+pnpm run start:server
 ```
 
 ### Supplier Node
@@ -53,7 +53,7 @@ pnpm start:server
 - Start the protocol supplier Node server:
 
 ```bash
-pnpm start:node
+pnpm run start:node
 ```
 
 ### Supplier Dapp
@@ -61,7 +61,7 @@ pnpm start:node
 - Start the protocol supplier web application:
 
 ```bash
-pnpm start:dapp-supplier
+pnpm run start:dapp-supplier
 ```
 
 ### Client Dapp
@@ -69,7 +69,7 @@ pnpm start:dapp-supplier
 - Start the protocol client web application:
 
 ```bash
-pnpm start:dapp-client
+pnpm run start:dapp-client
 ```
 
 ## Linting and Testing
@@ -77,14 +77,14 @@ pnpm start:dapp-client
 Run linting scripts and tests using the following command:
 
 ```bash
-pnpm lint
-pnpm test
+pnpm run lint
+pnpm run test
 ```
 
 To run code test coverage use the following command:
 
 ```bash
-pnpm coverage
+pnpm run coverage
 ```
 
 ## License
