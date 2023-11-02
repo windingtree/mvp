@@ -1,0 +1,65 @@
+{
+  "name": "@windingtree/mvp",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "version": "0.0.0",
+  "description": "The WindingTree market protocol MVP",
+  "repository": "git@github.com:windingtree/mvp.git",
+  "author": "Kostiantyn Smyrnov <kostysh@gmail.com>",
+  "contributors": [
+    "Kostiantyn Smyrnov <kostysh@gmail.com>",
+    "Evgenij Novikov <galeaf11@gmail.com>"
+  ],
+  "bugs": "https://github.com/windingtree/mvp/issues",
+  "homepage": "https://github.com/windingtree/mvp#readme",
+  "keywords": [
+    "windingtree",
+    "market",
+    "protocol",
+    "libp2p",
+    "sdk",
+    "typescript",
+    "p2p",
+    "peer",
+    "peer-to-peer",
+    "network",
+    "mvp"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@commitlint/cli": "^18.2.0",
+    "@commitlint/config-conventional": "^18.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/ui": "^0.34.6",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "git-cz": "^4.9.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.3",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-plugin-dts": "^3.6.3",
+    "vite-plugin-node-polyfills": "^0.15.0",
+    "vitest": "^0.34.6"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "commit": "git-cz -S",
+    "build": "pnpm -r --if-present run build",
+    "lint": "prettier --ignore-path ./.lintignore . && eslint . --ext .ts --ignore-path ./.lintignore",
+    "lint:fix": "prettier --ignore-path ./.lintignore --write . && eslint . --ext .ts --ignore-path ./.lintignore --fix",
+    "test": "vitest run --passWithNoTests",
+    "coverage": "vitest run --coverage",
+    "start:server": "DEBUG=* pnpm -C packages/server run start",
+    "start:node": "DEBUG=* pnpm -C packages/node run start",
+    "start:client": "pnpm -C packages/dapp-client run start",
+    "start:supplier": "pnpm -C packages/dapp-supplier run start"
+  }
+}
