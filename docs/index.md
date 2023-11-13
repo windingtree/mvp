@@ -3,12 +3,15 @@
 ## Introduction
 
 ### Purpose
+
 Brief description of the document’s purpose.
 
 ### Scope
+
 Outline of what is covered in this document.
 
 ### Definitions
+
 List of terms, acronyms, and abbreviations used in this document.
 
 ### References
@@ -567,19 +570,25 @@ sequenceDiagram
 ```
 
 ## Implementation
+
 Description of how the architecture is implemented.
 
 ### Overview
+
 General description of the implementation view.
 
 ### Layers
+
 Description of the layers of the architecture.
 
 ## Processes
+
 Description of the processes, tasks, and activities.
 
 ## Deployment
+
 Description of the deployment architecture and environment.
 
 ## Cross-cutting Concerns
+
 Description of concerns such as logging, error handling, etc.
