@@ -4,22 +4,25 @@
 
 ### Purpose
 
-Brief description of the document’s purpose.
+The purpose of this document is to provide a comprehensive architectural overview of the WindingTree Market Protocol MVP. It aims to outline the structure and design principles of the project, offering insights into the components, workflows, and interactions within the system. This document serves as a guide for developers, stakeholders, and contributors to understand and contribute to the development effectively.
 
 ### Scope
 
-Outline of what is covered in this document.
+This document covers the architectural design of the WindingTree Market Protocol MVP, including its major components like Smart Contracts, Supplier Node, Coordination Server, and both Supplier and Customer Dapps. It details the technical stack, modules, use-cases, implementation strategies, and deployment plans. The document aims to provide clarity on how the system components interact, their responsibilities, and how they fit into the broader context of the project.
 
 ### Definitions
 
-List of terms, acronyms, and abbreviations used in this document.
-
-### References
-
-- [**Server Specification**](./server-spec.md)
-- [**Supplier Node Specification**](./node-spec.md)
-- [**Client Dapp Specification**](./dapp-client-spec.md)
-- [**Supplier Dapp Specification**](./dapp-supplier-spec.md)
+- **MVP (Minimum Viable Product)**: The initial version of the WindingTree Market Protocol, providing essential features to demonstrate its potential.
+- **Smart Contracts**: The WindingTree Market Protocol smart contracts executed on the EVM-based blockchain.
+- **Supplier Node**: A backend component that interacts with the blockchain and manages supplier-related functionalities.
+- **Coordination Server**: The central server facilitating communication between different protocol parties.
+- **Dapp (Decentralized Application)**: A frontend application interacting with blockchain-based systems.
+- **Ethereum**: A decentralized, blockchain-based platform used for the project.
+- **Node.js**: A JavaScript runtime used for building server-side applications.
+- **React**: A JavaScript library for building user interfaces.
+- **Solidity**: A programming language used for writing smart contracts on Ethereum.
+- **TypeScript**: A typed superset of JavaScript used for writing the application code.
+- **LevelDB**: A lightweight database used for storing data in the MVP.
 
 ## Modules/Components
 
@@ -571,24 +574,48 @@ sequenceDiagram
 
 ## Implementation
 
-Description of how the architecture is implemented.
+To be possible to implement and test general customer's use-cases suppliers node and common protocol functionality must be implemented first. This way it makes sense to implement the market protocol and suppliers node components before all other.
 
-### Overview
+Here is a list of high-level components in the order of implementation:
 
-General description of the implementation view.
+- The Market Protocol Smart Contracts
+- [Supplier's Node](./node-spec.md)
+- [Supplier's Node Manager Dapp](./dapp-supplier-spec.md)
+- [Coordination Server](./server-spec.md)
+- [Client's Dapp](./dapp-client-spec.md)
 
-### Layers
+### Smart Contracts
 
-Description of the layers of the architecture.
+During the implementation must be implemented two kinds of market protocol smart contracts configurations:
 
-## Processes
+- for local (or CI) development and testing
+- for live on-chain testing
 
-Description of the processes, tasks, and activities.
+#### Local testing configuration
+
+This configuration can be implemented as a Docker container that includes a pre-configured smart contracts environment and contracts deployment scripts that must automatically start when the container starts.
+
+#### Live testing configuration
+
+This configuration must be prepared as a part of the market protocols smart contracts repository. Smart contracts must be deployed to the "Chiado" (Gnosis) testnet. All smart contracts must be verified and ready to support normal market protocol workflows.
 
 ## Deployment
 
-Description of the deployment architecture and environment.
+For the MVP infrastructure deployment must be an instantiated Linux-based server with pre-configured the following features:
 
-## Cross-cutting Concerns
+- Node-js LTS
+- Docker, docker-compose
+- Nginx
 
-Description of concerns such as logging, error handling, etc.
+CI workflow must be implemented as a Github action that consists of the deployment of the following apps:
+
+- Coordination Server (Node.js App)
+- Supplier's Node (Node.js App)
+- Supplier's Node Manager Dapp (Web App)
+- Client Dapp (Web App)
+
+Every validated commit to the "develop" branch of the MVP repository must results in refresh of deployed instances of updated applications.
+
+## Errors Logging
+
+On the MVP stage will be implemented logging of debug messages and errors to the system console only.
