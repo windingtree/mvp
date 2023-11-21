@@ -31,7 +31,6 @@ The primary users of the Supplier's Node include:
 
 This overview sets the stage for a detailed exploration of the Supplier's Node, including its technical requirements, system architecture, and integration with the WindingTree Market Protocol. The subsequent sections of this document will delve deeper into each of these areas, providing a clear roadmap for the development and deployment of the Supplier's Node.
 
-
 ## Technical Requirements
 
 ### Technology Stack
@@ -556,7 +555,5 @@ The Node must expose the following functions as tRPC API implemented using NodeA
 ### Security
 
 - **Security Audits**: Conduct regular security audits to identify and mitigate potential vulnerabilities.
-> ^^^ Must be discussed
+  > ^^^ Must be discussed
 - **Dependency Management**: Regularly update dependencies to incorporate security patches.
-
-
