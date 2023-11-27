@@ -1,0 +1,32 @@
+{
+  "name": "mvp-shared-files",
+  "version": "0.0.0",
+  "description": "The WindingTree market protocol MVP shared files",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "keywords": [
+    "node",
+    "wtmp",
+    "mvp"
+  ],
+  "author": "Kostiantyn Smyrnov <kostysh@gmail.com>",
+  "contributors": [
+    "Kostiantyn Smyrnov <kostysh@gmail.com>"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "test": "echo \"no test specified\" && exit 0",
+    "lint": "eslint . --ext .ts --ignore-path ../../.lintignore",
+    "lint:fix": "eslint . --ext .ts --ignore-path ../../.lintignore --fix && prettier --ignore-path ../../.lintignore  --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
+  },
+  "dependencies": {
+    "viem": "^1.19.9",
+    "@windingtree/sdk-types": "^1.1.2"
+  }
+}
