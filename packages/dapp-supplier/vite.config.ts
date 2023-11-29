@@ -6,7 +6,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 export default defineConfig({
   envDir: '../shared',
   plugins: [
-    nodePolyfills({ include: ['path', 'url']}),
+    nodePolyfills({ include: ['path', 'url'] }),
     /** @ignore */
     react(),
   ],

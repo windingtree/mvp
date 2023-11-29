@@ -1,4 +1,7 @@
 {
-  "*.{ts,tsx,js}": ["prettier --write --ignore-unknown", "eslint --fix"],
-  "*.md": ["prettier --write"]
+  "*.{ts,tsx,js}": [
+    "prettier --write --ignore-unknown --ignore-path ./.lintignore",
+    "eslint --fix --ignore-path ./.lintignore"
+  ],
+  "*.md": ["prettier --write --ignore-path ./.lintignore"]
 }
