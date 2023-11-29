@@ -43,6 +43,7 @@
     "husky": "^8.0.3",
     "prettier": "^3.1.0",
     "tsup": "^8.0.1",
+    "lint-staged": "^15.1.0",
     "typescript": "^5.3.2",
     "vite": "^5.0.2",
     "vite-plugin-dts": "^3.6.3",
@@ -60,6 +61,6 @@
     "start:server": "DEBUG=* pnpm -C packages/server run start",
     "start:node": "DEBUG=* pnpm -C packages/node run start",
     "start:client": "pnpm -C packages/dapp-client run start",
-    "start:supplier": "pnpm -C packages/dapp-supplier run start"
+    "start:manager": "pnpm -C packages/dapp-supplier run start"
   }
 }

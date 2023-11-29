@@ -8,11 +8,11 @@ import {
   WalletProvider,
   ContractsProvider,
 } from '@windingtree/sdk-react/providers';
-import { hardhat, polygonZkEvmTestnet } from 'viem/chains';
-import { contractsConfig } from 'mvp-shared-files/dist/index.js';
+import { hardhat, gnosisChiado } from 'viem/chains';
+import { contractsConfig } from 'mvp-shared-files';
 
 const targetChain =
-  import.meta.env.VITE_LOCAL_NODE === 'hardhat' ? hardhat : polygonZkEvmTestnet;
+  import.meta.env.VITE_LOCAL_NODE === 'hardhat' ? hardhat : gnosisChiado;
 
 export interface CustomConfig extends AppConfig {
   supplierId?: Hash;

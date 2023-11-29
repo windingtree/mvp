@@ -28,6 +28,14 @@ cd <your-project-directory>
 pnpm install
 ```
 
+### Configure local environment
+
+```bash
+cp ./packages/shared/.env.example ./packages/shared/.env
+```
+
+Then edit the content of `./packages/shared/.env` according needs of you setup.
+
 ### Build packages
 
 ```bash
@@ -61,7 +69,7 @@ pnpm run start:node
 - Start the protocol supplier web application:
 
 ```bash
-pnpm run start:dapp-supplier
+pnpm run start:manager
 ```
 
 ### Client Dapp
@@ -69,7 +77,7 @@ pnpm run start:dapp-supplier
 - Start the protocol client web application:
 
 ```bash
-pnpm run start:dapp-client
+pnpm run start:client
 ```
 
 ## Linting and Testing
