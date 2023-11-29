@@ -92,7 +92,7 @@ importers:
         version: 18.2.17
       '@vitejs/plugin-react':
         specifier: ^4.2.0
-        version: 4.2.0(vite@5.0.2)
+        version: 4.2.0(vite@5.0.4)
       '@windingtree/sdk-client':
         specifier: ^1.3.0
         version: 1.3.0(typescript@5.3.2)
@@ -137,7 +137,65 @@ importers:
         version: 1.19.9(typescript@5.3.2)(zod@3.22.4)
       vite-plugin-node-polyfills:
         specifier: ^0.17.0
-        version: 0.17.0(vite@5.0.2)
+        version: 0.17.0(vite@5.0.4)
+
+  packages/node:
+    dependencies:
+      '@libp2p/interface':
+        specifier: ^0.1.3
+        version: 0.1.6
+      '@windingtree/contracts':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@windingtree/sdk-constants':
+        specifier: ^1.2.1
+        version: 1.2.1
+      '@windingtree/sdk-contracts-manager':
+        specifier: ^1.3.0
+        version: 1.3.0(typescript@5.3.2)(zod@3.22.4)
+      '@windingtree/sdk-db':
+        specifier: ^1.2.3
+        version: 1.2.3(typescript@5.3.2)
+      '@windingtree/sdk-logger':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@windingtree/sdk-node':
+        specifier: ^1.3.0
+        version: 1.3.0(typescript@5.3.2)
+      '@windingtree/sdk-node-api':
+        specifier: ^1.3.0
+        version: 1.3.0(typescript@5.3.2)
+      '@windingtree/sdk-queue':
+        specifier: ^1.2.3
+        version: 1.2.3(typescript@5.3.2)
+      '@windingtree/sdk-storage':
+        specifier: ^1.3.0
+        version: 1.3.0
+      '@windingtree/sdk-types':
+        specifier: ^1.1.2
+        version: 1.1.2(typescript@5.3.2)(zod@3.22.4)
+      '@windingtree/sdk-utils':
+        specifier: ^1.2.1
+        version: 1.2.1(typescript@5.3.2)(zod@3.22.4)
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      luxon:
+        specifier: ^3.4.4
+        version: 3.4.4
+      mvp-shared-files:
+        specifier: workspace:*
+        version: link:../shared
+      viem:
+        specifier: ^1.19.9
+        version: 1.19.9(typescript@5.3.2)(zod@3.22.4)
+    devDependencies:
+      '@types/luxon':
+        specifier: ^3.3.5
+        version: 3.3.5
+      vite:
+        specifier: ^5.0.4
+        version: 5.0.4(@types/node@18.18.8)
 
   packages/server:
     dependencies:
@@ -2806,12 +2864,10 @@ packages:
       '@trpc/server': 10.44.1
     dependencies:
       '@trpc/server': 10.44.1
-    dev: true
 
   /@trpc/server@10.44.1:
     resolution: {integrity: sha512-mF7B+K6LjuboX8I1RZgKE5GA/fJhsJ8tKGK2UBt3Bwik7hepEPb4NJgNr7vO6BK5IYwPdBLRLTctRw6XZx0sRg==}
     engines: {node: '>=18.0.0'}
-    dev: true
 
   /@types/argparse@1.0.38:
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -3211,7 +3267,7 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
-  /@vitejs/plugin-react@4.2.0(vite@5.0.2):
+  /@vitejs/plugin-react@4.2.0(vite@5.0.4):
     resolution: {integrity: sha512-+MHTH/e6H12kRp5HUkzOGqPMksezRMmW+TNzlh/QXfI8rRf6l2Z2yH/v12no1UvTwhZgEDMuQ7g7rrfMseU6FQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -3222,7 +3278,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.23.3(@babel/core@7.23.3)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.0.2(@types/node@18.18.8)
+      vite: 5.0.4(@types/node@18.18.8)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3407,7 +3463,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@windingtree/sdk-db@1.2.3(typescript@5.3.2):
     resolution: {integrity: sha512-zFVVK95HkUfY4FIuad6o5FJY5HaM7WUZSWt9zypVgOHyz9f5aFAeGMC7m5BU/C2nUBqo4ebroNZPY1NEzPvvUw==}
@@ -3423,7 +3478,6 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: true
 
   /@windingtree/sdk-logger@1.1.2:
     resolution: {integrity: sha512-zkfa1rNlJEuzUkR17qxgblPZQA3B2rgv7iPep8kJ+U3zXboT1MFTwCJ2MIY887T/DaFSOcgtGy/dy6H64hg8wg==}
@@ -3445,7 +3499,6 @@ packages:
       - typescript
       - utf-8-validate
       - zod
-    dev: true
 
   /@windingtree/sdk-node-api@1.3.0(typescript@5.3.2):
     resolution: {integrity: sha512-HwfPcrUh5S+2qnkDm877nfGtvSjKc5WPPpt231zYviUh/e4tu4dm2qk5Rm3ZoI9/X1VKCzbbdUKUk4OsSwPdYw==}
@@ -3468,7 +3521,33 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: true
+
+  /@windingtree/sdk-node@1.3.0(typescript@5.3.2):
+    resolution: {integrity: sha512-k1kgS0De1ziZf4px/M208ItKMIMfSHqgbdPGXKLupYxrJhkj+G+U3xtI1RfsuCqMamYhBkCA1onSskfp65Dv+g==}
+    dependencies:
+      '@chainsafe/libp2p-noise': 13.0.5
+      '@chainsafe/libp2p-yamux': 5.0.3
+      '@libp2p/interface': 0.1.6
+      '@libp2p/mplex': 9.0.12
+      '@libp2p/peer-id': 3.0.6
+      '@libp2p/websockets': 7.0.13
+      '@multiformats/multiaddr': 12.1.10
+      '@windingtree/sdk-contracts-manager': 1.3.0(typescript@5.3.2)(zod@3.22.4)
+      '@windingtree/sdk-logger': 1.1.2
+      '@windingtree/sdk-messages': 1.2.1(typescript@5.3.2)(zod@3.22.4)
+      '@windingtree/sdk-pubsub': 1.3.0(typescript@5.3.2)
+      '@windingtree/sdk-types': 1.1.2(typescript@5.3.2)(zod@3.22.4)
+      '@windingtree/sdk-utils': 1.2.1(typescript@5.3.2)(zod@3.22.4)
+      libp2p: 0.46.21
+      superjson: 2.2.1
+      viem: 1.19.9(typescript@5.3.2)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /@windingtree/sdk-pubsub@1.3.0(typescript@5.3.2):
     resolution: {integrity: sha512-tmvLzGW0W+r/FgdFXiLQqDgIyCBrKeuuO0sXFG1XGxGZodDE/+iZADHDdUvm6PHQONknAv+9Z7R7ZgN7or+JtA==}
@@ -3490,6 +3569,22 @@ packages:
       - typescript
       - utf-8-validate
       - zod
+
+  /@windingtree/sdk-queue@1.2.3(typescript@5.3.2):
+    resolution: {integrity: sha512-Vf/xkocQxSRyJQfUsOUbpxm/A3wQ8gwXyCxtpUq/KAlysUh+tMUquCbH/znR6EvaP1iPy9PXvnl8qMN7718qtw==}
+    dependencies:
+      '@libp2p/interface': 0.1.6
+      '@windingtree/contracts': 1.0.0
+      '@windingtree/sdk-logger': 1.1.2
+      '@windingtree/sdk-storage': 1.3.0
+      '@windingtree/sdk-utils': 1.2.1(typescript@5.3.2)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /@windingtree/sdk-react@1.3.0:
     resolution: {integrity: sha512-n9Dae4sk54KCq/jWscv3XkPFpT2tH+fCJJMCjPIRraHv9A1emyxgL1Uew/pzls3lKboFu3pPxSWxi4NL0T0GxA==}
@@ -3572,7 +3667,6 @@ packages:
     dependencies:
       typescript: 5.3.2
       zod: 3.22.4
-    dev: true
 
   /abitype@0.9.8(typescript@5.3.2)(zod@3.22.4):
     resolution: {integrity: sha512-puLifILdm+8sjyss4S+fsUN09obiT1g2YW6CtcQF+QDzxR0euzgEB29MZujC6zMk2a6SVmtttq1fc6+YFA7WYQ==}
@@ -3934,7 +4028,6 @@ packages:
 
   /bcrypt-ts@4.0.1:
     resolution: {integrity: sha512-VdQBytZqdlUs6Hv992mKwhwvjaPAEfVRk+VAV4uuQtJ/6G/AQrqdiOq5nSubtBBsG9HxkTCfiVGUjQcnzq1htw==}
-    dev: true
 
   /benchmark@2.1.4:
     resolution: {integrity: sha512-l9MlfN4M1K/H2fbhfMy3B7vJd6AGKJVQn2h6Sg/Yx+KckoUA7ewS5Vv6TjSq18ooE1kS9hhAlQRH3AkXIh/aOQ==}
@@ -6227,7 +6320,6 @@ packages:
 
   /jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
-    dev: true
 
   /joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -8424,7 +8516,7 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 5.0.2(@types/node@20.10.0)
+      vite: 5.0.4(@types/node@20.10.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -8474,7 +8566,7 @@ packages:
       - rollup
     dev: true
 
-  /vite-plugin-node-polyfills@0.17.0(vite@5.0.2):
+  /vite-plugin-node-polyfills@0.17.0(vite@5.0.4):
     resolution: {integrity: sha512-iPmPn7376e5u6QvoTSJa16hf5Q0DFwHFXJk2uYpsNlmI3JdPms7hWyh55o+OysJ5jo9J5XPhLC9sMOYifwFd1w==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -8483,7 +8575,7 @@ packages:
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 5.0.2(@types/node@18.18.8)
+      vite: 5.0.4(@types/node@18.18.8)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -8524,8 +8616,44 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vite@5.0.2(@types/node@20.10.0):
-    resolution: {integrity: sha512-6CCq1CAJCNM1ya2ZZA7+jS2KgnhbzvxakmlIjN24cF/PXhRMzpM/z8QgsVJA/Dm5fWUWnVEsmtBoMhmerPxT0g==}
+  /vite@5.0.4(@types/node@18.18.8):
+    resolution: {integrity: sha512-RzAr8LSvM8lmhB4tQ5OPcBhpjOZRZjuxv9zO5UcxeoY2bd3kP3Ticd40Qma9/BqZ8JS96Ll/jeBX9u+LJZrhVg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 18.18.8
+      esbuild: 0.19.8
+      postcss: 8.4.31
+      rollup: 4.6.0
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
+  /vite@5.0.4(@types/node@20.10.0):
+    resolution: {integrity: sha512-RzAr8LSvM8lmhB4tQ5OPcBhpjOZRZjuxv9zO5UcxeoY2bd3kP3Ticd40Qma9/BqZ8JS96Ll/jeBX9u+LJZrhVg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -8613,7 +8741,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.7.0
-      vite: 5.0.2(@types/node@20.10.0)
+      vite: 5.0.4(@types/node@20.10.0)
       vite-node: 0.34.6(@types/node@20.10.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
