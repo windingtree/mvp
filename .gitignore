@@ -16,3 +16,4 @@ typechain
 db/*
 #ide
 .idea
+serverDb
