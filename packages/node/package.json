@@ -1,5 +1,5 @@
 {
-  "name": "wtmp-node-example",
+  "name": "@windingtree/mvp-node",
   "version": "0.0.0",
   "description": "The WindingTree market protocol node example",
   "private": true,
@@ -8,7 +8,7 @@
   "keywords": [
     "node",
     "wtmp",
-    "example"
+    "mvp"
   ],
   "author": "Kostiantyn Smyrnov <kostysh@gmail.com>",
   "contributors": [
