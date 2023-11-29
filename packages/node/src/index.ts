@@ -10,7 +10,7 @@ import {
   createWalletClient,
   http,
 } from 'viem';
-import { hardhat, polygonZkEvmTestnet } from 'viem/chains';
+import { hardhat, gnosisChiado } from 'viem/chains';
 import { randomSalt } from '@windingtree/contracts';
 import {
   RequestQuery,
@@ -25,7 +25,7 @@ import { Queue, JobHandler } from '@windingtree/sdk-queue';
 import { NodeApiServer } from '@windingtree/sdk-node-api/server';
 import { appRouter } from '@windingtree/sdk-node-api/router';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
-import { memoryStorage } from '@windingtree/sdk-storage';
+import { levelStorage } from '@windingtree/sdk-storage';
 import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
 import { DealsDb } from '@windingtree/sdk-db';
 import {
@@ -37,18 +37,18 @@ import {
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
 
-const logger = createLogger('NodeExample');
+const logger = createLogger('MvpNode');
 
 /**
  * Chain config
  */
-const chain = process.env.LOCAL_NODE === 'true' ? hardhat : polygonZkEvmTestnet;
+const chain = process.env.LOCAL_NODE === 'true' ? hardhat : gnosisChiado;
 
 /**
  * The supplier signer credentials
  */
-const signerMnemonic = process.env.EXAMPLE_ENTITY_SIGNER_MNEMONIC;
-const signerPk = process.env.EXAMPLE_ENTITY_SIGNER_PK as Hex;
+const signerMnemonic = process.env.ENTITY_SIGNER_MNEMONIC;
+const signerPk = process.env.ENTITY_SIGNER_PK as Hex;
 
 if (!signerMnemonic && !signerPk) {
   throw new Error(
@@ -61,7 +61,7 @@ if (!signerMnemonic && !signerPk) {
  * an address of the supplier owner account address.
  * Supplier must register his entity in the EntitiesRegistry
  */
-const supplierId = process.env.EXAMPLE_ENTITY_ID as Hash;
+const supplierId = process.env.ENTITY_ID as Hash;
 
 if (!supplierId) {
   throw new Error('Entity Id must be provided with EXAMPLE_ENTITY_ID env');
@@ -70,7 +70,7 @@ if (!supplierId) {
 /**
  * The Ethereum account address of the entity owner (supplier)
  */
-const entityOwnerAddress = process.env.EXAMPLE_ENTITY_OWNER_ADDRESS as Address;
+const entityOwnerAddress = process.env.ENTITY_OWNER_ADDRESS as Address;
 
 if (!entityOwnerAddress) {
   throw new Error(
@@ -269,13 +269,16 @@ const main = async (): Promise<void> => {
     }),
   });
 
-  const queueStorage = await memoryStorage.createInitializer({
+  const queueStorage = await levelStorage.createInitializer({
+    path: './queue.db',
     scope: 'queue',
   })();
-  const usersStorage = await memoryStorage.createInitializer({
+  const usersStorage = await levelStorage.createInitializer({
+    path: './users.db',
     scope: 'users',
   })();
-  const dealsStorage = await memoryStorage.createInitializer({
+  const dealsStorage = await levelStorage.createInitializer({
+    path: './deals.db',
     scope: 'deals',
   })();
 

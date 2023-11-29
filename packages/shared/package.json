@@ -4,8 +4,7 @@
   "description": "The WindingTree market protocol MVP shared files",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./index.ts",
   "keywords": [
     "node",
     "wtmp",
@@ -17,7 +16,6 @@
   ],
   "license": "ISC",
   "scripts": {
-    "build": "tsc -p ./tsconfig.json",
     "test": "echo \"no test specified\" && exit 0",
     "lint": "eslint . --ext .ts --ignore-path ../../.lintignore",
     "lint:fix": "eslint . --ext .ts --ignore-path ../../.lintignore --fix && prettier --ignore-path ../../.lintignore  --write ."

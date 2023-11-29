@@ -59,7 +59,9 @@
     "test": "vitest run --passWithNoTests",
     "coverage": "vitest run --coverage",
     "start:server": "DEBUG=* pnpm -C packages/server run start",
+    "start:server:dev": "DEBUG=* pnpm -C packages/server run start:dev",
     "start:node": "DEBUG=* pnpm -C packages/node run start",
+    "start:node:dev": "DEBUG=* pnpm -C packages/node run start:dev",
     "start:client": "pnpm -C packages/dapp-client run start",
     "start:manager": "pnpm -C packages/dapp-supplier run start"
   }

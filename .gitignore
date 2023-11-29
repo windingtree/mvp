@@ -17,5 +17,5 @@ db
 db/*
 #ide
 .idea
-serverDb
-serverDb/*
+*.db
+*.db/*
