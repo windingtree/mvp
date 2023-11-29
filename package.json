@@ -60,6 +60,6 @@
     "start:server": "DEBUG=* pnpm -C packages/server run start",
     "start:node": "DEBUG=* pnpm -C packages/node run start",
     "start:client": "pnpm -C packages/dapp-client run start",
-    "start:supplier": "pnpm -C packages/dapp-supplier run start"
+    "start:manager": "pnpm -C packages/dapp-supplier run start"
   }
 }
