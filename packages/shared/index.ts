@@ -24,6 +24,7 @@ export interface LocalEnv {
   VITE_SERVER_ID: string;
   VITE_SERVER_PR_KEY: string;
   VITE_SERVER_PB_KEY: string;
+  VITE_WC_PROJECT_ID: string;
 }
 
 let env: LocalEnv;
@@ -100,6 +101,8 @@ export const stableCoins: Record<string, Address> =
 export const serverPort = parseInt(env.VITE_SERVER_PORT);
 
 export const serverAddress = `/ip4/127.0.0.1/tcp/${serverPort}/ws/p2p/${env.VITE_SERVER_ID}`;
+
+export const wcProjectId = env.VITE_WC_PROJECT_ID;
 
 export const serverPeerKey = {
   id: env.VITE_SERVER_ID,

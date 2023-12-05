@@ -1,22 +1,25 @@
 import { useCallback, useState } from 'react';
+import { Container } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import { SupplierTabs } from '../components/SupplierTabs/SupplierTabs.js';
 import { SupplierTabPanel } from '../components/SupplierTabs/SupplierTabPanel.js';
+import { ConfigForm } from '../components/ConfigForm.js';
+import { DealSeek } from '../components/DealSeek.js';
+import { Supplier } from '../components/Supplier.js';
 import {
-  actionTabs,
   getTabIndex,
+  tabs,
 } from '../components/SupplierTabs/SupplierTabsConfig.js';
 
-export const Supplier = () => {
+export const SupplierPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [value, setValue] = useState(getTabIndex(actionTabs, location));
+  const [value, setValue] = useState(getTabIndex(tabs, location));
 
   const handleChange = useCallback(
     (newValue: number) => {
       setValue(newValue);
-      const { path } = actionTabs[newValue];
+      const { path } = tabs[newValue];
 
       if (path) {
         navigate(path);
@@ -26,17 +29,20 @@ export const Supplier = () => {
   );
 
   return (
-    <>
-      <SupplierTabs value={value} tabs={actionTabs} onChange={handleChange} />
+    <Container>
+      <SupplierTabs value={value} tabs={tabs} onChange={handleChange} />
       <SupplierTabPanel index={0} value={value}>
-        <Typography>Register</Typography>
+        <Supplier />
       </SupplierTabPanel>
       <SupplierTabPanel index={1} value={value}>
-        <Typography>View</Typography>
+        {/* <LoginWidget /> */}
       </SupplierTabPanel>
       <SupplierTabPanel index={2} value={value}>
-        <Typography>Manage</Typography>
+        <DealSeek />
       </SupplierTabPanel>
-    </>
+      <SupplierTabPanel index={3} value={value}>
+        <ConfigForm />
+      </SupplierTabPanel>
+    </Container>
   );
 };

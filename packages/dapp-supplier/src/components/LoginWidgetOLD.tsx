@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Tabs, TabPanel } from './Tabs.js';
+// import { Tabs, TabPanel } from './SupplierTabs/SupplierTabs.js';
 import {
   useConfig,
   useNode,
@@ -160,7 +160,7 @@ export const LoginWidget = () => {
           </div>
         </div>
       )}
-      <Tabs
+      {/* <Tabs
         tabs={[
           {
             id: 0,
@@ -255,7 +255,7 @@ export const LoginWidget = () => {
           </div>
         )}
         <UserRegister />
-      </TabPanel>
+      </TabPanel> */}
 
       {message && <div style={{ marginTop: 20 }}>✅ {message}</div>}
 
