@@ -7,6 +7,7 @@ import {
   actionTabs,
   getTabIndex,
 } from '../components/SupplierTabs/SupplierTabsConfig.js';
+import { SupplierRegister } from './SupplierRegister.js';
 
 export const Supplier = () => {
   const location = useLocation();
@@ -28,13 +29,13 @@ export const Supplier = () => {
   return (
     <>
       <SupplierTabs value={value} tabs={actionTabs} onChange={handleChange} />
-      <SupplierTabPanel index={0} value={value}>
-        <Typography>Register</Typography>
+      <SupplierTabPanel index={0} value={value} sx={{ paddingTop: 4 }}>
+        <SupplierRegister />
       </SupplierTabPanel>
-      <SupplierTabPanel index={1} value={value}>
+      <SupplierTabPanel index={1} value={value} sx={{ paddingTop: 4 }}>
         <Typography>View</Typography>
       </SupplierTabPanel>
-      <SupplierTabPanel index={2} value={value}>
+      <SupplierTabPanel index={2} value={value} sx={{ paddingTop: 4 }}>
         <Typography>Manage</Typography>
       </SupplierTabPanel>
     </>

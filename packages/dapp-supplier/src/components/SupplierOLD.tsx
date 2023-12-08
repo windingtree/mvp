@@ -373,8 +373,8 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
           },
         ]}
         onChange={setSelectedTab}
-      />
-      <TabPanel id={0} activeTab={selectedTab}>
+      /> */}
+      {/* <TabPanel id={0} activeTab={selectedTab}>
         <form onSubmit={(e) => e.preventDefault()}>
           <div
             style={{
@@ -574,9 +574,9 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
             </div>
           </div>
         </form>
-      </TabPanel>
+      </TabPanel> */}
 
-      <TabPanel id={1} activeTab={selectedTab}>
+      {/* <TabPanel id={1} activeTab={selectedTab}>
         <form onSubmit={(e) => e.preventDefault()}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {!account && (
@@ -653,9 +653,9 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
             )}
           </div>
         </form>
-      </TabPanel>
+      </TabPanel> */}
 
-      <TabPanel id={2} activeTab={selectedTab}>
+      {/* <TabPanel id={2} activeTab={selectedTab}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {!account && (
             <div>

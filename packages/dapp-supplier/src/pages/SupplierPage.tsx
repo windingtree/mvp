@@ -29,7 +29,7 @@ export const SupplierPage = () => {
   );
 
   return (
-    <Container>
+    <Container sx={{ paddingBottom: 20 }}>
       <SupplierTabs value={value} tabs={tabs} onChange={handleChange} />
       <SupplierTabPanel index={0} value={value}>
         <Supplier />

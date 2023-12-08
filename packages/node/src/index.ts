@@ -18,6 +18,7 @@ import {
   contractsConfig,
   stableCoins,
   serverAddress,
+  targetChain,
 } from 'mvp-shared-files';
 import { OfferData, DealStatus } from '@windingtree/sdk-types';
 import { noncePeriod } from '@windingtree/sdk-constants';
@@ -42,7 +43,7 @@ const logger = createLogger('MvpNode');
 /**
  * Chain config
  */
-const chain = process.env.LOCAL_NODE === 'true' ? hardhat : gnosisChiado;
+const chain = targetChain === 'hardhat' ? hardhat : gnosisChiado;
 
 /**
  * The supplier signer credentials

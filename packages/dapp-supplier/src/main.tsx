@@ -14,7 +14,7 @@ import { hardhat, gnosisChiado } from 'viem/chains';
 import { contractsConfig, wcProjectId } from 'mvp-shared-files';
 
 const targetChain =
-  import.meta.env.VITE_LOCAL_NODE === 'hardhat' ? hardhat : gnosisChiado;
+  import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
 
 const wagmiConfig = defaultWagmiConfig({
   chains: [targetChain],
