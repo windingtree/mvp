@@ -8,9 +8,9 @@ import {
   NodeProvider,
   ContractsProvider,
 } from '@windingtree/sdk-react/providers';
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { WagmiConfig } from 'wagmi';
 import { hardhat, gnosisChiado } from 'viem/chains';
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { contractsConfig, wcProjectId } from 'mvp-shared-files';
 
 const targetChain =

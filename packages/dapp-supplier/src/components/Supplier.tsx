@@ -1,6 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import { SupplierTabs } from '../components/SupplierTabs/SupplierTabs.js';
 import { SupplierTabPanel } from '../components/SupplierTabs/SupplierTabPanel.js';
 import {
@@ -8,11 +7,15 @@ import {
   getTabIndex,
 } from '../components/SupplierTabs/SupplierTabsConfig.js';
 import { SupplierRegister } from './SupplierRegister.js';
+import { SupplierView } from './SupplierView.js';
+import { SupplierManage } from './SupplierManage.js';
 
 export const Supplier = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [value, setValue] = useState(getTabIndex(actionTabs, location));
+  const [value, setValue] = useState<number | undefined>(
+    getTabIndex(actionTabs, location),
+  );
 
   const handleChange = useCallback(
     (newValue: number) => {
@@ -26,6 +29,10 @@ export const Supplier = () => {
     [navigate],
   );
 
+  useEffect(() => {
+    setValue(getTabIndex(actionTabs, location));
+  }, [location]);
+
   return (
     <>
       <SupplierTabs value={value} tabs={actionTabs} onChange={handleChange} />
@@ -33,10 +40,10 @@ export const Supplier = () => {
         <SupplierRegister />
       </SupplierTabPanel>
       <SupplierTabPanel index={1} value={value} sx={{ paddingTop: 4 }}>
-        <Typography>View</Typography>
+        <SupplierView />
       </SupplierTabPanel>
       <SupplierTabPanel index={2} value={value} sx={{ paddingTop: 4 }}>
-        <Typography>Manage</Typography>
+        <SupplierManage />
       </SupplierTabPanel>
     </>
   );

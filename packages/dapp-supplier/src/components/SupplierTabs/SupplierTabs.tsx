@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren } from 'react';
+import { useState, useEffect, useCallback, PropsWithChildren } from 'react';
 import { Tabs, Tab, type SxProps } from '@mui/material';
 
 export interface TabItem {
@@ -35,6 +35,10 @@ export const SupplierTabs = ({ value = 0, tabs, onChange, sx }: TabsProps) => {
     },
     [onChange],
   );
+
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   if (tabs.length === 0) {
     return null;

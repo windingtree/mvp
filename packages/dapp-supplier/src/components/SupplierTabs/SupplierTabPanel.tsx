@@ -3,7 +3,7 @@ import { Box, type SxProps } from '@mui/material';
 export interface SupplierTabPanelProps {
   children?: React.ReactNode;
   index: number;
-  value: number;
+  value?: number;
   sx?: SxProps;
 }
 

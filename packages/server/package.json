@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "mvp-shared-files": "workspace:*",
-    "@windingtree/sdk-server": "^1.2.3",
-    "@windingtree/sdk-storage": "^1.3.0",
-    "@windingtree/sdk-logger": "^1.1.2"
+    "@windingtree/sdk-server": "^1.2.4",
+    "@windingtree/sdk-storage": "^1.3.1",
+    "@windingtree/sdk-logger": "^1.1.3"
   }
 }
