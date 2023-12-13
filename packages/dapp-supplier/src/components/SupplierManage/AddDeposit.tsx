@@ -159,9 +159,6 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
             reset();
           }}
         />
-        {error && <Alert severity="error">{error}</Alert>}
-        {permitError && <Alert severity="error">{permitError}</Alert>}
-        {txError && <Alert severity="error">{txError.message}</Alert>}
         <Button
           variant="contained"
           disabled={isLoading || isTxLoading || done}
@@ -174,11 +171,6 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
             )}
           </Stack>
         </Button>
-        {done && (
-          <Alert severity="success">
-            LIF tokens deposit for the entity has been added successfully
-          </Alert>
-        )}
         {data?.hash && (
           <Stack direction="row" spacing={2}>
             <Box>
@@ -193,6 +185,14 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
               Copy Tx hash to clipboard
             </Button>
           </Stack>
+        )}
+        {error && <Alert severity="error">{error}</Alert>}
+        {permitError && <Alert severity="error">{permitError}</Alert>}
+        {txError && <Alert severity="error">{txError.message}</Alert>}
+        {done && (
+          <Alert severity="success">
+            LIF tokens deposit for the entity has been added successfully
+          </Alert>
         )}
       </Stack>
     </>

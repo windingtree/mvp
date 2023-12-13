@@ -3,13 +3,15 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Alert,
 } from '@mui/material';
 import { ExpandMore as ExpandMoreIconIcon } from '@mui/icons-material';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useConfig } from '@windingtree/sdk-react/providers';
 import { CustomConfig } from '../../main.js';
 import { AddDeposit } from './AddDeposit.js';
+import { ChangeSigner } from './ChangeSigner.js';
+import { NoSupplierAlert } from '../NoSupplierAlert.js';
+import { ToggleEntity } from './ToggleEntity.js';
 
 export const SupplierManage = () => {
   const navigate = useNavigate();
@@ -20,10 +22,7 @@ export const SupplierManage = () => {
   if (!supplierId) {
     return (
       <>
-        <Alert severity="warning">
-          <Link to="setup/register">Register</Link> or{' '}
-          <Link to="setup/view">add</Link> your entity Id first.
-        </Alert>
+        <NoSupplierAlert />
       </>
     );
   }
@@ -54,9 +53,11 @@ export const SupplierManage = () => {
           aria-controls="panel2bh-content"
           id="panel2bh-header"
         >
-          <Typography>Manage the supplier's Node signer</Typography>
+          <Typography>Change the supplier's Node signer</Typography>
         </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
+        <AccordionDetails>
+          <ChangeSigner supplierId={supplierId} />
+        </AccordionDetails>
       </Accordion>
       <Accordion
         expanded={panel === 'state'}
@@ -67,9 +68,11 @@ export const SupplierManage = () => {
           aria-controls="panel3bh-content"
           id="panel3bh-header"
         >
-          <Typography>Manage the supplier's entity state</Typography>
+          <Typography>Toggle the supplier's entity status</Typography>
         </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
+        <AccordionDetails>
+          <ToggleEntity supplierId={supplierId} />
+        </AccordionDetails>
       </Accordion>
     </>
   );

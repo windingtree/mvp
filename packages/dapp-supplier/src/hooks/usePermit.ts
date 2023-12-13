@@ -1,13 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Address, useContractRead, useWalletClient } from 'wagmi';
-import {
-  Hex,
-  Hash,
-  zeroAddress,
-  TypedDataDomain,
-  slice,
-  hexToNumber,
-} from 'viem';
+import { Hash, zeroAddress, TypedDataDomain } from 'viem';
 import { erc20_6PermitABI, erc20_18PermitABI } from '@windingtree/contracts';
 
 // export type PermitSignature = {
@@ -103,12 +96,6 @@ export const usePermit = ({
         primaryType: 'Permit',
         types,
       });
-      // const [r, s, v] = [
-      //   slice(signature, 0, 32),
-      //   slice(signature, 32, 64),
-      //   slice(signature, 64, 65),
-      // ];
-      // const permitSignature = { r, s, v: BigInt(hexToNumber(v)) };
 
       setSignature(signature);
 

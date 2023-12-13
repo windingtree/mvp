@@ -77,7 +77,12 @@ export const SupplierRegister = () => {
   const [nodeEnv, setNodeEnv] = useState<string | undefined>();
   const [registered, setRegistered] = useState<boolean>(false);
 
-  const { data, isLoading, write } = useContractWrite({
+  const {
+    data,
+    isLoading,
+    write,
+    error: sendError,
+  } = useContractWrite({
     address: contractsConfig.entities.address,
     abi: entitiesRegistryABI,
     functionName: 'register',
@@ -89,7 +94,7 @@ export const SupplierRegister = () => {
     },
   });
 
-  const { isLoading: isTxLoading } = useWaitForTransaction({
+  const { isLoading: isTxLoading, error: txError } = useWaitForTransaction({
     hash: data?.hash,
     enabled: Boolean(data?.hash),
     onError(error) {
@@ -164,15 +169,13 @@ VITE_SERVER_ID=${serverId}
   return (
     <form {...form.props}>
       <Stack spacing={4}>
-        <header>
-          <Typography variant="h5" component="h1">
-            Supplier's Entity Registration
-          </Typography>
-          <Typography variant="subtitle1" color="GrayText">
-            Using this form you are able to configure and register the
-            supplier's entity in the WindingTree Market Protocol smart-contract
-          </Typography>
-        </header>
+        <Typography variant="h5" component="h1">
+          Supplier's Entity Registration
+        </Typography>
+        <Typography variant="subtitle1" color="GrayText">
+          Using this form you are able to configure and register the supplier's
+          entity in the WindingTree Market Protocol smart-contract
+        </Typography>
         <Box>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="h6">Supplier's account:</Typography>
@@ -301,61 +304,56 @@ VITE_SERVER_ID=${serverId}
             )}
           </Stack>
         </Button>
-      </Stack>
-      {registered && (
-        <Stack spacing={4} sx={{ marginTop: 4 }}>
-          <Box>
-            <Typography variant="h6">
-              Registration is done, here is the supplier's Node Configuration
-            </Typography>
-            <Typography variant="subtitle1" color="GrayText">
-              Copy the content of the following <strong>.env</strong> file to
-              you Node's environment
-            </Typography>
-          </Box>
-          <TextField
-            label=".env"
-            type="text"
-            name="nodeEnv"
-            multiline
-            rows={8}
-            value={nodeEnv}
-          />
+        {data?.hash && (
           <Stack direction="row" spacing={2}>
+            <Box>
+              <Typography>Tx: {centerEllipsis(data.hash)}</Typography>
+            </Box>
             <Button
               variant="text"
               color="secondary"
               size="small"
               disabled={!Boolean(nodeEnv) || !registered}
-              onClick={() => copyToClipboard(nodeEnv || '')}
+              onClick={() => copyToClipboard(data.hash)}
             >
-              Copy <strong>.env</strong>&nbsp;to clipboard
+              Copy Tx hash to clipboard
             </Button>
           </Stack>
-          {registered && (
+        )}
+        {sendError && <Alert severity="error">{sendError.message}</Alert>}
+        {txError && <Alert severity="error">{txError.message}</Alert>}
+        {registered && (
+          <>
             <Alert severity="success">
               The entity with id {newSupplierId} has been registered
               successfully
             </Alert>
-          )}
-          {data?.hash && (
+            <Typography variant="subtitle1" color="GrayText">
+              Copy the content of the following <strong>.env</strong> file to
+              you Node's environment
+            </Typography>
+            <TextField
+              label=".env"
+              type="text"
+              name="nodeEnv"
+              multiline
+              rows={8}
+              value={nodeEnv}
+            />
             <Stack direction="row" spacing={2}>
-              <Box>
-                <Typography>Tx: {centerEllipsis(data.hash)}</Typography>
-              </Box>
               <Button
                 variant="text"
                 color="secondary"
                 size="small"
                 disabled={!Boolean(nodeEnv) || !registered}
-                onClick={() => copyToClipboard(data.hash)}
+                onClick={() => copyToClipboard(nodeEnv || '')}
               >
-                Copy Tx hash to clipboard
+                Copy <strong>.env</strong>&nbsp;to clipboard
               </Button>
             </Stack>
-          )}
-        </Stack>
-      )}
+          </>
+        )}
+      </Stack>
     </form>
   );
 };
