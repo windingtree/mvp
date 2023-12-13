@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { CheckCircle, PowerOff, Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { routesTitles, getTitleByPath } from '../config/routes.js';
+import { menuTitles, getTitleByPath } from '../config/routes.js';
 import { useNode } from '@windingtree/sdk-react/providers';
 
 const MainMenu = () => {
@@ -44,7 +44,7 @@ const MainMenu = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        {routesTitles.map(([path, title], index) => (
+        {menuTitles.map(([path, title], index) => (
           <MenuItem key={index} onClick={() => handleClose(path)}>
             {title}
           </MenuItem>

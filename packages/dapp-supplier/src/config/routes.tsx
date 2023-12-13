@@ -63,7 +63,13 @@ export const routesTitlesObj: Record<string, string> = {
   'supplier/config': 'Supplier Config',
 };
 
+export const menuTitlesObj: Record<string, string> = {
+  supplier: 'Supplier',
+};
+
 export const routesTitles = Object.entries(routesTitlesObj);
+
+export const menuTitles = Object.entries(menuTitlesObj);
 
 export const getTitleByPath = (currentPath: string) =>
   routesTitlesObj[currentPath.replace(/^\//, '')] || 'Node Manager';
