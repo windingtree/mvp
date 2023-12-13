@@ -1,8 +1,5 @@
 import { useState, useCallback } from 'react';
 import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Typography,
   Alert,
   Stack,
@@ -11,11 +8,7 @@ import {
   Box,
   CircularProgress,
 } from '@mui/material';
-import { ExpandMore as ExpandMoreIconIcon } from '@mui/icons-material';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Hash, zeroHash } from 'viem';
-import { useConfig } from '@windingtree/sdk-react/providers';
-import { CustomConfig } from '../main.js';
 import { contractsConfig } from 'mvp-shared-files';
 import { entitiesRegistryABI } from '@windingtree/contracts';
 import {
@@ -24,17 +17,17 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { usePermit } from '../hooks/usePermit.js';
-import { useProtocolConfig } from '../hooks/useProtocolConfig.js';
-import { DepositBalance } from './DepositBalance.js';
+import { usePermit } from '../../hooks/usePermit.js';
+import { useProtocolConfig } from '../../hooks/useProtocolConfig.js';
+import { DepositBalance } from '../DepositBalance.js';
 import {
   copyToClipboard,
   formatBalance,
   centerEllipsis,
 } from '@windingtree/sdk-react/utils';
-import { LifBalance } from './LifBalance.js';
+import { LifBalance } from '../LifBalance.js';
 
-const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
+export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
   const [depositValue, setDepositValue] = useState<string>('0');
   const [done, setDone] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
@@ -181,6 +174,11 @@ const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
             )}
           </Stack>
         </Button>
+        {done && (
+          <Alert severity="success">
+            LIF tokens deposit for the entity has been added successfully
+          </Alert>
+        )}
         {data?.hash && (
           <Stack direction="row" spacing={2}>
             <Box>
@@ -197,70 +195,6 @@ const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
           </Stack>
         )}
       </Stack>
-    </>
-  );
-};
-
-export const SupplierManage = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const panel = searchParams.get('panel');
-  const { supplierId } = useConfig<CustomConfig>();
-
-  if (!supplierId) {
-    return (
-      <>
-        <Alert severity="warning">
-          <Link to="setup/register">Register</Link> or{' '}
-          <Link to="setup/view">add</Link> your entity Id first.
-        </Alert>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Accordion
-        expanded={panel === 'deposit'}
-        onChange={() => navigate('setup/manage?panel=deposit')}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIconIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography>Manage LIF deposit of the entity</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <AddDeposit supplierId={supplierId} />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={panel === 'signer'}
-        onChange={() => navigate('setup/manage?panel=signer')}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIconIcon />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-        >
-          <Typography>Manage the supplier's Node signer</Typography>
-        </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={panel === 'state'}
-        onChange={() => navigate('setup/manage?panel=state')}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIconIcon />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-        >
-          <Typography>Manage the supplier's entity state</Typography>
-        </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
-      </Accordion>
     </>
   );
 };

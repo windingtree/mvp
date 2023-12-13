@@ -213,7 +213,10 @@ VITE_SERVER_ID=${serverId}
           rows={2}
           required
           value={signerMnemonic}
-          onChange={(e) => setSignerMnemonic(e.target.value)}
+          onChange={(e) => {
+            setRegistered(false);
+            setSignerMnemonic(e.target.value);
+          }}
           error={Boolean(fieldset.signerMnemonic.error)}
           helperText={fieldset.signerMnemonic.error}
           disabled={isLoading || isTxLoading || registered}
@@ -222,8 +225,13 @@ VITE_SERVER_ID=${serverId}
           <Button
             variant="contained"
             size="small"
-            onClick={() => setSignerMnemonic(() => generateMnemonic())}
-            disabled={isLoading || isTxLoading || registered}
+            onClick={() =>
+              setSignerMnemonic(() => {
+                setRegistered(false);
+                return generateMnemonic();
+              })
+            }
+            disabled={isLoading || isTxLoading}
           >
             Generate mnemonic
           </Button>
@@ -252,7 +260,12 @@ VITE_SERVER_ID=${serverId}
             <Button
               variant="contained"
               size="small"
-              onClick={() => setSalt(() => randomSalt())}
+              onClick={() =>
+                setSalt(() => {
+                  setRegistered(false);
+                  return randomSalt();
+                })
+              }
               disabled={isLoading}
             >
               Generate salt
@@ -319,6 +332,12 @@ VITE_SERVER_ID=${serverId}
               Copy <strong>.env</strong>&nbsp;to clipboard
             </Button>
           </Stack>
+          {registered && (
+            <Alert severity="success">
+              The entity with id {newSupplierId} has been registered
+              successfully
+            </Alert>
+          )}
           {data?.hash && (
             <Stack direction="row" spacing={2}>
               <Box>
@@ -331,7 +350,7 @@ VITE_SERVER_ID=${serverId}
                 disabled={!Boolean(nodeEnv) || !registered}
                 onClick={() => copyToClipboard(data.hash)}
               >
-                Copy <strong>Tx hash</strong>&nbsp;to clipboard
+                Copy Tx hash to clipboard
               </Button>
             </Stack>
           )}

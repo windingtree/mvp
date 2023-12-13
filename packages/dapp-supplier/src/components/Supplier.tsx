@@ -8,7 +8,7 @@ import {
 } from '../components/SupplierTabs/SupplierTabsConfig.js';
 import { SupplierRegister } from './SupplierRegister.js';
 import { SupplierView } from './SupplierView.js';
-import { SupplierManage } from './SupplierManage.js';
+import { SupplierManage } from './SupplierManage/SupplierManage.js';
 
 export const Supplier = () => {
   const location = useLocation();
