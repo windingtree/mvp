@@ -33,6 +33,10 @@ export const actionTabs: TabItem[] = [
     title: 'Manage',
     path: 'setup/manage',
   },
+  {
+    title: 'Node',
+    path: 'setup/node',
+  },
 ];
 
 export const getTabIndex = (tabs: TabItem[], location: Location) => {

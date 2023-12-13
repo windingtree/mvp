@@ -31,7 +31,7 @@ import {
   serverPort,
   serverId,
 } from 'mvp-shared-files';
-import { CustomConfig } from '../main.js';
+import { CustomConfig } from '../../main.js';
 
 const InfoBlock = () => (
   <List

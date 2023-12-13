@@ -72,9 +72,11 @@ export const Header = () => {
           <Stack direction="row" alignItems="center" spacing={1}>
             <Box>
               {nodeConnected ? (
-                <CheckCircle color="success" />
+                <Tooltip title={'Connected to Node'} arrow>
+                  <CheckCircle color="inherit" />
+                </Tooltip>
               ) : (
-                <Tooltip title={nodeError || 'Disconnected from Node'}>
+                <Tooltip title={nodeError || 'Disconnected from Node'} arrow>
                   <PowerOff color="error" />
                 </Tooltip>
               )}

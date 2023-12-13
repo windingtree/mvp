@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 import { MainLayout } from '../layouts/Main.js';
 import { HomePage } from '../pages/HomePage.js';
-import { SupplierPage } from '../pages/SupplierPage.js';
+import { SupplierSetup } from '../pages/SupplierSetup.js';
 
 export const routes: RouteObject[] = [
   {
@@ -14,38 +14,42 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'supplier',
-        element: <SupplierPage />,
+        element: <SupplierSetup />,
         children: [
           {
             path: 'setup',
-            element: <SupplierPage />,
+            element: <SupplierSetup />,
             children: [
               {
                 path: 'register',
-                element: <SupplierPage />,
+                element: <SupplierSetup />,
               },
               {
                 path: 'view',
-                element: <SupplierPage />,
+                element: <SupplierSetup />,
               },
               {
                 path: 'manage',
-                element: <SupplierPage />,
+                element: <SupplierSetup />,
+              },
+              {
+                path: 'node',
+                element: <SupplierSetup />,
               },
             ],
           },
-          {
-            path: 'access',
-            element: <SupplierPage />,
-          },
-          {
-            path: 'deals',
-            element: <SupplierPage />,
-          },
-          {
-            path: 'config',
-            element: <SupplierPage />,
-          },
+          // {
+          //   path: 'access',
+          //   element: <SupplierPage />,
+          // },
+          // {
+          //   path: 'deals',
+          //   element: <SupplierPage />,
+          // },
+          // {
+          //   path: 'config',
+          //   element: <NodeConfig />,
+          // },
         ],
       },
     ],
@@ -64,7 +68,7 @@ export const routesTitlesObj: Record<string, string> = {
 };
 
 export const menuTitlesObj: Record<string, string> = {
-  supplier: 'Supplier',
+  'supplier/setup': 'Setup',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);
