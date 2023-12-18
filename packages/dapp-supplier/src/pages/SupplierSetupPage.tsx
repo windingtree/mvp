@@ -8,11 +8,11 @@ import {
   getTabIndex,
 } from '../components/SupplierTabs/SupplierTabsConfig.js';
 import { SupplierRegister } from '../components/SupplierManage/SupplierRegister.js';
-import { SupplierView } from '../components/SupplierView.js';
+import { SupplierView } from '../components/SupplierManage/SupplierView.js';
 import { SupplierManage } from '../components/SupplierManage/SupplierManage.js';
 import { NodeConfig } from '../components/SupplierManage/NodeConfig.js';
 
-export const SupplierSetup = () => {
+export const SupplierSetupPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [value, setValue] = useState<number | undefined>(
@@ -36,7 +36,7 @@ export const SupplierSetup = () => {
   }, [location]);
 
   return (
-    <Container sx={{ paddingBottom: 20 }}>
+    <Container sx={{ paddingTop: 1, paddingBottom: 20 }}>
       <SupplierTabs value={value} tabs={actionTabs} onChange={handleChange} />
       <SupplierTabPanel index={0} value={value} sx={{ paddingTop: 4 }}>
         <SupplierRegister />

@@ -1,7 +1,8 @@
 import { RouteObject } from 'react-router-dom';
 import { MainLayout } from '../layouts/Main.js';
 import { HomePage } from '../pages/HomePage.js';
-import { SupplierSetup } from '../pages/SupplierSetup.js';
+import { SupplierSetupPage } from '../pages/SupplierSetupPage.js';
+import { AuthPage } from '../pages/AuthPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -14,43 +15,35 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'supplier',
-        element: <SupplierSetup />,
+        element: <SupplierSetupPage />,
         children: [
           {
             path: 'setup',
-            element: <SupplierSetup />,
+            element: <SupplierSetupPage />,
             children: [
               {
                 path: 'register',
-                element: <SupplierSetup />,
+                element: <SupplierSetupPage />,
               },
               {
                 path: 'view',
-                element: <SupplierSetup />,
+                element: <SupplierSetupPage />,
               },
               {
                 path: 'manage',
-                element: <SupplierSetup />,
+                element: <SupplierSetupPage />,
               },
               {
                 path: 'node',
-                element: <SupplierSetup />,
+                element: <SupplierSetupPage />,
               },
             ],
           },
-          // {
-          //   path: 'access',
-          //   element: <SupplierPage />,
-          // },
-          // {
-          //   path: 'deals',
-          //   element: <SupplierPage />,
-          // },
-          // {
-          //   path: 'config',
-          //   element: <NodeConfig />,
-          // },
         ],
+      },
+      {
+        path: 'auth',
+        element: <AuthPage />,
       },
     ],
   },
@@ -68,7 +61,9 @@ export const routesTitlesObj: Record<string, string> = {
 };
 
 export const menuTitlesObj: Record<string, string> = {
+  '/': 'Home',
   'supplier/setup': 'Setup',
+  auth: 'Users',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);

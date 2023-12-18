@@ -108,11 +108,11 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.3.1
-        version: 1.3.1(typescript@5.3.3)
+        specifier: ^1.3.2
+        version: 1.3.2(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.3.1
-        version: 1.3.1
+        specifier: ^1.3.2
+        version: 1.3.2
       '@windingtree/sdk-storage':
         specifier: ^1.3.1
         version: 1.3.1
@@ -189,8 +189,8 @@ importers:
         specifier: ^1.3.1
         version: 1.3.1(typescript@5.3.3)
       '@windingtree/sdk-node-api':
-        specifier: ^1.3.1
-        version: 1.3.1(typescript@5.3.3)
+        specifier: ^1.3.2
+        version: 1.3.2(typescript@5.3.3)
       '@windingtree/sdk-queue':
         specifier: ^1.2.4
         version: 1.2.4(typescript@5.3.3)
@@ -5222,8 +5222,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-node-api@1.3.1(typescript@5.3.3):
-    resolution: {integrity: sha512-7oZJ+tMLxpmx8siozx1nsHB8/h7n4yiErB1wLj8WklUGT2LTh8+0MdYzJx6db+9ijcI0P4Khmri0gBCL4fdKww==}
+  /@windingtree/sdk-node-api@1.3.2(typescript@5.3.3):
+    resolution: {integrity: sha512-kKgYgJ3SOkOYOw3FthusJ/gKkGejGRZlqgSQUpe3uk+GKTQPT0vAtEhS/35vSaPQ8plX+WBlEksUJWYFoDs7GA==}
     dependencies:
       '@trpc/client': 10.44.1(@trpc/server@10.44.1)
       '@trpc/server': 10.44.1
@@ -5308,8 +5308,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.3.1:
-    resolution: {integrity: sha512-ndIt7Og6zuD8vuBExuC4M/lrFB2YPE/d157coifb836SmvWWEPQwsHTjPD7ao/MveRx2qpg4CzvL+L7hEX0Nfw==}
+  /@windingtree/sdk-react@1.3.2:
+    resolution: {integrity: sha512-fwAAf3W4GFFfZMkQcyyQS59wLFzdXarY8tb7dfn6VYqpf13JjtEN63I0ivk1PGWdJ0Qhpq/RLXGuk1Qt9gVQKA==}
     dev: true
 
   /@windingtree/sdk-server@1.2.4(typescript@5.3.3):

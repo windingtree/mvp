@@ -1,9 +1,10 @@
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { Welcome } from '../components/Auth/Welcome.js';
 
 export const HomePage = () => {
   return (
-    <Container>
-      <Typography>Home</Typography>
+    <Container sx={{ paddingTop: 2 }}>
+      <Welcome />
     </Container>
   );
 };

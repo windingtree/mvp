@@ -1,15 +1,15 @@
 import { useCallback, useState } from 'react';
 import { Container } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { SupplierTabs } from '../components/SupplierTabs/SupplierTabs.js';
-import { SupplierTabPanel } from '../components/SupplierTabs/SupplierTabPanel.js';
+import { SupplierTabs } from '../src/components/SupplierTabs/SupplierTabs.js';
+import { SupplierTabPanel } from '../src/components/SupplierTabs/SupplierTabPanel.js';
 // import { NodeConfigForm } from '../components/SupplierManage/NodeConfig.js';
-import { DealSeek } from '../components/DealSeek.js';
-import { SupplierSetup } from './SupplierSetup.js';
+import { DealSeek } from '../src/components/DealSeek.js';
+import { SupplierSetup } from '../src/pages/SupplierSetupPage.js';
 import {
   getTabIndex,
   tabs,
-} from '../components/SupplierTabs/SupplierTabsConfig.js';
+} from '../src/components/SupplierTabs/SupplierTabsConfig.js';
 
 export const SupplierPage = () => {
   const location = useLocation();

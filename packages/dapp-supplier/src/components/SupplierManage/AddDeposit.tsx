@@ -122,79 +122,81 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
 
   return (
     <>
-      <Stack spacing={2}>
-        <Typography>
-          <strong>Owner's LIF balance</strong>: <LifBalance address={owner} />
-        </Typography>
-        <Typography>
-          <strong>Current deposit value</strong>:{' '}
-          <DepositBalance supplierId={supplierId} />
-        </Typography>
-        <Stack direction="row" alignItems="center">
+      <form>
+        <Stack spacing={2}>
           <Typography>
-            <strong>Minimum deposit value</strong>:{' '}
-            {formatBalance(BigInt(minDeposit || '0'), 2)} LIF
+            <strong>Owner's LIF balance</strong>: <LifBalance address={owner} />
           </Typography>
-          <Button
-            variant="text"
-            size="small"
-            onClick={() => {
-              setDepositValue(minDeposit?.toString() || '0');
-              reset();
-              setDone(false);
-            }}
-          >
-            Use this value
-          </Button>
-        </Stack>
-        <TextField
-          label="LIF deposit value in WEI"
-          type="text"
-          name="lifValue"
-          required
-          value={depositValue}
-          onChange={(e) => {
-            setDepositValue(e.target.value);
-            setDone(false);
-            reset();
-          }}
-        />
-        <Button
-          variant="contained"
-          disabled={isLoading || isTxLoading || done}
-          onClick={handleAddDeposit}
-        >
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography>Send transaction</Typography>
-            {(isLoading || isTxLoading) && (
-              <CircularProgress color="inherit" size={16} />
-            )}
-          </Stack>
-        </Button>
-        {data?.hash && (
-          <Stack direction="row" spacing={2}>
-            <Box>
-              <Typography>Tx: {centerEllipsis(data.hash)}</Typography>
-            </Box>
+          <Typography>
+            <strong>Current deposit value</strong>:{' '}
+            <DepositBalance supplierId={supplierId} />
+          </Typography>
+          <Stack direction="row" alignItems="center">
+            <Typography>
+              <strong>Minimum deposit value</strong>:{' '}
+              {formatBalance(BigInt(minDeposit || '0'), 2)} LIF
+            </Typography>
             <Button
               variant="text"
-              color="secondary"
               size="small"
-              onClick={() => copyToClipboard(data.hash)}
+              onClick={() => {
+                setDepositValue(minDeposit?.toString() || '0');
+                reset();
+                setDone(false);
+              }}
             >
-              Copy Tx hash to clipboard
+              Use this value
             </Button>
           </Stack>
-        )}
-        {error && <Alert severity="error">{error}</Alert>}
-        {permitError && <Alert severity="error">{permitError}</Alert>}
-        {txError && <Alert severity="error">{txError.message}</Alert>}
-        {done && (
-          <Alert severity="success">
-            LIF tokens deposit for the entity has been added successfully
-          </Alert>
-        )}
-      </Stack>
+          <TextField
+            label="LIF deposit value in WEI"
+            type="text"
+            name="lifValue"
+            required
+            value={depositValue}
+            onChange={(e) => {
+              setDepositValue(e.target.value);
+              setDone(false);
+              reset();
+            }}
+          />
+          <Button
+            variant="contained"
+            disabled={isLoading || isTxLoading || done}
+            onClick={handleAddDeposit}
+          >
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Typography>Send transaction</Typography>
+              {(isLoading || isTxLoading) && (
+                <CircularProgress color="inherit" size={16} />
+              )}
+            </Stack>
+          </Button>
+          {data?.hash && (
+            <Stack direction="row" spacing={2}>
+              <Box>
+                <Typography>Tx: {centerEllipsis(data.hash)}</Typography>
+              </Box>
+              <Button
+                variant="text"
+                color="secondary"
+                size="small"
+                onClick={() => copyToClipboard(data.hash)}
+              >
+                Copy Tx hash to clipboard
+              </Button>
+            </Stack>
+          )}
+          {error && <Alert severity="error">{error}</Alert>}
+          {permitError && <Alert severity="error">{permitError}</Alert>}
+          {txError && <Alert severity="error">{txError.message}</Alert>}
+          {done && (
+            <Alert severity="success">
+              LIF tokens deposit for the entity has been added successfully
+            </Alert>
+          )}
+        </Stack>
+      </form>
     </>
   );
 };

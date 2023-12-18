@@ -14,7 +14,7 @@ import {
   getPk,
   supplierId as createSupplierId,
 } from '@windingtree/sdk-utils';
-import { CustomConfig } from '../main.js';
+import { CustomConfig } from '../src/main.js';
 // import { TabPanel, Tabs } from './SupplierTabs/SupplierTabs.js';
 import { copyToClipboard, formatBalance } from '@windingtree/sdk-react/utils';
 

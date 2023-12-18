@@ -5,8 +5,8 @@ import {
   useNode,
   useWallet,
 } from '@windingtree/sdk-react/providers';
-import { UserUpdate } from './UserUpdate.js';
-import { UserRegister } from './UserRegister.js';
+import { UserUpdate } from '../src/components/Auth/UserUpdate.js';
+import { UserRegister } from '../src/components/Auth/UserRegister.js';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 
 export const LoginWidget = () => {

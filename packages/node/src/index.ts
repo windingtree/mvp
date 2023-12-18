@@ -286,6 +286,8 @@ const main = async (): Promise<void> => {
     scope: 'deals',
   })();
 
+  console.log('@@@', await usersStorage.entries());
+
   const apiServerConfig: NodeApiServerOptions = {
     usersStorage,
     dealsStorage,

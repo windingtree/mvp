@@ -1,5 +1,5 @@
 import { ConfigActions, useConfig } from '@windingtree/sdk-react/providers';
-import { CustomConfig } from '../main.js';
+import { CustomConfig } from '../../main.js';
 import {
   Stack,
   Alert,
@@ -15,8 +15,8 @@ import {
   formatBalance,
   copyToClipboard,
 } from '@windingtree/sdk-react/utils';
-import { AddressBalance } from './AddressBalance.js';
-import { useEntity } from '../hooks/useEntity.js';
+import { AddressBalance } from '../AddressBalance.js';
+import { useEntity } from '../../hooks/useEntity.js';
 
 export const SupplierView = () => {
   const { supplierId, setConfig } = useConfig<CustomConfig>();
