@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Tabs, TabPanel } from './Tabs.js';
+// import { Tabs, TabPanel } from './SupplierTabs/SupplierTabs.js';
 import {
   useConfig,
   useNode,
   useWallet,
 } from '@windingtree/sdk-react/providers';
-import { UserUpdate } from './UserUpdate.js';
-import { UserRegister } from './UserRegister.js';
+import { UserUpdate } from '../src/components/Auth/UserUpdate.js';
+import { UserRegister } from '../src/components/Auth/UserRegister.js';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 
 export const LoginWidget = () => {
@@ -160,7 +160,7 @@ export const LoginWidget = () => {
           </div>
         </div>
       )}
-      <Tabs
+      {/* <Tabs
         tabs={[
           {
             id: 0,
@@ -255,7 +255,7 @@ export const LoginWidget = () => {
           </div>
         )}
         <UserRegister />
-      </TabPanel>
+      </TabPanel> */}
 
       {message && <div style={{ marginTop: 20 }}>✅ {message}</div>}
 

@@ -14,8 +14,8 @@ import {
   getPk,
   supplierId as createSupplierId,
 } from '@windingtree/sdk-utils';
-import { CustomConfig } from '../main.js';
-import { TabPanel, Tabs } from './Tabs.js';
+import { CustomConfig } from '../src/main.js';
+// import { TabPanel, Tabs } from './SupplierTabs/SupplierTabs.js';
 import { copyToClipboard, formatBalance } from '@windingtree/sdk-react/utils';
 
 export const Supplier = () => {
@@ -356,7 +356,7 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
 
   return (
     <>
-      <Tabs
+      {/* <Tabs
         tabs={[
           {
             id: 0,
@@ -373,8 +373,8 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
           },
         ]}
         onChange={setSelectedTab}
-      />
-      <TabPanel id={0} activeTab={selectedTab}>
+      /> */}
+      {/* <TabPanel id={0} activeTab={selectedTab}>
         <form onSubmit={(e) => e.preventDefault()}>
           <div
             style={{
@@ -574,9 +574,9 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
             </div>
           </div>
         </form>
-      </TabPanel>
+      </TabPanel> */}
 
-      <TabPanel id={1} activeTab={selectedTab}>
+      {/* <TabPanel id={1} activeTab={selectedTab}>
         <form onSubmit={(e) => e.preventDefault()}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {!account && (
@@ -653,9 +653,9 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
             )}
           </div>
         </form>
-      </TabPanel>
+      </TabPanel> */}
 
-      <TabPanel id={2} activeTab={selectedTab}>
+      {/* <TabPanel id={2} activeTab={selectedTab}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {!account && (
             <div>
@@ -768,7 +768,7 @@ EXAMPLE_ENTITY_OWNER_ADDRESS=${ownerAccount}
             </>
           )}
         </div>
-      </TabPanel>
+      </TabPanel> */}
 
       {tx && <div style={{ marginTop: 20 }}>Tx hash: {tx}</div>}
 

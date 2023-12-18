@@ -19,11 +19,13 @@ export interface OfferOptions extends GenericOfferOptions {
 }
 
 export interface LocalEnv {
-  VITE_LOCAL_NODE?: string;
+  VITE_CHAIN: string;
+  VITE_SERVER_IP: string;
   VITE_SERVER_PORT: string;
   VITE_SERVER_ID: string;
   VITE_SERVER_PR_KEY: string;
   VITE_SERVER_PB_KEY: string;
+  VITE_WC_PROJECT_ID: string;
 }
 
 let env: LocalEnv;
@@ -35,8 +37,10 @@ if (typeof window === 'undefined') {
   env = (import.meta as unknown as { env: LocalEnv }).env;
 }
 
+export const targetChain = env.VITE_CHAIN;
+
 export const contractsConfig: Contracts =
-  env.VITE_LOCAL_NODE === 'hardhat'
+  env.VITE_CHAIN === 'hardhat'
     ? {
         config: {
           name: 'Config',
@@ -83,7 +87,7 @@ export const contractsConfig: Contracts =
       };
 
 export const stableCoins: Record<string, Address> =
-  env.VITE_LOCAL_NODE === 'hardhat'
+  env.VITE_CHAIN === 'hardhat'
     ? {
         stable6: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
         stable6permit: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
@@ -97,12 +101,18 @@ export const stableCoins: Record<string, Address> =
         stable18permit: '0xF54784206A53EF19fd3024D8cdc7A6251A4A0d67',
       };
 
+export const serverIp = env.VITE_SERVER_IP;
+
 export const serverPort = parseInt(env.VITE_SERVER_PORT);
 
-export const serverAddress = `/ip4/127.0.0.1/tcp/${serverPort}/ws/p2p/${env.VITE_SERVER_ID}`;
+export const serverId = env.VITE_SERVER_ID;
+
+export const serverAddress = `/ip4/${env.VITE_SERVER_IP}/tcp/${serverPort}/ws/p2p/${env.VITE_SERVER_ID}`;
 
 export const serverPeerKey = {
-  id: env.VITE_SERVER_ID,
+  id: serverId,
   privKey: env.VITE_SERVER_PR_KEY,
   pubKey: env.VITE_SERVER_PB_KEY,
 } as const;
+
+export const wcProjectId = env.VITE_WC_PROJECT_ID;

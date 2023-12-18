@@ -18,11 +18,15 @@ import {
   contractsConfig,
   stableCoins,
   serverAddress,
+  targetChain,
 } from 'mvp-shared-files';
 import { OfferData, DealStatus } from '@windingtree/sdk-types';
 import { noncePeriod } from '@windingtree/sdk-constants';
 import { Queue, JobHandler } from '@windingtree/sdk-queue';
-import { NodeApiServer } from '@windingtree/sdk-node-api/server';
+import {
+  NodeApiServer,
+  NodeApiServerOptions,
+} from '@windingtree/sdk-node-api/server';
 import { appRouter } from '@windingtree/sdk-node-api/router';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
@@ -42,7 +46,7 @@ const logger = createLogger('MvpNode');
 /**
  * Chain config
  */
-const chain = process.env.LOCAL_NODE === 'true' ? hardhat : gnosisChiado;
+const chain = targetChain === 'hardhat' ? hardhat : gnosisChiado;
 
 /**
  * The supplier signer credentials
@@ -282,7 +286,9 @@ const main = async (): Promise<void> => {
     scope: 'deals',
   })();
 
-  const apiServer = new NodeApiServer({
+  console.log('@@@', await usersStorage.entries());
+
+  const apiServerConfig: NodeApiServerOptions = {
     usersStorage,
     dealsStorage,
     prefix: 'test',
@@ -290,7 +296,12 @@ const main = async (): Promise<void> => {
     secret: 'secret',
     ownerAccount: entityOwnerAddress,
     protocolContracts: contractsManager,
-  });
+  };
+
+  const apiServer = new NodeApiServer(apiServerConfig);
+
+  // TODO: Show better URL
+  logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
 
   apiServer.start(appRouter);
 
