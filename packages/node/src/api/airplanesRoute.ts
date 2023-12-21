@@ -50,107 +50,103 @@ export const createAirplanesRouter = ({
   airplanesStorage,
 }: CreateAirplanesRouterOptions) => {
   return router({
-    airplanes: router({
-      /**
-       * Adds new airplane to the database
-       */
-      add: authAdminProcedure
-        .input(AirplaneInputSchema)
-        .mutation(async ({ input }) => {
-          try {
-            const id = simpleUid();
-            await airplanesStorage.set(id, input);
-            logger.trace(`Airplane ${input.name} registered with id ${id}`);
-          } catch (error) {
-            logger.error('airplanes.add', error);
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: (error as Error).message,
-            });
-          }
-        }),
-      /**
-       * Updates airplane to the database
-       */
-      update: authAdminProcedure
-        .input(AirplaneUpdateSchema)
-        .mutation(async ({ input }) => {
-          try {
-            await airplanesStorage.set(input.id, input.data);
-            logger.trace(`Airplane ${input.data.name} updated`);
-          } catch (error) {
-            logger.error('airplanes.update', error);
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: (error as Error).message,
-            });
-          }
-        }),
-      /**
-       * Deletes airplane from the database
-       */
-      delete: authAdminProcedure
-        .input(z.string())
-        .mutation(async ({ input }) => {
-          try {
-            await airplanesStorage.delete(input);
-            logger.trace(`Airplane with id ${input} deleted`);
-          } catch (error) {
-            logger.error('airplanes.delete', error);
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: (error as Error).message,
-            });
-          }
-        }),
-      /**
-       * Returns array of airplanes objects
-       */
-      get: authProcedure
-        .input(z.string())
-        .output(AirplaneInputSchema)
-        .query(async ({ input }) => {
-          let record: AirplaneInput | undefined;
-
-          try {
-            record = await airplanesStorage.get<AirplaneInput>(input);
-
-            if (record) {
-              return record;
-            }
-          } catch (error) {
-            logger.error('airplanes.get', error);
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: (error as Error).message,
-            });
-          }
-
+    /**
+     * Adds new airplane to the database
+     */
+    add: authAdminProcedure
+      .input(AirplaneInputSchema)
+      .mutation(async ({ input }) => {
+        try {
+          const id = simpleUid();
+          await airplanesStorage.set(id, input);
+          logger.trace(`Airplane ${input.name} registered with id ${id}`);
+        } catch (error) {
+          logger.error('airplanes.add', error);
           throw new TRPCError({
-            code: 'NOT_FOUND',
-            message: `Airplane with id ${input} not found`,
+            code: 'BAD_REQUEST',
+            message: (error as Error).message,
           });
-        }),
-      /**
-       * Returns array of airplanes objects
-       */
-      getAll: authProcedure
-        .output(z.array(AirplaneInputSchema))
-        .query(async () => {
-          try {
-            const response = [];
-            for (const record of await airplanesStorage.entries<AirplaneInput>()) {
-              response.push(record[1]);
-            }
-            return response;
-          } catch (error) {
-            logger.error('airplanes.add', error);
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: (error as Error).message,
-            });
-          }
-        }),
+        }
+      }),
+    /**
+     * Updates airplane to the database
+     */
+    update: authAdminProcedure
+      .input(AirplaneUpdateSchema)
+      .mutation(async ({ input }) => {
+        try {
+          await airplanesStorage.set(input.id, input.data);
+          logger.trace(`Airplane ${input.data.name} updated`);
+        } catch (error) {
+          logger.error('airplanes.update', error);
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: (error as Error).message,
+          });
+        }
+      }),
+    /**
+     * Deletes airplane from the database
+     */
+    delete: authAdminProcedure.input(z.string()).mutation(async ({ input }) => {
+      try {
+        await airplanesStorage.delete(input);
+        logger.trace(`Airplane with id ${input} deleted`);
+      } catch (error) {
+        logger.error('airplanes.delete', error);
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: (error as Error).message,
+        });
+      }
     }),
+    /**
+     * Returns array of airplanes objects
+     */
+    get: authProcedure
+      .input(z.string())
+      .output(AirplaneInputSchema)
+      .query(async ({ input }) => {
+        let record: AirplaneInput | undefined;
+
+        try {
+          record = await airplanesStorage.get<AirplaneInput>(input);
+
+          if (record) {
+            return record;
+          }
+        } catch (error) {
+          logger.error('airplanes.get', error);
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: (error as Error).message,
+          });
+        }
+
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Airplane with id ${input} not found`,
+        });
+      }),
+    /**
+     * Returns array of airplanes objects
+     */
+    getAll: authProcedure
+      .output(z.array(AirplaneInputSchema))
+      .query(async () => {
+        try {
+          const response = [];
+          for (const record of await airplanesStorage.entries<AirplaneInput>()) {
+            response.push(record[1]);
+          }
+          return response;
+        } catch (error) {
+          logger.error('airplanes.add', error);
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: (error as Error).message,
+          });
+        }
+      }),
   });
 };

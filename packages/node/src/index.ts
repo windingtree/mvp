@@ -26,9 +26,14 @@ import { Queue, JobHandler } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
-  mergeRouters,
+  router,
 } from '@windingtree/sdk-node-api/server';
-import { appRouter } from '@windingtree/sdk-node-api/router';
+import {
+  serviceRouter,
+  adminRouter,
+  userRouter,
+  dealsRouter,
+} from '@windingtree/sdk-node-api/router';
 import { createAirplanesRouter } from './api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
@@ -313,9 +318,15 @@ const main = async (): Promise<void> => {
   const airplanesRouter = createAirplanesRouter({
     airplanesStorage,
   });
-  const commonRouter = mergeRouters(appRouter, airplanesRouter);
+  const appRouter = router({
+    service: serviceRouter,
+    admin: adminRouter,
+    user: userRouter,
+    deals: dealsRouter,
+    airlines: airplanesRouter,
+  });
 
-  apiServer.start(commonRouter);
+  apiServer.start(appRouter);
 
   const queue = new Queue({
     storage: queueStorage,
