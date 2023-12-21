@@ -64,7 +64,6 @@ graph TB
     subgraph sysDb[System Database]
       tasks[Tasks]
       offers[Offers]
-      deals[Deals]
       transactions[Transactions]
     end
 
@@ -74,8 +73,8 @@ graph TB
     end
 
     subgraph serviceDb[Service Database]
-      tours[Tours]
-      slots[Time Slots]
+      planes[Airplanes]
+      bookings[Bookings]
       passengers[Passengers]
     end
 
@@ -101,6 +100,111 @@ graph TB
 ```
 
 > Offers records stored in the database have an expiration time that is calculated as an offer expiration time with an added time gap that can be configured via the Node config file. When a record is expired it should be deleted from the database.
+
+## Databases specification
+
+### System databases
+
+#### Tasks database
+
+> Managed by the `Tasks Queue` in its internal format
+
+#### Offers
+
+```typescript
+// Original Offer structure from the smart contract
+// struct Offer {
+//   bytes32 id;
+//   uint256 expire;
+//   bytes32 supplierId;
+//   uint256 chainId;
+//   bytes32 requestHash;
+//   bytes32 optionsHash;
+//   bytes32 paymentHash;
+//   bytes32 cancelHash;
+//   bool transferable;
+//   uint256 checkIn;
+//   uint256 checkOut;
+// }
+
+// Original Payment options structure from the smart contract
+// struct PaymentOption {
+//   bytes32 id;
+//   uint256 price;
+//   address asset;
+// }
+
+// Original Cancel options from the smart contract
+// struct CancelOption {
+//   uint256 time;
+//   uint256 penalty;
+// }
+
+// Original type from the smart contract
+enum DealStatus {
+  Created, // Just created
+  Claimed, // Claimed by the supplier
+  Rejected, // Rejected by the supplier
+  Refunded, // Refunded by the supplier
+  Cancelled, // Cancelled by the buyer
+  CheckedIn, // Checked In
+  CheckedOut, // Checked Out
+  Disputed, // Dispute started
+}
+
+interface SysOffer {
+  id: string; // Offer Id
+  offer: Offer; // Copy of the original Offer
+  request: Request; // Copy of the original Request obtained from the customer
+  options: CustomOptions; // Raw offer options object. See Offer flow below
+  payment: PaymentOption; // Raw payment option object
+  cancel: CancelOption; // Raw cancel option object
+  status: DealStatus;
+}
+```
+
+### Service databases
+
+#### Airplanes configuration
+
+These records must be added before the entity starts operation. The set of records must contain airplane fleet information that is required for offers building.
+
+```typescript
+type MediaType = 'image' | 'video';
+
+interface AirplaneMedia {
+  type: MediaType;
+  uri: string; // Link to the media file
+  thumbnail: string: // Link to the medial file thumbnail
+  description: string; // Description of the medial file
+}
+
+interface AirplanePrice {
+  token: string; // ERC20 token address (stablecoin)
+  value: string; // Price per one hour in tokens
+}
+
+interface AirplaneConfiguration {
+  name: string; // Name/type of the airplane
+  description: string; // Detailed information about the airplane
+  capacity: number; // Maximum passengers capacity
+  minTime: number; // Minimum tour time in hours (decimal number allowed)
+  maxTime: number; // Maximum tour time in hours (decimal number allowed)
+  media: AirplaneMedia[];
+  price: AirplanePrice[] // Price options
+}
+```
+
+#### Bookings
+
+These records are added every time a new deal is claimed.
+
+```typescript
+interface Bookings {
+  deal: string; // The deal Id
+  date: string; // ISO Date
+}
+```
 
 ## Use Cases and Algorithms
 
@@ -228,13 +332,13 @@ sequenceDiagram
     alt Income request
       protocolCtrl ->> protocolCtrl: Request validation
       protocolCtrl ->> protocolCtrl: Request parsing
-      protocolCtrl ->> serviceCtrl: Get available time slots
-      serviceCtrl ->> serviceDb: Get available time slots
-      serviceDb ->> serviceDb: Executes search
-      serviceDb -->> serviceCtrl: Available time slots
-      serviceCtrl -->> protocolCtrl: Available time slots
+      protocolCtrl ->> serviceCtrl: Get airplanes
+      serviceCtrl ->> serviceDb: Get airplanes
+      serviceDb ->> serviceDb: Executes getting airplanes
+      serviceDb -->> serviceCtrl: Airplanes configuration
+      serviceCtrl -->> protocolCtrl: Airplanes configuration
 
-      loop Received time slots
+      loop Received airplanes
         protocolCtrl ->> protocolCtrl: Build offer payload
         protocolCtrl ->> protocolCtrl: Sign payload
         protocolCtrl ->> offersDb: Save offer
@@ -253,11 +357,7 @@ Here is the recommended `Request` structure.
 
 ```typescript
 interface CustomRequest extends GenericQuery {
-  passengers: number; // Number of passengers
-  children: number; // Number of children (cannot be greater than `passengers` - 1)
-  dateFrom: string; // ISO Date
-  dateTo: string; // ISO Date
-  timeFrom: number; // Day time from
+  date: string; // ISO Date
   duration: number; // Day time to (must be greater than `timeFrom`)
 }
 ```
@@ -273,14 +373,12 @@ interface GalleryImage {
 }
 
 interface CustomOfferOptions extends GenericOfferOptions {
-  name: string; // Tour name
-  description: string; // Tour description
+  name: string; // Airplane type
+  description: string; // Offer description
   capacity: number; // Maximum number of passengers
   gallery: GalleryImage[];
   uri: string; // Link to the tour details
   date: string; // ISO Date
-  // Time slot
-  timeFrom: number; // Day time from
   duration: number; // Duration of the tour
 }
 ```

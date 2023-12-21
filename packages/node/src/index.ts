@@ -26,8 +26,10 @@ import { Queue, JobHandler } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
+  mergeRouters,
 } from '@windingtree/sdk-node-api/server';
 import { appRouter } from '@windingtree/sdk-node-api/router';
+import { createAirplanesRouter } from './api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
 import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
@@ -285,8 +287,12 @@ const main = async (): Promise<void> => {
     path: './deals.db',
     scope: 'deals',
   })();
+  const airplanesStorage = await levelStorage.createInitializer({
+    path: './airplanes.db',
+    scope: 'airplanes',
+  })();
 
-  console.log('@@@', await usersStorage.entries());
+  // console.log('@@@', await usersStorage.entries());
 
   const apiServerConfig: NodeApiServerOptions = {
     usersStorage,
@@ -303,7 +309,13 @@ const main = async (): Promise<void> => {
   // TODO: Show better URL
   logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
 
-  apiServer.start(appRouter);
+  // Create common router
+  const airplanesRouter = createAirplanesRouter({
+    airplanesStorage,
+  });
+  const commonRouter = mergeRouters(appRouter, airplanesRouter);
+
+  apiServer.start(commonRouter);
 
   const queue = new Queue({
     storage: queueStorage,
