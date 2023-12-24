@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useConfig, useNode } from '@windingtree/sdk-react/providers';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
+import { type AppRouter } from '@windingtree/mvp-node';
 import { useWalletClient } from 'wagmi';
 
 interface LoginProps {
@@ -17,7 +18,7 @@ interface LoginProps {
 }
 
 export const Login = ({ admin }: LoginProps) => {
-  const { node } = useNode();
+  const { node } = useNode<AppRouter>();
   const { isAuth, login: account, setAuth, resetAuth } = useConfig();
   const { data: walletClient } = useWalletClient();
   const [login, setLogin] = useState<string>('');

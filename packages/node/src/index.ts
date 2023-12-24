@@ -34,7 +34,7 @@ import {
   userRouter,
   dealsRouter,
 } from '@windingtree/sdk-node-api/router';
-import { createAirplanesRouter } from './api/airplanesRoute.js';
+import { airplanesRouter } from './api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
 import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
@@ -47,6 +47,16 @@ import {
   createNode,
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
+
+const appRouter = router({
+  service: serviceRouter,
+  admin: adminRouter,
+  user: userRouter,
+  deals: dealsRouter,
+  airlines: airplanesRouter,
+});
+
+export type AppRouter = typeof appRouter;
 
 const logger = createLogger('MvpNode');
 
@@ -88,6 +98,13 @@ if (!entityOwnerAddress) {
     'Entity owner address must be provided with EXAMPLE_ENTITY_OWNER_ADDRESS env',
   );
 }
+
+/**
+ * Parse CORS configuration
+ */
+const cors = process.env.VITE_SERVER_CORS
+  ? process.env.VITE_SERVER_CORS.split(';').map((uri) => uri.trim())
+  : ['*'];
 
 /** Handles UFOs */
 process.once('unhandledRejection', (error) => {
@@ -300,31 +317,23 @@ const main = async (): Promise<void> => {
   // console.log('@@@', await usersStorage.entries());
 
   const apiServerConfig: NodeApiServerOptions = {
-    usersStorage,
-    dealsStorage,
+    storage: {
+      users: usersStorage,
+      deals: dealsStorage,
+      airplanes: airplanesStorage,
+    },
     prefix: 'test',
     port: 3456,
     secret: 'secret',
     ownerAccount: entityOwnerAddress,
     protocolContracts: contractsManager,
+    cors,
   };
 
   const apiServer = new NodeApiServer(apiServerConfig);
 
   // TODO: Show better URL
   logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
-
-  // Create common router
-  const airplanesRouter = createAirplanesRouter({
-    airplanesStorage,
-  });
-  const appRouter = router({
-    service: serviceRouter,
-    admin: adminRouter,
-    user: userRouter,
-    deals: dealsRouter,
-    airlines: airplanesRouter,
-  });
 
   apiServer.start(appRouter);
 

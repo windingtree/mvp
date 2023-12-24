@@ -11,12 +11,13 @@ import {
 import { useWalletClient } from 'wagmi';
 import { useConfig, useNode } from '@windingtree/sdk-react/providers';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
+import { type AppRouter } from '@windingtree/mvp-node';
 
 /**
  * Register an Admin user
  */
 export const AdminRegister = () => {
-  const { node } = useNode();
+  const { node } = useNode<AppRouter>();
   const { isAuth, login: account, setAuth, resetAuth } = useConfig();
   const { data: walletClient } = useWalletClient();
   const [login, setLogin] = useState<string>('');
