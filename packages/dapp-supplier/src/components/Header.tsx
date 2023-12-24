@@ -15,6 +15,7 @@ import { CheckCircle, PowerOff, Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { menuTitles, getTitleByPath } from '../config/routes.js';
 import { useNode } from '@windingtree/sdk-react/providers';
+import { type AppRouter } from '@windingtree/mvp-node';
 
 const MainMenu = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const MainMenu = () => {
  */
 export const Header = () => {
   const location = useLocation();
-  const { nodeConnected, nodeError } = useNode();
+  const { nodeConnected, nodeError } = useNode<AppRouter>();
 
   return (
     <AppBar position="static">

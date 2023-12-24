@@ -20,7 +20,7 @@
   },
   "include": [
     "src",
-    "OLD/SupplierPage.tsx",
+    "OLD/SupplierPageOLD.tsx",
     "OLD/LoginWidgetOLD.tsx",
     "OLD/SupplierOLD.tsx"
   ]

@@ -152,13 +152,14 @@ export const SupplierRegister = () => {
   useEffect(() => {
     if (registered) {
       setNodeEnv(
-        () => `ENTITY_SIGNER_MNEMONIC=${signerMnemonic}
-ENTITY_ID=${newSupplierId}
-ENTITY_OWNER_ADDRESS=${account.address}
-VITE_CHAIN=${targetChain}
+        () => `VITE_CHAIN=${targetChain}
 VITE_SERVER_IP=${serverIp}
 VITE_SERVER_PORT=${serverPort}
 VITE_SERVER_ID=${serverId}
+VITE_SERVER_CORS=${window.location.origin}
+ENTITY_SIGNER_MNEMONIC=${signerMnemonic}
+ENTITY_ID=${newSupplierId}
+ENTITY_OWNER_ADDRESS=${account.address}
 `,
       );
     } else {

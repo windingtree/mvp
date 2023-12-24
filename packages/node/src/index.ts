@@ -26,8 +26,15 @@ import { Queue, JobHandler } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
+  router,
 } from '@windingtree/sdk-node-api/server';
-import { appRouter } from '@windingtree/sdk-node-api/router';
+import {
+  serviceRouter,
+  adminRouter,
+  userRouter,
+  dealsRouter,
+} from '@windingtree/sdk-node-api/router';
+import { airplanesRouter } from './api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
 import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
@@ -40,6 +47,16 @@ import {
   createNode,
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
+
+const appRouter = router({
+  service: serviceRouter,
+  admin: adminRouter,
+  user: userRouter,
+  deals: dealsRouter,
+  airlines: airplanesRouter,
+});
+
+export type AppRouter = typeof appRouter;
 
 const logger = createLogger('MvpNode');
 
@@ -81,6 +98,13 @@ if (!entityOwnerAddress) {
     'Entity owner address must be provided with EXAMPLE_ENTITY_OWNER_ADDRESS env',
   );
 }
+
+/**
+ * Parse CORS configuration
+ */
+const cors = process.env.VITE_SERVER_CORS
+  ? process.env.VITE_SERVER_CORS.split(';').map((uri) => uri.trim())
+  : ['*'];
 
 /** Handles UFOs */
 process.once('unhandledRejection', (error) => {
@@ -285,17 +309,25 @@ const main = async (): Promise<void> => {
     path: './deals.db',
     scope: 'deals',
   })();
+  const airplanesStorage = await levelStorage.createInitializer({
+    path: './airplanes.db',
+    scope: 'airplanes',
+  })();
 
-  console.log('@@@', await usersStorage.entries());
+  // console.log('@@@', await usersStorage.entries());
 
   const apiServerConfig: NodeApiServerOptions = {
-    usersStorage,
-    dealsStorage,
+    storage: {
+      users: usersStorage,
+      deals: dealsStorage,
+      airplanes: airplanesStorage,
+    },
     prefix: 'test',
     port: 3456,
     secret: 'secret',
     ownerAccount: entityOwnerAddress,
     protocolContracts: contractsManager,
+    cors,
   };
 
   const apiServer = new NodeApiServer(apiServerConfig);

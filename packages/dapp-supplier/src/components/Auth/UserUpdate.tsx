@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useConfig, useNode } from '@windingtree/sdk-react/providers';
+import { type AppRouter } from '@windingtree/mvp-node';
 import {
   Alert,
   Box,
@@ -16,7 +17,7 @@ import { Login } from './Login.js';
  */
 export const UserUpdate = () => {
   const { isAuth, login } = useConfig();
-  const { node } = useNode();
+  const { node } = useNode<AppRouter>();
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
