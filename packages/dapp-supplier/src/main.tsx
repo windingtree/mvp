@@ -12,6 +12,7 @@ import { WagmiConfig } from 'wagmi';
 import { hardhat, gnosisChiado } from 'viem/chains';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { contractsConfig, wcProjectId } from 'mvp-shared-files';
+import { AirplaneConfiguration } from './components/Airplanes/type.js';
 
 const targetChain =
   import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
@@ -37,6 +38,9 @@ createWeb3Modal({
 
 export interface CustomConfig extends AppConfig {
   supplierId?: Hash;
+  ipfsProjectId?: string;
+  ipfsServerKey?: string;
+  cacheAirplane: AirplaneConfiguration;
 }
 
 window.addEventListener('unhandledrejection', (event) => {

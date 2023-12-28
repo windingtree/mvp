@@ -3,11 +3,15 @@ import { MainLayout } from '../layouts/Main.js';
 import { HomePage } from '../pages/HomePage.js';
 import { SupplierSetupPage } from '../pages/SupplierSetupPage.js';
 import { AuthPage } from '../pages/AuthPage.js';
+import { RootBoundary } from '../components/ErrorBoundary.js';
+import { Upload } from '../components/Airplanes/Gallery.js';
+import { AddAirplane } from '../components/Airplanes/AddAirplane.js';
 
 export const routes: RouteObject[] = [
   {
     path: '/',
     element: <MainLayout />,
+    errorElement: <RootBoundary />,
     children: [
       {
         index: true,
@@ -37,6 +41,10 @@ export const routes: RouteObject[] = [
                 path: 'node',
                 element: <SupplierSetupPage />,
               },
+              {
+                path: 'ipfs',
+                element: <SupplierSetupPage />,
+              },
             ],
           },
         ],
@@ -44,6 +52,10 @@ export const routes: RouteObject[] = [
       {
         path: 'auth',
         element: <AuthPage />,
+      },
+      {
+        path: 'airplanes',
+        element: <AddAirplane />,
       },
     ],
   },
@@ -64,6 +76,7 @@ export const menuTitlesObj: Record<string, string> = {
   '/': 'Home',
   'supplier/setup': 'Setup',
   auth: 'Users',
+  airplanes: 'Airplanes',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);
