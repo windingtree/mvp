@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import {
   Alert,
@@ -27,7 +27,8 @@ import { createThumbnail, getImageDimensions } from '../../utils/images.js';
 
 interface GalleryProps {
   onChange(gallery: AirplaneMedia[]): void;
-  clear: boolean;
+  gallery: AirplaneMedia[];
+  disabled?: boolean;
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -42,9 +43,12 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export const Gallery = ({ onChange, clear }: GalleryProps) => {
+export const Gallery = ({
+  onChange,
+  gallery,
+  disabled = false,
+}: GalleryProps) => {
   const { ipfs, error: configError } = useIpfs();
-  const [gallery, setGallery] = useState<AirplaneMedia[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
   const [showImg, setShowImg] = useState<string | undefined>();
@@ -69,33 +73,25 @@ export const Gallery = ({ onChange, clear }: GalleryProps) => {
         }
 
         const res = await ipfs.upload(file);
-        setGallery((gal) => [
-          ...gal,
-          {
-            type: 'image',
-            uri: res.fastUrl,
-            thumbnail: resThumb ? resThumb.fastUrl : res.fastUrl,
-            description: '',
-          },
-        ]);
-        console.log(res);
+        onChange(
+          gallery.concat([
+            {
+              type: 'image',
+              uri: res.fastUrl,
+              thumbnail: resThumb ? resThumb.fastUrl : res.fastUrl,
+              description: '',
+            },
+          ]),
+        );
 
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
         setError((err as Error).message ?? 'Unknown file upload error');
       }
-
-      onChange(gallery);
     },
     [gallery, ipfs, onChange],
   );
-
-  useEffect(() => {
-    if (clear) {
-      setGallery([]);
-    }
-  }, [clear]);
 
   return (
     <>
@@ -122,8 +118,9 @@ export const Gallery = ({ onChange, clear }: GalleryProps) => {
                         multiline
                         rows={2}
                         value={gal.description}
+                        disabled={disabled}
                         onChange={(e) => {
-                          setGallery(() =>
+                          onChange(
                             gallery.map((g, i) =>
                               i === index
                                 ? {
@@ -140,10 +137,9 @@ export const Gallery = ({ onChange, clear }: GalleryProps) => {
                       <Button
                         size="small"
                         onClick={() => {
-                          setGallery(() =>
-                            gallery.filter((_, i) => i !== index),
-                          );
+                          onChange(gallery.filter((_, i) => i !== index));
                         }}
+                        disabled={disabled}
                       >
                         Delete
                       </Button>
@@ -159,7 +155,7 @@ export const Gallery = ({ onChange, clear }: GalleryProps) => {
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
-          disabled={Boolean(configError) || isLoading}
+          disabled={Boolean(configError) || isLoading || disabled}
         >
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography>Upload image</Typography>

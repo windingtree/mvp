@@ -1,11 +1,10 @@
 import { RouteObject } from 'react-router-dom';
-import { MainLayout } from '../layouts/Main.js';
-import { HomePage } from '../pages/HomePage.js';
-import { SupplierSetupPage } from '../pages/SupplierSetupPage.js';
-import { AuthPage } from '../pages/AuthPage.js';
-import { RootBoundary } from '../components/ErrorBoundary.js';
-import { Upload } from '../components/Airplanes/Gallery.js';
-import { AddAirplane } from '../components/Airplanes/AddAirplane.js';
+import { MainLayout } from './layouts/Main.js';
+import { HomePage } from './pages/HomePage.js';
+import { SupplierSetupPage } from './pages/SupplierSetupPage.js';
+import { AuthPage } from './pages/AuthPage.js';
+import { RootBoundary } from './components/ErrorBoundary.js';
+import { AddAirplane } from './components/Airplanes/AddAirplane.js';
 
 export const routes: RouteObject[] = [
   {

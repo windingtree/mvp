@@ -18,10 +18,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
-  "include": [
-    "src",
-    "OLD/SupplierPageOLD.tsx",
-    "OLD/LoginWidgetOLD.tsx",
-    "OLD/SupplierOLD.tsx"
-  ]
+  "include": ["src"]
 }

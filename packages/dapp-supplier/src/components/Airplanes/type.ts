@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { StableCoin } from '../../hooks/useProtocolConfig.js';
 
 export const MediaTypeSchema = z.enum(['image', 'video']);
 
@@ -30,3 +31,8 @@ export const AirplaneConfigurationSchema = z
   });
 
 export type AirplaneConfiguration = z.infer<typeof AirplaneConfigurationSchema>;
+
+export interface PriceOption {
+  price: bigint;
+  coin: StableCoin;
+}

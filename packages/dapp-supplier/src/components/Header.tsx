@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { CheckCircle, PowerOff, Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { menuTitles, getTitleByPath } from '../config/routes.js';
+import { menuTitles, getTitleByPath } from '../routes.js';
 import { useNode } from '@windingtree/sdk-react/providers';
 import { type AppRouter } from '@windingtree/mvp-node';
 
