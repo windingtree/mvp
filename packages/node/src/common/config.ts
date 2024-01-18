@@ -32,6 +32,11 @@ class Config {
   }
 
   private setSignerPkFromConfig() {
+    // Ignore Pk configuration if mnemonic is set already
+    if (this._signerMnemonic) {
+      return;
+    }
+
     /**
      * The supplier signer credentials
      */

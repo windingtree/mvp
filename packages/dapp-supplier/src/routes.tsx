@@ -1,13 +1,17 @@
 import { RouteObject } from 'react-router-dom';
-import { MainLayout } from '../layouts/Main.js';
-import { HomePage } from '../pages/HomePage.js';
-import { SupplierSetupPage } from '../pages/SupplierSetupPage.js';
-import { AuthPage } from '../pages/AuthPage.js';
+import { MainLayout } from './layouts/Main.js';
+import { HomePage } from './pages/HomePage.js';
+import { SupplierSetupPage } from './pages/SupplierSetupPage.js';
+import { AuthPage } from './pages/AuthPage.js';
+import { RequireAuth } from './components/Auth/RequireAuth.js';
+import { RootBoundary } from './components/ErrorBoundary.js';
+import { AirplanesPage } from './pages/AirplanesPage.js';
 
 export const routes: RouteObject[] = [
   {
     path: '/',
     element: <MainLayout />,
+    errorElement: <RootBoundary />,
     children: [
       {
         index: true,
@@ -37,6 +41,10 @@ export const routes: RouteObject[] = [
                 path: 'node',
                 element: <SupplierSetupPage />,
               },
+              {
+                path: 'ipfs',
+                element: <SupplierSetupPage />,
+              },
             ],
           },
         ],
@@ -44,6 +52,14 @@ export const routes: RouteObject[] = [
       {
         path: 'auth',
         element: <AuthPage />,
+      },
+      {
+        path: 'airplanes',
+        element: (
+          <RequireAuth admin>
+            <AirplanesPage />
+          </RequireAuth>
+        ),
       },
     ],
   },
@@ -58,12 +74,14 @@ export const routesTitlesObj: Record<string, string> = {
   'supplier/access': 'Supplier Access',
   'supplier/deals': 'Deals',
   'supplier/config': 'Supplier Config',
+  airplanes: 'Airplanes Management',
 };
 
 export const menuTitlesObj: Record<string, string> = {
   '/': 'Home',
   'supplier/setup': 'Setup',
   auth: 'Users',
+  airplanes: 'Airplanes',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);

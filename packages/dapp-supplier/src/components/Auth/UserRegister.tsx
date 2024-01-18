@@ -8,15 +8,20 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-import { useConfig, useNode } from '@windingtree/sdk-react/providers';
+import {
+  ConfigActions,
+  useConfig,
+  useNode,
+} from '@windingtree/sdk-react/providers';
 import { type AppRouter } from '@windingtree/mvp-node';
 import { Login } from './Login.js';
+import { CustomConfig } from '../../main.js';
 
 /**
  * Register a new user
  */
 export const UserRegister = () => {
-  const { isAuth } = useConfig();
+  const { isAuth, setAuth, resetAuth, setConfig } = useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -39,14 +44,28 @@ export const UserRegister = () => {
         password,
       });
 
+      setAuth(login);
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: 'manager',
+        },
+      });
       setDone(true);
       setIsLoading(false);
     } catch (err) {
       setDone(false);
+      resetAuth();
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: undefined,
+        },
+      });
       setIsLoading(false);
       setError((err as Error).message ?? 'Unknown user registration error');
     }
-  }, [node, login, password]);
+  }, [node, login, password, setAuth, setConfig, resetAuth]);
 
   if (!isAuth) {
     return (

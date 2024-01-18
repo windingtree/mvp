@@ -16,6 +16,7 @@ export interface CreateAirplanesRouterOptions {
 }
 
 export const AirplaneInputSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1),
   description: z.string(),
   capacity: z.number().int().gte(1),
@@ -138,8 +139,12 @@ export const airplanesRouter = router({
         for (const record of await ctx.storage[
           'airplanes'
         ].entries<AirplaneInput>()) {
-          response.push(record[1]);
+          response.push({
+            id: record[0],
+            ...record[1],
+          });
         }
+
         return response;
       } catch (error) {
         logger.error('airplanes.add', error);

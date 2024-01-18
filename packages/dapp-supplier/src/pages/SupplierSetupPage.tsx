@@ -11,6 +11,7 @@ import { SupplierRegister } from '../components/SupplierManage/SupplierRegister.
 import { SupplierView } from '../components/SupplierManage/SupplierView.js';
 import { SupplierManage } from '../components/SupplierManage/SupplierManage.js';
 import { NodeConfig } from '../components/SupplierManage/NodeConfig.js';
+import { IpfsConfig } from '../components/SupplierManage/IpfsConfig.js';
 
 export const SupplierSetupPage = () => {
   const location = useLocation();
@@ -49,6 +50,9 @@ export const SupplierSetupPage = () => {
       </SupplierTabPanel>
       <SupplierTabPanel index={3} value={value} sx={{ paddingTop: 4 }}>
         <NodeConfig />
+      </SupplierTabPanel>
+      <SupplierTabPanel index={4} value={value} sx={{ paddingTop: 4 }}>
+        <IpfsConfig />
       </SupplierTabPanel>
     </Container>
   );

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Alert,
   Stack,
@@ -8,27 +8,51 @@ import {
   CircularProgress,
   Switch,
 } from '@mui/material';
-import { useConfig, useNode } from '@windingtree/sdk-react/providers';
+import {
+  ConfigActions,
+  useConfig,
+  useNode,
+} from '@windingtree/sdk-react/providers';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 import { type AppRouter } from '@windingtree/mvp-node';
 import { useWalletClient } from 'wagmi';
+import { CustomConfig } from '../../main.js';
 
 interface LoginProps {
+  reset?: boolean;
   admin?: boolean;
 }
 
-export const Login = ({ admin }: LoginProps) => {
+export const Login = ({ reset, admin }: LoginProps) => {
   const { node } = useNode<AppRouter>();
-  const { isAuth, login: account, setAuth, resetAuth } = useConfig();
+  const {
+    isAuth,
+    login: account,
+    setAuth,
+    resetAuth,
+    setConfig,
+  } = useConfig<CustomConfig>();
   const { data: walletClient } = useWalletClient();
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
   const [done, setDone] = useState<boolean>(false);
-  const [asAdmin, setAsAdmin] = useState<boolean>(
-    admin !== undefined ? admin : false,
-  );
+  const [asAdmin, setAsAdmin] = useState<boolean>(admin ?? false);
+
+  const handleReset = useCallback(async () => {
+    try {
+      resetAuth();
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: undefined,
+        },
+      });
+    } catch (err) {
+      setError((err as Error).message ?? 'Unknown login reset error');
+    }
+  }, [resetAuth, setConfig]);
 
   const handleAdminLogin = useCallback(async () => {
     try {
@@ -54,13 +78,25 @@ export const Login = ({ admin }: LoginProps) => {
       setIsLoading(false);
       setDone(true);
       setAuth(login);
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: 'admin',
+        },
+      });
     } catch (err) {
       setIsLoading(false);
       setDone(false);
       resetAuth();
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: undefined,
+        },
+      });
       setError((err as Error).message ?? 'Unknown admin login error');
     }
-  }, [walletClient, node, login, setAuth, resetAuth]);
+  }, [walletClient, node, login, setAuth, resetAuth, setConfig]);
 
   const handleUserLogin = useCallback(async () => {
     try {
@@ -80,13 +116,31 @@ export const Login = ({ admin }: LoginProps) => {
       setIsLoading(false);
       setDone(true);
       setAuth(login);
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: 'manager',
+        },
+      });
     } catch (err) {
       setIsLoading(false);
       setDone(false);
       resetAuth();
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: undefined,
+        },
+      });
       setError((err as Error).message ?? 'Unknown login error');
     }
-  }, [node, login, password, setAuth, resetAuth]);
+  }, [node, login, password, setAuth, setConfig, resetAuth]);
+
+  useEffect(() => {
+    if (Boolean(reset)) {
+      handleReset();
+    }
+  }, [handleReset, reset]);
 
   if (isAuth && account) {
     return (

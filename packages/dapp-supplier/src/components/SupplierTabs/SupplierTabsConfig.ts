@@ -37,6 +37,10 @@ export const actionTabs: TabItem[] = [
     title: 'Node',
     path: 'setup/node',
   },
+  {
+    title: 'IPFS',
+    path: 'setup/ipfs',
+  },
 ];
 
 export const getTabIndex = (tabs: TabItem[], location: Location) => {
