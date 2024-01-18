@@ -3,8 +3,9 @@ import { MainLayout } from './layouts/Main.js';
 import { HomePage } from './pages/HomePage.js';
 import { SupplierSetupPage } from './pages/SupplierSetupPage.js';
 import { AuthPage } from './pages/AuthPage.js';
+import { RequireAuth } from './components/Auth/RequireAuth.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
-import { AddAirplane } from './components/Airplanes/AddAirplane.js';
+import { AirplanesPage } from './pages/AirplanesPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -54,7 +55,11 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'airplanes',
-        element: <AddAirplane />,
+        element: (
+          <RequireAuth admin>
+            <AirplanesPage />
+          </RequireAuth>
+        ),
       },
     ],
   },
@@ -69,6 +74,7 @@ export const routesTitlesObj: Record<string, string> = {
   'supplier/access': 'Supplier Access',
   'supplier/deals': 'Deals',
   'supplier/config': 'Supplier Config',
+  airplanes: 'Airplanes Management',
 };
 
 export const menuTitlesObj: Record<string, string> = {
