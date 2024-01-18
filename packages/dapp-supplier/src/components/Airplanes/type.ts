@@ -7,7 +7,7 @@ export const AirplaneMediaSchema = z.object({
   type: MediaTypeSchema,
   uri: z.string(), // Link to the media file
   thumbnail: z.string(), // Link to the medial file thumbnail
-  description: z.string().optional(), // Description of the medial file
+  description: z.string(), // Description of the medial file
 });
 
 export type AirplaneMedia = z.infer<typeof AirplaneMediaSchema>;
@@ -35,4 +35,11 @@ export type AirplaneConfiguration = z.infer<typeof AirplaneConfigurationSchema>;
 export interface PriceOption {
   price: bigint;
   coin: StableCoin;
+}
+
+export interface AirplaneMeta {
+  id?: string;
+  config: AirplaneConfiguration;
+  media: AirplaneMedia[];
+  prices: PriceOption[];
 }
