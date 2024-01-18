@@ -40,6 +40,7 @@ export interface CustomConfig extends AppConfig {
   ipfsProjectId?: string;
   ipfsServerKey?: string;
   cacheAirplane: AirplaneConfiguration;
+  role?: 'admin' | 'manager';
 }
 
 window.addEventListener('unhandledrejection', (event) => {
