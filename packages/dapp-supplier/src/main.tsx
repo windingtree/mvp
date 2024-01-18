@@ -1,4 +1,3 @@
-// import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import { Hash } from 'viem';
 import { App } from './App.js';
@@ -9,11 +8,12 @@ import {
   ContractsProvider,
 } from '@windingtree/sdk-react/providers';
 import { WagmiConfig } from 'wagmi';
-import { hardhat, gnosisChiado } from 'viem/chains';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { contractsConfig, wcProjectId } from 'mvp-shared-files';
+import { AirplaneConfiguration } from './components/Airplanes/type.js';
+import { hardhat, gnosisChiado } from 'viem/chains';
 
-const targetChain =
+export const targetChain =
   import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
 
 const wagmiConfig = defaultWagmiConfig({
@@ -37,6 +37,10 @@ createWeb3Modal({
 
 export interface CustomConfig extends AppConfig {
   supplierId?: Hash;
+  ipfsProjectId?: string;
+  ipfsServerKey?: string;
+  cacheAirplane: AirplaneConfiguration;
+  role?: 'admin' | 'manager';
 }
 
 window.addEventListener('unhandledrejection', (event) => {

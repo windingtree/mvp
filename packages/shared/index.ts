@@ -28,6 +28,12 @@ export interface LocalEnv {
   VITE_WC_PROJECT_ID: string;
 }
 
+export interface Erc20Token {
+  address: Address;
+  decimals: number;
+  permit: boolean;
+}
+
 let env: LocalEnv;
 
 if (typeof window === 'undefined') {
@@ -86,20 +92,52 @@ export const contractsConfig: Contracts =
         },
       };
 
-export const stableCoins: Record<string, Address> =
+export const stableCoins: Erc20Token[] =
   env.VITE_CHAIN === 'hardhat'
-    ? {
-        stable6: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
-        stable6permit: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
-        stable18: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
-        stable18permit: '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e',
-      }
-    : {
-        stable6: '0x8CB96383609C56af1Fe44DB7591F94AEE2fa43b2',
-        stable6permit: '0x4556d5C1486d799f67FA96c84F1d0552486CAAF4',
-        stable18: '0x4EcB659060Da61D795D777bb21BAe3599b301C66',
-        stable18permit: '0xF54784206A53EF19fd3024D8cdc7A6251A4A0d67',
-      };
+    ? [
+        {
+          address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+          decimals: 6,
+          permit: false,
+        },
+        {
+          address: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+          decimals: 6,
+          permit: true,
+        },
+        {
+          address: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+          decimals: 18,
+          permit: false,
+        },
+        {
+          address: '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e',
+          decimals: 18,
+          permit: true,
+        },
+      ]
+    : [
+        {
+          address: '0x8CB96383609C56af1Fe44DB7591F94AEE2fa43b2',
+          decimals: 6,
+          permit: false,
+        },
+        {
+          address: '0x4556d5C1486d799f67FA96c84F1d0552486CAAF4',
+          decimals: 6,
+          permit: true,
+        },
+        {
+          address: '0x4EcB659060Da61D795D777bb21BAe3599b301C66',
+          decimals: 18,
+          permit: false,
+        },
+        {
+          address: '0xF54784206A53EF19fd3024D8cdc7A6251A4A0d67',
+          decimals: 18,
+          permit: true,
+        },
+      ];
 
 export const serverIp = env.VITE_SERVER_IP;
 

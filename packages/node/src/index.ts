@@ -215,12 +215,12 @@ const createRequestsHandler =
           {
             id: randomSalt(),
             price: BigInt('1000000000000000'), // 0.001
-            asset: stableCoins.stable18permit,
+            asset: stableCoins[3].address,
           },
           {
             id: randomSalt(),
             price: BigInt('1200000000000000'), // 0.0012
-            asset: stableCoins.stable18,
+            asset: stableCoins[2].address,
           },
         ],
         /** Cancellation options */

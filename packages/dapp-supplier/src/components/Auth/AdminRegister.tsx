@@ -9,16 +9,21 @@ import {
   Box,
 } from '@mui/material';
 import { useWalletClient } from 'wagmi';
-import { useConfig, useNode } from '@windingtree/sdk-react/providers';
+import {
+  ConfigActions,
+  useConfig,
+  useNode,
+} from '@windingtree/sdk-react/providers';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 import { type AppRouter } from '@windingtree/mvp-node';
+import { CustomConfig } from '../../main.js';
 
 /**
  * Register an Admin user
  */
 export const AdminRegister = () => {
   const { node } = useNode<AppRouter>();
-  const { isAuth, login: account, setAuth, resetAuth } = useConfig();
+  const { setAuth, resetAuth, setConfig } = useConfig<CustomConfig>();
   const { data: walletClient } = useWalletClient();
   const [login, setLogin] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
@@ -48,13 +53,25 @@ export const AdminRegister = () => {
       setDone(true);
       setIsLoading(false);
       setAuth(login);
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: 'manager',
+        },
+      });
     } catch (err) {
       setDone(false);
       setIsLoading(false);
       resetAuth();
+      setConfig({
+        type: ConfigActions.SET_CONFIG,
+        payload: {
+          role: undefined,
+        },
+      });
       setError((err as Error).message ?? 'Unknown user registration error');
     }
-  }, [walletClient, node, login, setAuth, resetAuth]);
+  }, [walletClient, node, login, setAuth, resetAuth, setConfig]);
 
   if (!walletClient) {
     return (
