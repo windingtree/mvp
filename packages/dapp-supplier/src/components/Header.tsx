@@ -72,17 +72,21 @@ export const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction="row" alignItems="center" spacing={1}>
             <Box>
-              {nodeConnected ? (
-                <Tooltip title={'Connected to Node'} arrow>
-                  <CheckCircle color="inherit" />
-                </Tooltip>
-              ) : (
-                <Tooltip title={nodeError || 'Disconnected from Node'} arrow>
-                  <PowerOff color="error" />
-                </Tooltip>
-              )}
+              <Tooltip
+                title={
+                  nodeConnected
+                    ? 'Connected to Node'
+                    : nodeError ?? 'Disconnected from Node'
+                }
+                arrow
+              >
+                <>
+                  {nodeConnected && <CheckCircle color="inherit" />}
+                  {!nodeConnected && <PowerOff color="error" />}
+                </>
+              </Tooltip>
             </Box>
-            <w3m-button balance="hide" />
+            <w3m-button size="sm" balance="hide" />
             <MainMenu />
           </Stack>
         </Toolbar>
