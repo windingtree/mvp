@@ -114,17 +114,17 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.3
-        version: 1.3.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.4
+        version: 1.3.4(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-messages':
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.1
-        version: 1.5.1(typescript@5.3.3)
+        specifier: ^1.5.2
+        version: 1.5.2(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.4.2
+        version: 1.4.2
       '@windingtree/sdk-storage':
         specifier: ^1.4.1
         version: 1.4.1
@@ -231,17 +231,17 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.3
-        version: 1.3.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.4
+        version: 1.3.4(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-messages':
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.1
-        version: 1.5.1(typescript@5.3.3)
+        specifier: ^1.5.2
+        version: 1.5.2(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.4.2
+        version: 1.4.2
       '@windingtree/sdk-storage':
         specifier: ^1.4.1
         version: 1.4.1
@@ -315,8 +315,8 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3
       '@windingtree/sdk-contracts-manager':
-        specifier: ^1.3.2
-        version: 1.3.2(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db':
         specifier: ^1.2.6
         version: 1.2.6(typescript@5.3.3)
@@ -324,11 +324,11 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       '@windingtree/sdk-node':
-        specifier: ^1.3.3
-        version: 1.3.3(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.4
+        version: 1.3.4(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.1
-        version: 1.5.1(typescript@5.3.3)
+        specifier: ^1.5.2
+        version: 1.5.2(typescript@5.3.3)
       '@windingtree/sdk-queue':
         specifier: ^1.2.6
         version: 1.2.6(typescript@5.3.3)(zod@3.22.4)
@@ -5301,8 +5301,8 @@ packages:
   /@windingtree/contracts@1.0.0:
     resolution: {integrity: sha512-foRPGrAuxNwSsI0rAPgVi8dsOclVxEVCQ8HO8Oat+HUgOPGzsKi45+tUjXBEuECMeRNdhEOXLystheW65SsEaw==}
 
-  /@windingtree/sdk-client@1.3.3(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-UUdZZID+2maMWAA0jJ2iWN6tWSFgv/5O3IRGnU/WDkcSjzeQBR6VH1cbKn5siFJUzbQoLfMuH2blUYNbPJcueA==}
+  /@windingtree/sdk-client@1.3.4(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-KItn5EKC2GutPhGGNSXWuYlYvqoBCt58XJCppxz7ZMxx0jzcWI9RsEubmaBT/RGdnHwWBGjG3eG4QJxzEoYHRA==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5311,7 +5311,7 @@ packages:
       '@libp2p/peer-id': 3.0.6
       '@libp2p/websockets': 7.0.13
       '@multiformats/multiaddr': 12.1.11
-      '@windingtree/sdk-contracts-manager': 1.3.2(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-pubsub': 1.3.3(typescript@5.3.3)(zod@3.22.4)
@@ -5332,8 +5332,8 @@ packages:
   /@windingtree/sdk-constants@1.2.3:
     resolution: {integrity: sha512-yZ2JqbTUPNb00DRpbxN776rro4AB+NalxZ4Ayfmc4CWv9XK2fpElBkTXK1NpnOklHUyO4jGP1eQmcHgfQsgcOg==}
 
-  /@windingtree/sdk-contracts-manager@1.3.2(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-QEQLiAt4IR3rfhB9Rc+EoWrF/adtiCF16OD/0VssRWppe+4PtgwwJBqbupfESFdzNaumBfQLPZAD6Hv3bk3+hA==}
+  /@windingtree/sdk-contracts-manager@1.4.0(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-UgxU/fzd5yhqN455Ok/Zb65yiDsbUYl7MHlFzgrMArshbbCOUKXOgo4V2cheOn0fepIXOX+YPDyzbGRoMW633g==}
     dependencies:
       '@windingtree/contracts': 1.0.0
       '@windingtree/sdk-logger': 1.1.4
@@ -5383,12 +5383,12 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-node-api@1.5.1(typescript@5.3.3):
-    resolution: {integrity: sha512-KQkjebwoziXUk+yCXxWI0nx655NUlEsIdbuwQzuKn2z08MNd+qykVEQljOtmbmPcrOp4e0TlByDZByl7TzDybA==}
+  /@windingtree/sdk-node-api@1.5.2(typescript@5.3.3):
+    resolution: {integrity: sha512-cX/iGoRstnWTAA3xDxhW72JSzJq1Qm5wxvnsiStl8NgFx3kpKjVmXSgsb7IlRBVzDfRHfBg4oHEfO/WnMBehPg==}
     dependencies:
       '@trpc/client': 10.44.1(@trpc/server@10.45.0)
       '@trpc/server': 10.45.0
-      '@windingtree/sdk-contracts-manager': 1.3.2(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db': 1.2.6(typescript@5.3.3)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
@@ -5405,8 +5405,8 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@windingtree/sdk-node@1.3.3(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-BnFux3w/1SWhOyyO+Y6O0AsEKHZCmhj6sLOIl67AbXxiNq06ngUrmfOB4PD2ac9D0jFvcs1JxFeDJUtfWEkSvA==}
+  /@windingtree/sdk-node@1.3.4(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-BE4qVG3NTDIP1jN23yUHXh5BK+4qGeNGqReVSf7iNwC5EYnSoWdp+j94FgO+P3iSL3o3wWk0LeR9BCGHAwYr4Q==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5415,7 +5415,7 @@ packages:
       '@libp2p/peer-id': 3.0.6
       '@libp2p/websockets': 7.0.13
       '@multiformats/multiaddr': 12.1.11
-      '@windingtree/sdk-contracts-manager': 1.3.2(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-pubsub': 1.3.3(typescript@5.3.3)(zod@3.22.4)
@@ -5469,8 +5469,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.1:
-    resolution: {integrity: sha512-72yNRFvPfuNV1vCNuy4JLaqCemPWM6qmFI+x5EIHgfRaG0dhrIbQVfJUozooa9c8rexZt/ma+bNgY/jw95I+9A==}
+  /@windingtree/sdk-react@1.4.2:
+    resolution: {integrity: sha512-IkNvIRVxXTySt6kfJep4OTaHp8XtR61NpdODDMFE3N0eseMVdNBAnQt7XOHEpOH7G3VxlN77OXkPhcL1+e2I5g==}
     dev: true
 
   /@windingtree/sdk-server@1.2.6(typescript@5.3.3):
