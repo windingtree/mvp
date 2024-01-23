@@ -10,11 +10,11 @@ import {
 import { randomSalt } from '@windingtree/contracts';
 import {
   RequestQuery,
-  OfferOptions,
   contractsConfig,
   stableCoins,
   serverAddress,
 } from 'mvp-shared-files';
+import { OfferOptions } from '../types.js';
 import { OfferData, DealStatus } from '@windingtree/sdk-types';
 import { noncePeriod } from '@windingtree/sdk-constants';
 import { Queue, JobHandler } from '@windingtree/sdk-queue';
@@ -154,8 +154,7 @@ const createRequestsHandler =
         /** Random options data. Just for testing */
         options: {
           date: DateTime.now().toISODate(),
-          buongiorno: Math.random() < 0.5,
-          buonasera: Math.random() < 0.5,
+          airplane: {} as OfferOptions['airplane'],
         },
         /**
          * Dummy payment option.
