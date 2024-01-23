@@ -4,11 +4,24 @@ import {
   AppConfig,
   ConfigProvider,
   ContractsProvider,
+  ClientProvider,
+  RequestsManagerProvider,
+  DealsManagerProvider,
 } from '@windingtree/sdk-react/providers';
 import { WagmiConfig } from 'wagmi';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-import { contractsConfig, wcProjectId } from 'mvp-shared-files';
+import {
+  RequestQuery,
+  contractsConfig,
+  serverAddress,
+  wcProjectId,
+} from 'mvp-shared-files';
+import type { OfferOptions } from '@windingtree/mvp-node/types';
 import { hardhat, gnosisChiado } from 'viem/chains';
+import {
+  LocalStorage,
+  createInitializer,
+} from '@windingtree/sdk-storage/local';
 
 export const targetChain =
   import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
@@ -48,7 +61,28 @@ root.render(
   <ConfigProvider>
     <WagmiConfig config={wagmiConfig}>
       <ContractsProvider contractsConfig={contractsConfig}>
-        <App />
+        <ClientProvider<RequestQuery, OfferOptions>
+          serverAddress={serverAddress}
+        >
+          <RequestsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
+            storageInitializer={createInitializer({
+              session: false, // session or local storage
+            })}
+            prefix={'mvp_requests_'}
+          >
+            <DealsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
+              storageInitializer={createInitializer({
+                session: false, // session or local storage
+              })}
+              prefix={'mvp_deals_'}
+              checkInterval={'5s'}
+              chain={targetChain}
+              contracts={contractsConfig}
+            >
+              <App />
+            </DealsManagerProvider>
+          </RequestsManagerProvider>
+        </ClientProvider>
       </ContractsProvider>
     </WagmiConfig>
   </ConfigProvider>,
