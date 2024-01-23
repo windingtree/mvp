@@ -1,6 +1,6 @@
 import { Alert, Grid, Typography, IconButton, Stack } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { AppRouter } from '@windingtree/mvp-node';
+import type { AppRouter } from '@windingtree/mvp-node/types';
 import { useNode } from '@windingtree/sdk-react/providers';
 import { useCallback, useEffect, useState } from 'react';
 import { inferProcedureOutput } from '@trpc/server';

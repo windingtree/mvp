@@ -13,7 +13,7 @@ import {
   useConfig,
   useNode,
 } from '@windingtree/sdk-react/providers';
-import { type AppRouter } from '@windingtree/mvp-node';
+import type { AppRouter } from '@windingtree/mvp-node/types';
 import { Login } from './Login.js';
 import { CustomConfig } from '../../main.js';
 

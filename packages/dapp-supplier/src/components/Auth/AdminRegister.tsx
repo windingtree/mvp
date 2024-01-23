@@ -15,7 +15,7 @@ import {
   useNode,
 } from '@windingtree/sdk-react/providers';
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
-import { type AppRouter } from '@windingtree/mvp-node';
+import type { AppRouter } from '@windingtree/mvp-node/types';
 import { CustomConfig } from '../../main.js';
 
 /**
