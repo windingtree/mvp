@@ -35,6 +35,8 @@
     "million": "^2.6.4",
     "@mui/material": "^5.14.20",
     "@mui/icons-material": "^5.14.19",
+    "@mui/x-date-pickers": "^6.19.0",
+    "dayjs": "^1.11.10",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@conform-to/react": "^0.9.1",

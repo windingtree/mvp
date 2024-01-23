@@ -1,4 +1,5 @@
 export interface Showcase {
+  id: string;
   name: string;
   description: string;
   media: {
@@ -9,6 +10,7 @@ export interface Showcase {
 
 export const mainShowcase: Showcase[] = [
   {
+    id: 'prague',
     name: 'Prague at Dawn',
     description: 'The historic grandeur of Prague awakens with the day.',
     media: {
@@ -18,6 +20,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'lake',
     name: 'Tranquil Waters',
     description: "A serene lake reflects the surrounding forest's peace.",
     media: {
@@ -27,6 +30,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'hydro',
     name: 'Harnessing the Flow',
     description: 'The might of human ingenuity captured in a dam.',
     media: {
@@ -36,6 +40,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'castle',
     name: 'Fairytale Fortress',
     description: "A castle's fairytale silhouette amidst a forest's embrace.",
     media: {
@@ -45,6 +50,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'river',
     name: 'Serpentine Flow',
     description: 'A river winds through mountains like a silver ribbon.',
     media: {
@@ -54,6 +60,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'fields',
     name: "Nature's Mosaic",
     description: 'A colorful tapestry of rural farmland.',
     media: {
@@ -63,6 +70,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'mountains',
     name: 'Carpathian Splendor',
     description: 'Sunlight dances through the Carpathian valleys.',
     media: {
@@ -72,6 +80,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'abandoned',
     name: 'Ghost Town Reclaimed',
     description: "Nature's embrace of an abandoned urban expanse.",
     media: {
@@ -81,6 +90,7 @@ export const mainShowcase: Showcase[] = [
     },
   },
   {
+    id: 'horses',
     name: 'Dawn Stampede',
     description: 'Horses in motion across a misty field at sunrise.',
     media: {

@@ -1,18 +1,19 @@
-import { Container } from '@mui/material';
 import {
+  Container,
   Grid,
   Card,
   CardMedia,
   CardContent,
   Typography,
-  CardActions,
-  Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { mainShowcase } from '../config.js';
 
 export const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
-    <Container sx={{ paddingTop: 4, paddingBottom: 4 }}>
+    <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
       <Grid container spacing={2}>
         {mainShowcase.map((item, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
@@ -21,9 +22,10 @@ export const HomePage = () => {
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
+                maxWidth: 300,
                 height: '100%',
               }}
-              onClick={() => console.log(item.name)}
+              onClick={() => navigate(`search?tour=${item.id}`)}
             >
               <CardMedia
                 sx={{ height: 140 }}

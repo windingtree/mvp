@@ -2,6 +2,7 @@ import { RouteObject } from 'react-router-dom';
 import { MainLayout } from './layouts/Main.js';
 import { HomePage } from './pages/HomePage.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
+import { SearchPage } from './pages/SearchPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -13,20 +14,17 @@ export const routes: RouteObject[] = [
         index: true,
         element: <HomePage />,
       },
+      {
+        path: 'search',
+        element: <SearchPage />,
+      },
     ],
   },
 ];
 
 export const routesTitlesObj: Record<string, string> = {
-  // supplier: 'Supplier',
-  // 'supplier/setup': 'Supplier Setup',
-  // 'supplier/setup/register': 'Supplier Setup',
-  // 'supplier/setup/view': 'Supplier Setup',
-  // 'supplier/setup/manage': 'Supplier Setup',
-  // 'supplier/access': 'Supplier Access',
-  // 'supplier/deals': 'Deals',
-  // 'supplier/config': 'Supplier Config',
-  // airplanes: 'Airplanes Management',
+  '': 'Book Your Flight',
+  search: 'Search Airplane',
 };
 
 export const menuTitlesObj: Record<string, string> = {
