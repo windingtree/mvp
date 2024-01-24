@@ -6,16 +6,13 @@ import {
   Box,
   Stack,
   Typography,
-  Tooltip,
   Menu,
   MenuItem,
   IconButton,
 } from '@mui/material';
-import { CheckCircle, PowerOff, Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { menuTitles, getTitleByPath } from '../routes.js';
-import { useNode } from '@windingtree/sdk-react/providers';
-import { type AppRouter } from '@windingtree/mvp-node';
 
 const MainMenu = () => {
   const navigate = useNavigate();
