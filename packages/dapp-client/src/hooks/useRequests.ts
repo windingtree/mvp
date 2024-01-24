@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { EventHandler } from '@libp2p/interface/events';
-import { Client, ClientRequestRecord } from '@windingtree/sdk-client';
+import {
+  Client,
+  ClientRequestRecord,
+  ClientRequestsManager,
+} from '@windingtree/sdk-client';
 import { buildRequest } from '@windingtree/sdk-messages';
 import { OfferData, RequestData } from '@windingtree/sdk-types';
 import {
@@ -15,14 +19,6 @@ import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('useRequests');
 
-export type RequestsRegistryRecord = Required<
-  ClientRequestRecord<RequestQuery, OfferOptions>
->;
-
-export type DealsRegistryRecord = Required<
-  DealRecord<RequestQuery, OfferOptions>
->;
-
 export interface UseRequestsProps {
   expire: string;
   topic: string;
@@ -30,12 +26,13 @@ export interface UseRequestsProps {
 
 export interface UseRequestsHook {
   client: Client<RequestQuery, OfferOptions>;
+  requestsManager?: ClientRequestsManager<RequestQuery, OfferOptions>;
   clientConnected: boolean;
   publish: (
     query: RequestQuery,
-  ) => Promise<RequestData<RequestQuery> | undefined>;
-  requests: RequestsRegistryRecord[];
-  deals: DealsRegistryRecord[];
+  ) => Promise<ClientRequestRecord<RequestQuery, OfferOptions> | undefined>;
+  requests: ClientRequestRecord<RequestQuery, OfferOptions>[];
+  deals: DealRecord<RequestQuery, OfferOptions>[];
   error?: string;
 }
 
@@ -46,13 +43,19 @@ export const useRequests = ({
   const { client, clientConnected } = useClient<RequestQuery, OfferOptions>();
   const { requestsManager } = useRequestsManager<RequestQuery, OfferOptions>();
   const { dealsManager } = useDealsManager<RequestQuery, OfferOptions>();
-  const [requests, setRequests] = useState<RequestsRegistryRecord[]>([]);
-  const [deals, setDeals] = useState<DealsRegistryRecord[]>([]);
+  const [requests, setRequests] = useState<
+    ClientRequestRecord<RequestQuery, OfferOptions>[]
+  >([]);
+  const [deals, setDeals] = useState<DealRecord<RequestQuery, OfferOptions>[]>(
+    [],
+  );
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     const updateRequests = () => {
-      setRequests(() => requestsManager?.getAll() || []);
+      setTimeout(() => {
+        setRequests(() => requestsManager?.getAll() || []);
+      }, 150);
     };
 
     const updateDeals = () => {
@@ -94,12 +97,14 @@ export const useRequests = ({
       CustomEvent<RequestData<RequestQuery>>
     > = ({ detail }) => {
       requestsManager?.add(detail);
+      updateRequests();
     };
 
     const onOffer: EventHandler<
       CustomEvent<OfferData<RequestQuery, OfferOptions>>
     > = ({ detail }) => {
       requestsManager?.addOffer(detail);
+      updateRequests();
     };
 
     const onRequestSubscribe: EventHandler<
@@ -163,7 +168,7 @@ export const useRequests = ({
       try {
         setError(undefined);
 
-        if (!client) {
+        if (!client || !requestsManager) {
           throw new Error('The client is not initialized yet');
         }
 
@@ -177,18 +182,24 @@ export const useRequests = ({
         });
 
         client.publish(request);
-        return request;
+
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
+
+        return await requestsManager.get(request.id);
       } catch (error) {
         setError((error as Error).message);
         logger.error(error);
       }
     },
-    [client, expire, topic],
+    [client, expire, requestsManager, topic],
   );
 
   return {
     client,
     clientConnected,
+    requestsManager,
     publish,
     requests,
     deals,
