@@ -1,3 +1,4 @@
+export { requestExpiration, nodeTopic } from 'mvp-shared-files';
 export interface Showcase {
   id: string;
   name: string;
