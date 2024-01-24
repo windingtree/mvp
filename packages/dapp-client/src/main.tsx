@@ -22,6 +22,9 @@ import {
   LocalStorage,
   createInitializer,
 } from '@windingtree/sdk-storage/local';
+import { createLogger } from '@windingtree/sdk-logger';
+
+const logger = createLogger('Main');
 
 export const targetChain =
   import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
@@ -52,8 +55,7 @@ export interface CustomConfig extends AppConfig {
 window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault();
   event.stopPropagation();
-  // eslint-disable-next-line no-console
-  console.log('Unhandled error event', event);
+  logger.trace('Unhandled error event', event);
 });
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
