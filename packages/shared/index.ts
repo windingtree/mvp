@@ -144,3 +144,9 @@ export const serverPeerKey = {
 } as const;
 
 export const wcProjectId = env.VITE_WC_PROJECT_ID;
+
+export const requestExpiration = '1h';
+
+export const offerExpiration = '1h';
+
+export const nodeTopic = 'nice-aero-tours';
