@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useConfig, useNode } from '@windingtree/sdk-react/providers';
-import { type AppRouter } from '@windingtree/mvp-node';
+import type { AppRouter } from '@windingtree/mvp-node/types';
 import {
   Alert,
   Box,

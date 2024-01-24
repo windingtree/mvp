@@ -64,7 +64,7 @@ export const Header = () => {
   return (
     <AppBar position="static">
       <Container maxWidth="lg">
-        <Toolbar>
+        <Toolbar disableGutters={true}>
           <Typography variant="h6">
             {getTitleByPath(location.pathname)}
           </Typography>

@@ -1,21 +1,11 @@
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { Address } from 'viem';
-import {
-  GenericQuery,
-  GenericOfferOptions,
-  Contracts,
-} from '@windingtree/sdk-types';
+import type { Address } from 'viem';
+import type { GenericQuery, Contracts } from '@windingtree/sdk-types';
 import { config } from 'dotenv';
 
 export interface RequestQuery extends GenericQuery {
-  greeting: string;
-}
-
-export interface OfferOptions extends GenericOfferOptions {
-  date: string | null;
-  buongiorno: boolean;
-  buonasera: boolean;
+  date: string; // ISO 8601 without minutes: `YYYY-MM-DD`
 }
 
 export interface LocalEnv {

@@ -24,7 +24,7 @@ import {
 import { useNode } from '@windingtree/sdk-react/providers';
 import { Gallery } from './Gallery.js';
 import { Prices } from './Prices.js';
-import { AppRouter } from '@windingtree/mvp-node';
+import type { AppRouter } from '@windingtree/mvp-node/types';
 import { inferProcedureInput } from '@trpc/server';
 
 type AirplanesAddInput = inferProcedureInput<AppRouter['airlines']['add']>;

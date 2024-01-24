@@ -6,11 +6,12 @@ export default defineConfig([
     tsconfig: './tsconfig.json',
     entry: {
       index: './src/index.ts',
+      types: './src/types.ts',
     },
     platform: 'node',
     treeshake: true,
     sourcemap: true,
-    format: ['esm'],
+    format: ['esm', 'cjs'],
     external: Object.keys(dependencies),
     splitting: false,
   },
