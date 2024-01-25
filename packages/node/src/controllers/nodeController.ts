@@ -1,45 +1,48 @@
 import 'dotenv/config';
 import { EventHandler } from '@libp2p/interface/events';
-import { DateTime } from 'luxon';
 import {
-  zeroAddress,
   createPublicClient,
   createWalletClient,
   http,
+  zeroAddress,
 } from 'viem';
 import { randomSalt } from '@windingtree/contracts';
 import {
-  RequestQuery,
   contractsConfig,
-  stableCoins,
+  nodeTopic,
+  offerExpiration,
+  RequestQuery,
   serverAddress,
 } from 'mvp-shared-files';
-import { OfferOptions } from '../types.js';
-import { OfferData, DealStatus } from '@windingtree/sdk-types';
+import { DealStatus, OfferData, PaymentOption } from '@windingtree/sdk-types';
+import {
+  DealHandlerOptions,
+  OfferOptions,
+  RequestHandlerOptions,
+} from '../types.js';
 import { noncePeriod } from '@windingtree/sdk-constants';
-import { Queue, JobHandler } from '@windingtree/sdk-queue';
+import { JobHandler, Queue } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
   router,
 } from '@windingtree/sdk-node-api/server';
 import {
-  serviceRouter,
   adminRouter,
-  userRouter,
   dealsRouter,
+  serviceRouter,
+  userRouter,
 } from '@windingtree/sdk-node-api/router';
-import { airplanesRouter } from '../api/airplanesRoute.js';
+import { AirplaneInput, airplanesRouter } from '../api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
 import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
-import { DealsDb } from '@windingtree/sdk-db';
 import {
+  createNode,
   Node,
   NodeOptions,
   NodeRequestManager,
   RequestEvent,
-  createNode,
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
 import { config } from '../common/config.js';
@@ -69,14 +72,6 @@ const createJobHandler =
   (options: HandlerOptions = {} as HandlerOptions) =>
   (data: JobData) =>
     handler(data, options);
-
-/**
- * This is interface of object that you want to pass to the job handler as options
- */
-interface DealHandlerOptions {
-  contracts: ProtocolContracts;
-  dealsDb: DealsDb;
-}
 
 /**
  * This handler looking up for a deal
@@ -140,73 +135,93 @@ const dealHandler = createJobHandler<
 const createRequestsHandler =
   (
     node: Node<RequestQuery, OfferOptions>,
-    queue: Queue,
+    options: RequestHandlerOptions,
   ): EventHandler<CustomEvent<RequestEvent<RequestQuery>>> =>
   ({ detail }) => {
     const handler = async () => {
       logger.trace(`📨 Request on topic #${detail.topic}:`, detail.data);
+      const { airplanesDb, offersDb } = options;
 
-      const offer = await node.makeOffer({
-        /** Offer expiration time */
-        expire: '15m',
-        /** Copy of request */
-        request: detail.data,
-        /** Random options data. Just for testing */
-        options: {
-          date: DateTime.now().toISODate(),
-          airplane: {} as OfferOptions['airplane'],
-        },
-        /**
-         * Dummy payment option.
-         * In production these options managed by supplier
-         */
-        payment: [
-          {
-            id: randomSalt(),
-            price: BigInt('1000000000000000'), // 0.001
-            asset: stableCoins[3].address,
-          },
-          {
-            id: randomSalt(),
-            price: BigInt('1200000000000000'), // 0.0012
-            asset: stableCoins[2].address,
-          },
-        ],
-        /** Cancellation options */
-        cancel: [
-          {
-            time: BigInt(nowSec() + 500),
-            penalty: BigInt(100),
-          },
-        ],
-        /** Check-in time */
-        checkIn: BigInt(nowSec() + 1000),
-        checkOut: BigInt(nowSec() + 2000),
-      });
+      for (const record of await airplanesDb.entries<AirplaneInput>()) {
+        const airplane = {
+          id: record[0],
+          ...record[1],
+        };
 
-      queue.addEventListener('status', ({ detail: job }) => {
-        logger.trace(`Job #${job.id} status changed`, job);
-      });
+        const timingCoefficients = processTimingCoefficients(
+          airplane.minTime,
+          airplane.maxTime,
+        );
 
-      /**
-       * On every published offer we expecting a deal.
-       * So, we add a job for detection of deals
-       */
-      queue.add({
-        handlerName: 'deal',
-        data: offer,
-        isRecurrent: true,
-        recurrenceInterval: 5000,
-        expire: Number(offer.expire),
-      });
+        for (const timingCoefficient of timingCoefficients) {
+          const paymentOptions: PaymentOption[] = airplane.price.map((i) => {
+            return {
+              id: randomSalt(),
+              price: BigInt(+i.value * timingCoefficient),
+              asset: i.token as `0x${string}`,
+            };
+          });
 
-      // слушаем смартконтракт каждый новый блок
-      // если нет новых событий продолжаем слушать
-      // если есть, то перебираем и запускаем флоу по удачным офферам и отмененным, отмененные идут в одну ветку логики, удачные в другую
+          const offer = await node.makeOffer({
+            /** Offer expiration time */
+            expire: offerExpiration,
+            /** Copy of request */
+            request: detail.data,
+            options: {
+              date: detail.data.query.date,
+              airplane: mapAirplane(airplane),
+            },
+            payment: paymentOptions,
+            /** Cancellation options */
+            cancel: [
+              // {
+              //   time: BigInt(nowSec() + 500),
+              //   penalty: BigInt(100),
+              // },
+            ],
+            /** Check-in time */
+            checkIn: BigInt(nowSec() + 1000),
+            checkOut: BigInt(nowSec() + 2000),
+          });
+
+          await offersDb.set(offer.id, offer);
+        }
+      }
     };
 
     handler().catch(logger.error);
   };
+
+const processTimingCoefficients = (
+  minTime: number,
+  maxTime: number,
+): number[] => {
+  const timingCoefficients = [minTime];
+  let time = minTime;
+
+  while (time < maxTime) {
+    time = time + config.offerGap;
+    if (time > maxTime) {
+      timingCoefficients.push(maxTime);
+    } else {
+      timingCoefficients.push(+time.toFixed(1));
+    }
+  }
+
+  return timingCoefficients;
+};
+
+const mapAirplane = (
+  airplane: AirplaneInput,
+): Omit<AirplaneInput, 'minTime' | 'maxTime' | 'price'> => {
+  return {
+    id: airplane.id,
+    name: airplane.name,
+    description: airplane.description,
+    capacity: airplane.capacity,
+    media: airplane.media,
+  };
+};
 
 /**
  * Starts the suppliers node
@@ -218,7 +233,7 @@ export const main = async (): Promise<void> => {
   //todo listen to ToggleEnabled event smart contract every new block and shutdown service if config == false
 
   const options: NodeOptions = {
-    topics: ['hello'],
+    topics: [nodeTopic],
     chain: config.chain,
     contracts: contractsConfig,
     serverAddress,
@@ -269,7 +284,10 @@ export const main = async (): Promise<void> => {
     path: './airplanes.db',
     scope: 'airplanes',
   })();
-
+  const offerDb = await levelStorage.createInitializer({
+    path: './offer.db',
+    scope: 'offer',
+  })();
   // console.log('@@@', await usersStorage.entries());
 
   const apiServerConfig: NodeApiServerOptions = {
@@ -305,7 +323,10 @@ export const main = async (): Promise<void> => {
 
   requestManager.addEventListener(
     'request',
-    createRequestsHandler(node, queue),
+    createRequestsHandler(node, {
+      airplanesDb: airplanesStorage,
+      offersDb: offerDb,
+    }),
   );
 
   node.addEventListener('heartbeat', () => {

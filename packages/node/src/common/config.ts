@@ -10,6 +10,7 @@ class Config {
   private _entityOwnerAddress: `0x${string}` | undefined;
   private _cors: string[] | undefined;
   private _chain: Chain | undefined;
+  private _offerGap: number | undefined;
 
   public init() {
     this.setSignerMnemonicFromConfig();
@@ -18,6 +19,7 @@ class Config {
     this.setEntityOwnerAddressFromConfig();
     this.setChainFromConfig();
     this.setCorsFromConfig();
+    this.setOfferGapFromConfig();
   }
 
   private setSignerMnemonicFromConfig() {
@@ -93,6 +95,18 @@ class Config {
     this._chain = targetChain === 'hardhat' ? hardhat : gnosisChiado;
   }
 
+  private setOfferGapFromConfig() {
+    const offerGap = Number(process.env.ENTITY_OFFER_GAP);
+
+    if (!offerGap) {
+      throw new Error(
+        'Entity offer gap must be provided with ENTITY_OFFER_GAP env',
+      );
+    }
+
+    this._offerGap = offerGap;
+  }
+
   get signerMnemonic(): string | undefined {
     return this._signerMnemonic;
   }
@@ -129,6 +143,16 @@ class Config {
       throw new Error('Chain config error');
     }
     return this._chain;
+  }
+
+  get offerGap(): number {
+    if (!this._offerGap) {
+      throw new Error(
+        'Entity offer gap must be provided with ENTITY_OFFER_GAP env',
+      );
+    }
+
+    return this._offerGap;
   }
 }
 
