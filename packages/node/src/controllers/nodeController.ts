@@ -158,12 +158,16 @@ const createRequestsHandler =
           const paymentOptions: PaymentOption[] = airplane.price.map((i) => {
             return {
               id: randomSalt(),
-              price: BigInt(+i.value * timingCoefficient),
+              price: BigInt(Math.ceil(+i.value * timingCoefficient)),
               asset: i.token as `0x${string}`,
             };
           });
 
-          const nowTimestamp = BigInt(DateTime.now().toSeconds());
+          const nowTimestamp = Math.ceil(DateTime.now().toSeconds());
+          const nowTimestampBn = BigInt(nowTimestamp);
+          const currentTime = DateTime.now().toSeconds();
+          const timeDiff = nowTimestamp - currentTime;
+          const halfTime = Math.round(currentTime + timeDiff / 2);
 
           const offer = await node.makeOffer({
             /** Offer expiration time */
@@ -172,19 +176,20 @@ const createRequestsHandler =
             request: detail.data,
             options: {
               date: detail.data.query.date,
+              hours: timingCoefficient,
               airplane: mapAirplane(airplane),
             },
             payment: paymentOptions,
             /** Cancellation options */
             cancel: [
-              // {
-              //   time: BigInt(nowSec() + 500),
-              //   penalty: BigInt(100),
-              // },
+              {
+                time: BigInt(halfTime), // When half the time has passed before the offer date (checkIn)
+                penalty: BigInt(50), // the penalty becomes 50%
+              },
             ],
             /** Check-in time */
-            checkIn: nowTimestamp,
-            checkOut: nowTimestamp,
+            checkIn: nowTimestampBn,
+            checkOut: nowTimestampBn,
           });
 
           await offersDb.set(offer.id, offer);
