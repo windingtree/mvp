@@ -36,7 +36,7 @@ import {
 import { AirplaneInput, airplanesRouter } from '../api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { levelStorage } from '@windingtree/sdk-storage';
-import { nowSec, parseSeconds } from '@windingtree/sdk-utils';
+import { parseSeconds } from '@windingtree/sdk-utils';
 import {
   createNode,
   Node,
@@ -46,6 +46,7 @@ import {
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
 import { config } from '../common/config.js';
+import { DateTime } from 'luxon';
 
 const appRouter = router({
   service: serviceRouter,
@@ -162,6 +163,8 @@ const createRequestsHandler =
             };
           });
 
+          const nowTimestamp = BigInt(DateTime.now().toSeconds());
+
           const offer = await node.makeOffer({
             /** Offer expiration time */
             expire: offerExpiration,
@@ -180,8 +183,8 @@ const createRequestsHandler =
               // },
             ],
             /** Check-in time */
-            checkIn: BigInt(nowSec() + 1000),
-            checkOut: BigInt(nowSec() + 2000),
+            checkIn: nowTimestamp,
+            checkOut: nowTimestamp,
           });
 
           await offersDb.set(offer.id, offer);
