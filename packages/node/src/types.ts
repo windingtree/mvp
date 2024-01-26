@@ -8,6 +8,7 @@ export type { AirplaneInput };
 
 export interface OfferOptions extends GenericOfferOptions {
   date: string;
+  hours: number;
   airplane: Omit<AirplaneInput, 'minTime' | 'maxTime' | 'price'>;
 }
 
