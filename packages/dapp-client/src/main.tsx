@@ -22,6 +22,8 @@ import {
   LocalStorage,
   createInitializer,
 } from '@windingtree/sdk-storage/local';
+import { SearchProvider } from './providers/SearchProvider/index.js';
+import { requestExpiration, nodeTopic } from './config.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('Main');
@@ -81,7 +83,9 @@ root.render(
               chain={targetChain}
               contracts={contractsConfig}
             >
-              <App />
+              <SearchProvider topic={nodeTopic} expire={requestExpiration}>
+                <App />
+              </SearchProvider>
             </DealsManagerProvider>
           </RequestsManagerProvider>
         </ClientProvider>

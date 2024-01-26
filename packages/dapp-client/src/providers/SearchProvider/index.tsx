@@ -1,10 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { PropsWithChildren, useState, useEffect, useCallback } from 'react';
+import { SearchContext } from './SearchProviderContext.js';
 import { EventHandler } from '@libp2p/interface/events';
-import {
-  Client,
-  ClientRequestRecord,
-  ClientRequestsManager,
-} from '@windingtree/sdk-client';
+import { ClientRequestRecord } from '@windingtree/sdk-client';
 import { buildRequest } from '@windingtree/sdk-messages';
 import { OfferData, RequestData } from '@windingtree/sdk-types';
 import {
@@ -17,30 +14,19 @@ import { OfferOptions } from '@windingtree/mvp-node/types';
 import { RequestQuery } from 'mvp-shared-files';
 import { createLogger } from '@windingtree/sdk-logger';
 
-const logger = createLogger('useRequests');
+const logger = createLogger('SearchProvider');
 
-export interface UseRequestsProps {
+export interface SearchProviderProps extends PropsWithChildren {
   expire: string;
   topic: string;
 }
 
-export interface UseRequestsHook {
-  client: Client<RequestQuery, OfferOptions>;
-  requestsManager?: ClientRequestsManager<RequestQuery, OfferOptions>;
-  clientConnected: boolean;
-  publish: (
-    query: RequestQuery,
-  ) => Promise<ClientRequestRecord<RequestQuery, OfferOptions> | undefined>;
-  requests: ClientRequestRecord<RequestQuery, OfferOptions>[];
-  deals: DealRecord<RequestQuery, OfferOptions>[];
-  error?: string;
-}
-
-export const useRequests = ({
+export const SearchProvider = ({
+  children,
   expire,
   topic,
-}: UseRequestsProps): UseRequestsHook => {
-  const { client, clientConnected } = useClient<RequestQuery, OfferOptions>();
+}: SearchProviderProps) => {
+  const { client } = useClient<RequestQuery, OfferOptions>();
   const { requestsManager } = useRequestsManager<RequestQuery, OfferOptions>();
   const { dealsManager } = useDealsManager<RequestQuery, OfferOptions>();
   const [requests, setRequests] = useState<
@@ -196,13 +182,17 @@ export const useRequests = ({
     [client, expire, requestsManager, topic],
   );
 
-  return {
-    client,
-    clientConnected,
-    requestsManager,
-    publish,
-    requests,
-    deals,
-    error,
-  };
+  return (
+    <SearchContext.Provider
+      value={{
+        requestsManager,
+        publish,
+        requests,
+        deals,
+        error,
+      }}
+    >
+      {children}
+    </SearchContext.Provider>
+  );
 };
