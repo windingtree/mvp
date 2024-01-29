@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   Grid,
   Card,
@@ -7,13 +8,63 @@ import {
   CircularProgress,
   Stack,
   Box,
+  Alert,
 } from '@mui/material';
 import { OfferOptions } from '@windingtree/mvp-node/types';
-import { OfferData } from '@windingtree/sdk-types';
+import { OfferData, PaymentOption } from '@windingtree/sdk-types';
+import { isExpired } from '@windingtree/sdk-utils/time';
 import { RequestQuery } from 'mvp-shared-files';
-// import { createLogger } from '@windingtree/sdk-logger';
+import { Address, FetchTokenResult, fetchToken } from '@wagmi/core';
+import { formatUnits } from 'viem';
+import { DateTime } from 'luxon';
+import { createLogger } from '@windingtree/sdk-logger';
 
-// const logger = createLogger('Offers');
+const logger = createLogger('OffersList');
+
+const tokensCache: Record<Address, FetchTokenResult> = {};
+
+const Prices = ({ payments }: { payments: PaymentOption[] }) => {
+  const [prices, setPrices] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getPrices = async () => {
+      try {
+        const res = await Promise.all(
+          payments.map(async (o) => {
+            const token = tokensCache[o.asset]
+              ? tokensCache[o.asset]
+              : await fetchToken({
+                  address: o.asset,
+                });
+            tokensCache[o.asset] = token;
+            const price = parseFloat(formatUnits(o.price, token.decimals));
+            return `${price.toFixed(2)} ${token.symbol}`;
+          }),
+        );
+        setPrices(res);
+      } catch (err) {
+        logger.error('getPrices', err);
+        setPrices([]);
+      }
+    };
+    getPrices();
+  }, [payments]);
+
+  return (
+    <>
+      <Typography variant="h6" color="text.secondary">
+        Prices:
+      </Typography>
+      <ul style={{ padding: '0 0 0 16px', margin: 0 }}>
+        {prices.map((p, i) => (
+          <li key={i}>
+            <Typography variant="body2">{p}</Typography>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
 
 interface OffersProps {
   offers?: OfferData<RequestQuery, OfferOptions>[];
@@ -26,6 +77,12 @@ export const Offers = ({
   subscribed,
   onStop = () => {},
 }: OffersProps) => {
+  useEffect(() => {
+    if (offers && isExpired(offers[0].expire)) {
+      onStop();
+    }
+  }, [offers, onStop]);
+
   if (!offers || (offers && offers.length === 0)) {
     return null;
   }
@@ -50,9 +107,17 @@ export const Offers = ({
               title={item.options.airplane.name}
             />
             <CardContent>
+              {isExpired(item.expire) && (
+                <Alert severity="warning" sx={{ marginBottom: 1 }}>
+                  Expired at{' '}
+                  {DateTime.fromSeconds(
+                    parseInt(item.expire.toString()),
+                  ).toFormat('yyyy/MM/dd mm:ss')}
+                </Alert>
+              )}
               <Stack direction="row" spacing={2}>
                 <Box sx={{ paddingRight: 1, borderRight: 1 }}>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography gutterBottom variant="h5">
                     {item.options.airplane.name}
                   </Typography>
                 </Box>
@@ -63,6 +128,7 @@ export const Offers = ({
                   <Typography variant="h6" color="text.secondary">
                     Hours: {item.options.hours}
                   </Typography>
+                  <Prices payments={item.payment} />
                 </Box>
               </Stack>
             </CardContent>
