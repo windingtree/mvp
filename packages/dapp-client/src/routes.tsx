@@ -3,6 +3,7 @@ import { MainLayout } from './layouts/Main.js';
 import { HomePage } from './pages/HomePage.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
 import { SearchPage } from './pages/SearchPage.js';
+import { OfferPage } from './pages/OfferPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -18,6 +19,10 @@ export const routes: RouteObject[] = [
         path: 'search',
         element: <SearchPage />,
       },
+      {
+        path: 'offer',
+        element: <OfferPage />,
+      },
     ],
   },
 ];
@@ -25,6 +30,7 @@ export const routes: RouteObject[] = [
 export const routesTitlesObj: Record<string, string> = {
   '': 'Book Your Flight',
   search: 'Search Airplane',
+  offer: 'Book Offer',
 };
 
 export const menuTitlesObj: Record<string, string> = {

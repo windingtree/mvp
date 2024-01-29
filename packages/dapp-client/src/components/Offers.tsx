@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Card,
@@ -14,14 +15,11 @@ import { OfferOptions } from '@windingtree/mvp-node/types';
 import { OfferData, PaymentOption } from '@windingtree/sdk-types';
 import { isExpired } from '@windingtree/sdk-utils/time';
 import { RequestQuery } from 'mvp-shared-files';
-import { Address, FetchTokenResult, fetchToken } from '@wagmi/core';
-import { formatUnits } from 'viem';
 import { DateTime } from 'luxon';
+import { parsePayment } from '../utils/offer.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('OffersList');
-
-const tokensCache: Record<Address, FetchTokenResult> = {};
 
 const Prices = ({ payments }: { payments: PaymentOption[] }) => {
   const [prices, setPrices] = useState<string[]>([]);
@@ -29,18 +27,7 @@ const Prices = ({ payments }: { payments: PaymentOption[] }) => {
   useEffect(() => {
     const getPrices = async () => {
       try {
-        const res = await Promise.all(
-          payments.map(async (o) => {
-            const token = tokensCache[o.asset]
-              ? tokensCache[o.asset]
-              : await fetchToken({
-                  address: o.asset,
-                });
-            tokensCache[o.asset] = token;
-            const price = parseFloat(formatUnits(o.price, token.decimals));
-            return `${price.toFixed(2)} ${token.symbol}`;
-          }),
-        );
+        const res = await parsePayment(payments, 'string');
         setPrices(res);
       } catch (err) {
         logger.error('getPrices', err);
@@ -77,11 +64,7 @@ export const Offers = ({
   subscribed,
   onStop = () => {},
 }: OffersProps) => {
-  useEffect(() => {
-    if (offers && isExpired(offers[0].expire)) {
-      onStop();
-    }
-  }, [offers, onStop]);
+  const navigate = useNavigate();
 
   if (!offers || (offers && offers.length === 0)) {
     return null;
@@ -99,7 +82,11 @@ export const Offers = ({
               maxWidth: 300,
               height: '100%',
             }}
-            onClick={() => {}}
+            onClick={() => {
+              navigate(
+                `/offer?requestId=${item.request.id}&offerId=${item.id}`,
+              );
+            }}
           >
             <CardMedia
               sx={{ height: 140 }}
