@@ -78,7 +78,7 @@ export const SearchPage = () => {
         }
       }
     } catch (err) {
-      logger.error(err);
+      logger.error('handlePublish', err);
     }
   }, [
     currentRequest,
@@ -206,8 +206,16 @@ export const SearchPage = () => {
           onStop={handleRequestStop}
         />
 
-        {tourError && <Alert severity="error">{tourError}</Alert>}
-        {requestsError && <Alert severity="error">{requestsError}</Alert>}
+        {tourError && (
+          <Alert severity="error" sx={{ marginBottom: 2 }}>
+            {tourError}
+          </Alert>
+        )}
+        {requestsError && (
+          <Alert severity="error" sx={{ marginBottom: 2 }}>
+            {requestsError}
+          </Alert>
+        )}
       </Container>
     </LocalizationProvider>
   );
