@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
 import {
   AppConfig,
+  WalletProvider,
   ConfigProvider,
   ContractsProvider,
   ClientProvider,
@@ -62,34 +63,36 @@ window.addEventListener('unhandledrejection', (event) => {
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <ConfigProvider>
-    <WagmiConfig config={wagmiConfig}>
-      <ContractsProvider contractsConfig={contractsConfig}>
-        <ClientProvider<RequestQuery, OfferOptions>
-          serverAddress={serverAddress}
-        >
-          <RequestsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
-            storageInitializer={createInitializer({
-              session: false, // session or local storage
-            })}
-            prefix={'mvp_requests_'}
+  <WalletProvider targetChain={targetChain}>
+    <ConfigProvider>
+      <WagmiConfig config={wagmiConfig}>
+        <ContractsProvider contractsConfig={contractsConfig}>
+          <ClientProvider<RequestQuery, OfferOptions>
+            serverAddress={serverAddress}
           >
-            <DealsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
+            <RequestsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
               storageInitializer={createInitializer({
                 session: false, // session or local storage
               })}
-              prefix={'mvp_deals_'}
-              checkInterval={'5s'}
-              chain={targetChain}
-              contracts={contractsConfig}
+              prefix={'mvp_requests_'}
             >
-              <SearchProvider topic={nodeTopic} expire={requestExpiration}>
-                <App />
-              </SearchProvider>
-            </DealsManagerProvider>
-          </RequestsManagerProvider>
-        </ClientProvider>
-      </ContractsProvider>
-    </WagmiConfig>
-  </ConfigProvider>,
+              <DealsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
+                storageInitializer={createInitializer({
+                  session: false, // session or local storage
+                })}
+                prefix={'mvp_deals_'}
+                checkInterval={'5s'}
+                chain={targetChain}
+                contracts={contractsConfig}
+              >
+                <SearchProvider topic={nodeTopic} expire={requestExpiration}>
+                  <App />
+                </SearchProvider>
+              </DealsManagerProvider>
+            </RequestsManagerProvider>
+          </ClientProvider>
+        </ContractsProvider>
+      </WagmiConfig>
+    </ConfigProvider>
+  </WalletProvider>,
 );
