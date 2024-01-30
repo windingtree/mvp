@@ -22,6 +22,7 @@ import { useSearchProvider } from '../providers/SearchProvider/SearchProviderCon
 import { MuiMarkdown, getOverrides } from 'mui-markdown';
 import { ParsedPrice, parsePayment } from '../utils/offer.js';
 import { useAccount, useBlockNumber } from 'wagmi';
+import { Book } from '../components/Book.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('OfferPage');
@@ -40,6 +41,9 @@ export const OfferPage = () => {
   const [prices, setPrices] = useState<ParsedPrice[]>([]);
   const { address, isConnected } = useAccount();
   const { data: blockNumber } = useBlockNumber({ watch: true });
+  const [selectedPaymentOpt, setSelectedPaymentOpt] = useState<
+    ParsedPrice | undefined
+  >();
 
   useEffect(() => {
     setOfferLoading(true);
@@ -61,7 +65,7 @@ export const OfferPage = () => {
         .then((p) => {
           setPrices(() => p);
         })
-        .catch(logger.error);
+        .catch((err) => logger.error('setPrices', err));
     } else {
       setPrices([]);
     }
@@ -172,36 +176,85 @@ export const OfferPage = () => {
             </Grid>
             <Grid item xs={3} />
           </Grid>
-          {/* Rows */}
-          {prices.map((item, index) => (
+          {selectedPaymentOpt && (
             <Grid
               container
               spacing={2}
-              key={index}
-              sx={{ marginBottom: 1, display: 'flex', alignItems: 'center' }}
+              sx={{
+                marginBottom: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
               <Grid item xs={6}>
                 <Typography>
                   <span
                     title="copy address to clipboard"
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                    onClick={() => copyToClipboard(item.token)}
+                    onClick={() => copyToClipboard(selectedPaymentOpt.token)}
                   >
-                    {item.symbol}
+                    {selectedPaymentOpt.symbol}
                   </span>{' '}
-                  ({item.balance})
+                  ({selectedPaymentOpt.balance})
                 </Typography>
               </Grid>
               <Grid item xs={3}>
-                <Typography textAlign="right">{item.price}</Typography>
+                <Typography textAlign="right">
+                  {selectedPaymentOpt.price}
+                </Typography>
               </Grid>
-              <Grid item xs={3}>
-                <Button variant="contained" disabled={expired || !address}>
-                  Book
-                </Button>
-              </Grid>
+              <Grid item xs={3}></Grid>
             </Grid>
-          ))}
+          )}
+          {!selectedPaymentOpt &&
+            prices.map((item, index) => (
+              <Grid
+                container
+                spacing={2}
+                key={index}
+                sx={{
+                  marginBottom: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Grid item xs={6}>
+                  <Typography>
+                    <span
+                      title="copy address to clipboard"
+                      style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                      onClick={() => copyToClipboard(item.token)}
+                    >
+                      {item.symbol}
+                    </span>{' '}
+                    ({item.balance})
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography textAlign="right">{item.price}</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    variant="contained"
+                    disabled={
+                      expired || !address || Boolean(selectedPaymentOpt)
+                    }
+                    onClick={() => setSelectedPaymentOpt(item)}
+                  >
+                    Book
+                  </Button>
+                </Grid>
+              </Grid>
+            ))}
+
+          {selectedPaymentOpt && address && (
+            <Book
+              address={address}
+              offer={offer}
+              price={selectedPaymentOpt}
+              onCancel={() => setSelectedPaymentOpt(undefined)}
+            />
+          )}
         </>
       )}
     </Container>
