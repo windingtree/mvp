@@ -13,7 +13,7 @@ export interface UsePermitHookProps {
   owner?: Address;
   verifyingContract: Address;
   spender: Address;
-  decimals: 6 | 18;
+  decimals: number;
   version: string;
   value: bigint;
   deadline: bigint;
@@ -43,7 +43,8 @@ export const usePermit = ({
   const { data: nonce } = useContractRead({
     chainId,
     address: verifyingContract,
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     abi,
     functionName: 'nonces',
     args: [owner],
@@ -51,7 +52,8 @@ export const usePermit = ({
   const { data: name } = useContractRead({
     chainId,
     address: verifyingContract,
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     abi,
     functionName: 'name',
   });

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Hash, zeroHash } from 'viem';
 import { contractsConfig } from 'mvp-shared-files';
+import { usePermit } from 'mvp-shared-files/react';
 import { entitiesRegistryABI } from '@windingtree/contracts';
 import {
   useAccount,
@@ -17,7 +18,6 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { usePermit } from '../../hooks/usePermit.js';
 import { useProtocolConfig } from '../../hooks/useProtocolConfig.js';
 import { DepositBalance } from '../DepositBalance.js';
 import {

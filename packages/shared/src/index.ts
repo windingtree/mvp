@@ -27,7 +27,7 @@ export interface Erc20Token {
 let env: LocalEnv;
 
 if (typeof window === 'undefined') {
-  config({ path: resolve(fileURLToPath(import.meta.url), '../.env') });
+  config({ path: resolve(fileURLToPath(import.meta.url), '../../.env') });
   env = process.env as unknown as LocalEnv;
 } else {
   env = (import.meta as unknown as { env: LocalEnv }).env;
