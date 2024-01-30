@@ -5,6 +5,7 @@ import {
   fetchBalance,
 } from '@wagmi/core';
 import { PaymentOption } from '@windingtree/sdk-types';
+import { Erc20Token, stableCoins } from 'mvp-shared-files';
 import { Hash, formatUnits } from 'viem';
 
 const tokensCache: Record<Address, FetchTokenResult> = {};
@@ -14,7 +15,9 @@ export interface ParsedPrice {
   symbol: string;
   token: Address;
   decimals: number;
+  permit: boolean;
   price: string;
+  value: bigint;
   balance: string;
 }
 
@@ -38,9 +41,18 @@ export async function parsePayment(
   const data = await Promise.all(
     payments.map(async (o) => {
       let token = tokensCache[o.asset];
+      let coin: Erc20Token | undefined;
 
       if (!token) {
         token = await fetchToken({ address: o.asset });
+
+        // Check token
+        coin = stableCoins.find((s) => s.address === token.address);
+
+        if (!coin) {
+          throw new Error(`Token ${token.address} is not supported`);
+        }
+
         tokensCache[o.asset] = token;
       }
 
@@ -63,7 +75,9 @@ export async function parsePayment(
             symbol: token.symbol,
             token: token.address,
             decimals: token.decimals,
+            permit: coin?.permit ?? false,
             price: formattedPrice,
+            value: o.price,
             balance: balance ?? '0.00',
           };
     }),
