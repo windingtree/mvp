@@ -1,6 +1,5 @@
-import 'dotenv/config';
-import { Address, Chain, Hash, Hex } from 'viem';
 import { targetChain } from 'mvp-shared-files';
+import { Address, Chain, Hash, Hex } from 'viem';
 import { gnosisChiado, hardhat } from 'viem/chains';
 
 class Config {
