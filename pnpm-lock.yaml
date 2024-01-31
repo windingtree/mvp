@@ -120,8 +120,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.5
-        version: 1.3.5(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.6
+        version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -132,8 +132,8 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.3
-        version: 1.4.3
+        specifier: ^1.4.4
+        version: 1.4.4
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -246,8 +246,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.5
-        version: 1.3.5(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.6
+        version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-messages':
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
@@ -255,8 +255,8 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.3
-        version: 1.4.3
+        specifier: ^1.4.4
+        version: 1.4.4
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -5393,8 +5393,8 @@ packages:
   /@windingtree/contracts@1.0.0:
     resolution: {integrity: sha512-foRPGrAuxNwSsI0rAPgVi8dsOclVxEVCQ8HO8Oat+HUgOPGzsKi45+tUjXBEuECMeRNdhEOXLystheW65SsEaw==}
 
-  /@windingtree/sdk-client@1.3.5(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-15SsLkfBJEP5xAkuTd/RSoHNnMrLRBtCBc6Q1YeLUV7LzucvVVoeoQuVI20Z3kPNBn7lZ1PL7QUDprH9z9ANig==}
+  /@windingtree/sdk-client@1.3.6(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-h6gHm1lPB7QMz6If0XKfhuie916jSAElUgdaOQ6BhJlESUW0Es8OAThq7O/bUUKI2cL1BfVFamgJbqkyVfjk9Q==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5561,8 +5561,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.3:
-    resolution: {integrity: sha512-oOXU9uR+jJ5owZDRgYaFPY4V5wrCbhqvc3D57RKuyog6sBkrDBdNdKzXDaw4raLpFJ1drZjmA1pbUUcJPB76FQ==}
+  /@windingtree/sdk-react@1.4.4:
+    resolution: {integrity: sha512-t/waNLtanlY4lAMT4i2imx0O9upilcdrnrG7XPmFROQhOt21TJSCOsvvLdel1nTo+34L04T+1efAik5ZGAgpYg==}
     dev: true
 
   /@windingtree/sdk-server@1.2.7(typescript@5.3.3):
