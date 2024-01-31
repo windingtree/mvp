@@ -1,11 +1,6 @@
 import 'dotenv/config';
 import { EventHandler } from '@libp2p/interface/events';
-import {
-  createPublicClient,
-  createWalletClient,
-  http,
-  zeroAddress,
-} from 'viem';
+import { createPublicClient, createWalletClient, http } from 'viem';
 import { randomSalt } from '@windingtree/contracts';
 import {
   contractsConfig,
@@ -17,11 +12,11 @@ import {
 import { DealStatus, OfferData, PaymentOption } from '@windingtree/sdk-types';
 import {
   DealHandlerOptions,
+  EventSubscribeOptions,
   OfferOptions,
   RequestHandlerOptions,
 } from '../types.js';
 import { noncePeriod } from '@windingtree/sdk-constants';
-import { JobHandler, Queue } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
@@ -66,21 +61,10 @@ process.once('unhandledRejection', (error) => {
   process.exit(1);
 });
 
-const createJobHandler =
-  <JobData = unknown, HandlerOptions = unknown>(
-    handler: JobHandler<JobData, HandlerOptions>,
-  ) =>
-  (options: HandlerOptions = {} as HandlerOptions) =>
-  (data: JobData) =>
-    handler(data, options);
-
-/**
- * This handler looking up for a deal
- */
-const dealHandler = createJobHandler<
-  OfferData<RequestQuery, OfferOptions>,
-  DealHandlerOptions
->(async (offer, options) => {
+const dealHandler = async (
+  offer: OfferData<RequestQuery, OfferOptions>,
+  options: DealHandlerOptions,
+) => {
   if (!offer || !options) {
     throw new Error('Invalid job execution configuration');
   }
@@ -96,13 +80,10 @@ const dealHandler = createJobHandler<
   // Check for a deal
   const [created, offerPayload, retailerId, buyer, price, asset, status] =
     await contracts.getDeal(offer);
+  // check for double booking in the availability system
+  // If double booking detected - rejects (and refunds) the deal
 
-  // Deal must be exists and not cancelled
-  if (buyer !== zeroAddress && status === Number(DealStatus.Created)) {
-    // check for double booking in the availability system
-    // If double booking detected - rejects (and refunds) the deal
-
-    // If not detected - claims the deal
+  if ((status as DealStatus) === DealStatus.Created) {
     await contracts.claimDeal(
       offer,
       undefined,
@@ -112,23 +93,19 @@ const dealHandler = createJobHandler<
         );
       },
     );
-
-    await dealsDb.set({
-      chainId: Number(offerPayload.chainId),
-      created,
-      offer,
-      retailerId,
-      buyer,
-      price,
-      asset,
-      status: DealStatus.Claimed,
-    });
-
-    return false; // Returning false means that the job must be stopped
   }
 
-  return true; // Job continuing
-});
+  await dealsDb.set({
+    chainId: Number(offerPayload.chainId),
+    created,
+    offer,
+    retailerId,
+    buyer,
+    price,
+    asset,
+    status,
+  });
+};
 
 /**
  * This handler creates offer then publishes it and creates a job for deal handling
@@ -231,6 +208,46 @@ const mapAirplane = (
   };
 };
 
+const subscribeChangeStatusEvent = async (
+  options: EventSubscribeOptions,
+): Promise<() => void> => {
+  const { contractsManager, apiServer, offerDb } = options;
+  let blockNumber = BigInt(0); //todo сохранить в базу последний блок номер + 1
+
+  return await contractsManager.subscribeMarket(
+    'Status', // Event name
+    (logs) => {
+      logs.forEach((log) => {
+        const { offerId } = log.args as {
+          offerId?: `0x${string}` | undefined;
+          status?: DealStatus | number | undefined;
+          sender?: `0x${string}` | undefined;
+        };
+        offerDb
+          .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
+          .then((offer) => {
+            if (offer) {
+              dealHandler(offer, {
+                contracts: contractsManager,
+                dealsDb: apiServer.deals!,
+              }).catch((e) => logger.error(e));
+            }
+          })
+          .catch((e) => logger.error(e));
+      });
+
+      const maxBlockNumber = logs.reduce(
+        (max, log) => (log.blockNumber > max ? log.blockNumber : max),
+        BigInt(0),
+      );
+
+      blockNumber = maxBlockNumber + BigInt(1);
+      console.log(12341234121234, blockNumber);
+    },
+    blockNumber, // Block number to listen from
+  );
+};
+
 /**
  * Starts the suppliers node
  *
@@ -276,10 +293,6 @@ export const main = async (): Promise<void> => {
     }),
   });
 
-  const queueStorage = await levelStorage.createInitializer({
-    path: './queue.db',
-    scope: 'queue',
-  })();
   const usersStorage = await levelStorage.createInitializer({
     path: './users.db',
     scope: 'users',
@@ -303,6 +316,7 @@ export const main = async (): Promise<void> => {
       users: usersStorage,
       deals: dealsStorage,
       airplanes: airplanesStorage,
+      offers: offerDb,
     },
     prefix: 'test',
     port: 3456,
@@ -318,12 +332,6 @@ export const main = async (): Promise<void> => {
   logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
 
   apiServer.start(appRouter);
-
-  const queue = new Queue({
-    storage: queueStorage,
-    idsKeyName: 'jobsIds',
-    concurrencyLimit: 3,
-  });
 
   const requestManager = new NodeRequestManager<RequestQuery>({
     noncePeriod: Number(parseSeconds(noncePeriod)),
@@ -347,14 +355,11 @@ export const main = async (): Promise<void> => {
     requestManager.add(topic, data);
   });
 
-  queue.registerHandler(
-    'deal',
-    dealHandler({
-      contracts: contractsManager,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      dealsDb: apiServer.deals!,
-    }),
-  );
+  const unsubscribe = await subscribeChangeStatusEvent({
+    contractsManager,
+    apiServer,
+    offerDb,
+  });
 
   /**
    * Graceful Shutdown handler
@@ -363,6 +368,7 @@ export const main = async (): Promise<void> => {
     const stopHandler = async () => {
       await apiServer.stop();
       await node.stop();
+      unsubscribe();
     };
     stopHandler()
       .catch((error) => {
