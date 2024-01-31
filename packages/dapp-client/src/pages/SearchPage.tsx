@@ -39,9 +39,7 @@ export const SearchPage = () => {
     () => mainShowcase.find((t) => t.id === tourId),
     [tourId],
   );
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(
-    dayjs(new Date()),
-  );
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [tourError, setTourError] = useState<string | undefined>();
   const { clientConnected } = useClient();
   const {
@@ -155,8 +153,9 @@ export const SearchPage = () => {
                 <DatePicker
                   label="Choose a Date"
                   disabled={Boolean(requestId)}
-                  value={dayjs(selectedDate)}
+                  value={selectedDate !== null ? dayjs(selectedDate) : null}
                   onChange={setSelectedDate}
+                  minDate={dayjs().add(1, 'day')}
                 />
               </Grid>
               <Grid
@@ -173,7 +172,9 @@ export const SearchPage = () => {
                     size="large"
                     variant="contained"
                     color="primary"
-                    disabled={!clientConnected || Boolean(requestId)}
+                    disabled={
+                      !selectedDate || !clientConnected || Boolean(requestId)
+                    }
                     onClick={handlePublish}
                   >
                     Search
@@ -185,7 +186,7 @@ export const SearchPage = () => {
                     variant="outlined"
                     onClick={handleRequestCancel}
                   >
-                    {currentRequest?.subscribed ? 'Stop' : 'Cancel'}
+                    {currentRequest?.subscribed ? 'Cancel' : 'Back'}
                   </Button>
                 </Grid>
                 <Grid item>
