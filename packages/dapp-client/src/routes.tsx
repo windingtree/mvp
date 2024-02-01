@@ -4,7 +4,7 @@ import { HomePage } from './pages/HomePage.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
 import { SearchPage } from './pages/SearchPage.js';
 import { OfferPage } from './pages/OfferPage.js';
-import { BookingsPage } from './pages/Bookings.js';
+import { BookingsPage } from './pages/BookingsPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -41,6 +41,7 @@ export const routesTitlesObj: Record<string, string> = {
 
 export const menuTitlesObj: Record<string, string> = {
   '/': 'Home',
+  '/bookings': 'Bookings',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);

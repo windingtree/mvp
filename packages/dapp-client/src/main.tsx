@@ -74,13 +74,13 @@ root.render(
               storageInitializer={createInitializer({
                 session: false, // session or local storage
               })}
-              prefix={'mvp_requests_'}
+              prefix={'mvp_'}
             >
               <DealsManagerProvider<RequestQuery, OfferOptions, LocalStorage>
                 storageInitializer={createInitializer({
                   session: false, // session or local storage
                 })}
-                prefix={'mvp_deals_'}
+                prefix={'mvp_'}
                 checkInterval={'5s'}
                 chain={targetChain}
                 contracts={contractsConfig}
