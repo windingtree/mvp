@@ -163,10 +163,12 @@ const createRequestsHandler =
             };
           });
 
-          const nowTimestamp = Math.ceil(DateTime.now().toSeconds());
-          const nowTimestampBn = BigInt(nowTimestamp);
+          const offerTimestamp = Math.ceil(
+            DateTime.fromISO(detail.data.query.date).toSeconds(),
+          );
+          const offerTimestampBn = BigInt(offerTimestamp);
           const currentTime = DateTime.now().toSeconds();
-          const timeDiff = nowTimestamp - currentTime;
+          const timeDiff = offerTimestamp - currentTime;
           const halfTime = Math.round(currentTime + timeDiff / 2);
 
           const offer = await node.makeOffer({
@@ -188,8 +190,8 @@ const createRequestsHandler =
               },
             ],
             /** Check-in time */
-            checkIn: nowTimestampBn,
-            checkOut: nowTimestampBn,
+            checkIn: offerTimestampBn,
+            checkOut: offerTimestampBn,
           });
 
           await offersDb.set(offer.id, offer);
