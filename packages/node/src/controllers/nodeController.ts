@@ -272,7 +272,7 @@ export const main = async (): Promise<void> => {
     walletClient: createWalletClient({
       chain: config.chain,
       transport: http(),
-      account: node.signer.address,
+      account: node.signer,
     }),
   });
 
