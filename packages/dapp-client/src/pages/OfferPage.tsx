@@ -1,16 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  Container,
-  Grid,
-  Card,
-  CardMedia,
-  Typography,
-  Box,
-  useTheme,
-  useMediaQuery,
-  Button,
-} from '@mui/material';
+import { Alert, Container, Grid, Typography, Button } from '@mui/material';
 import { OfferOptions } from '@windingtree/mvp-node/types';
 import { OfferData } from '@windingtree/sdk-types';
 import { isExpired } from '@windingtree/sdk-utils/time';
@@ -19,10 +8,10 @@ import { RequestQuery } from 'mvp-shared-files';
 import { useSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useSearchProvider } from '../providers/SearchProvider/SearchProviderContext.js';
-import { MuiMarkdown, getOverrides } from 'mui-markdown';
 import { ParsedPrice, parsePayment } from '../utils/offer.js';
 import { useAccount, useBlockNumber } from 'wagmi';
 import { Book } from '../components/Book.js';
+import { OfferDetails } from '../components/OfferDetails.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('OfferPage');
@@ -32,8 +21,6 @@ export const OfferPage = () => {
   const requestId = searchParams.get('requestId');
   const offerId = searchParams.get('offerId');
   const { requests } = useSearchProvider();
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [offer, setOffer] = useState<
     OfferData<RequestQuery, OfferOptions> | undefined
   >();
@@ -98,65 +85,7 @@ export const OfferPage = () => {
       )}
       {offer && (
         <>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={5} md={4} lg={3}>
-              {isSmallScreen && (
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Cool Airplane
-                </Typography>
-              )}
-              <Card sx={{ maxWidth: '100%', mb: 2 }}>
-                <CardMedia
-                  component="img"
-                  image={offer.options.airplane.media[0].thumbnail}
-                  alt={offer.options.airplane.name}
-                  sx={{ width: '100%', height: 'auto' }}
-                />
-              </Card>
-              <Grid container spacing={1}>
-                {offer.options.airplane.media
-                  .slice(0, 4)
-                  .map((media, index) => (
-                    <Grid item xs={3} sm={2} md={1.5} lg={1} key={index}>
-                      <Card>
-                        <CardMedia
-                          component="img"
-                          image={media.thumbnail}
-                          sx={{ width: '100%', height: 'auto' }}
-                        />
-                      </Card>
-                    </Grid>
-                  ))}
-              </Grid>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="body2">Duration: 1h</Typography>
-                <Typography variant="body2">Capacity: 3</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={7} md={8} lg={9}>
-              {!isSmallScreen && (
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Cool Airplane
-                </Typography>
-              )}
-              <Box>
-                <MuiMarkdown
-                  overrides={{
-                    ...getOverrides({}),
-                    span: {
-                      component: Typography,
-                      props: {
-                        variant: 'body2',
-                        color: 'text.secondary',
-                      },
-                    },
-                  }}
-                >
-                  {offer.options.airplane.description}
-                </MuiMarkdown>
-              </Box>
-            </Grid>
-          </Grid>
+          <OfferDetails offer={offer} />
           <Grid
             container
             spacing={2}
