@@ -5,6 +5,7 @@ import { RootBoundary } from './components/ErrorBoundary.js';
 import { SearchPage } from './pages/SearchPage.js';
 import { OfferPage } from './pages/OfferPage.js';
 import { BookingsPage } from './pages/BookingsPage.js';
+import { DetailsPage } from './pages/DetailsPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -28,6 +29,10 @@ export const routes: RouteObject[] = [
         path: 'bookings',
         element: <BookingsPage />,
       },
+      {
+        path: 'details',
+        element: <DetailsPage />,
+      },
     ],
   },
 ];
@@ -37,6 +42,7 @@ export const routesTitlesObj: Record<string, string> = {
   search: 'Search Airplane',
   offer: 'Book Offer',
   bookings: 'My Bookings',
+  details: 'My Booking',
 };
 
 export const menuTitlesObj: Record<string, string> = {

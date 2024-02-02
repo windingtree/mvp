@@ -131,7 +131,7 @@ export const BookingsPage = () => {
           <Grid item xs={3}>
             <Typography
               sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-              onClick={() => {}}
+              onClick={() => navigate(`/details?offerId=${deal.offer.id}`)}
             >
               {deal.offer.options.airplane.name}
             </Typography>
@@ -149,7 +149,7 @@ export const BookingsPage = () => {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} alignItems="center">
               {[DealStatus.Created, DealStatus.Claimed].includes(
                 deal.status,
               ) && (
