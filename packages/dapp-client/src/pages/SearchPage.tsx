@@ -31,8 +31,8 @@ const logger = createLogger('SearchPage');
 export const SearchPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const tourId = searchParams.get('tour');
   const requestId = searchParams.get('requestId');
   const tour = useMemo(
