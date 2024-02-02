@@ -120,8 +120,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.6
-        version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -132,8 +132,8 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.4
-        version: 1.4.4
+        specifier: ^1.4.5
+        version: 1.4.5
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -170,6 +170,9 @@ importers:
       mvp-shared-files:
         specifier: workspace:*
         version: link:../shared
+      qrcode.react:
+        specifier: ^3.1.0
+        version: 3.1.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -246,8 +249,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.3.6
-        version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-messages':
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
@@ -255,8 +258,8 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.4
-        version: 1.4.4
+        specifier: ^1.4.5
+        version: 1.4.5
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -5393,8 +5396,8 @@ packages:
   /@windingtree/contracts@1.0.0:
     resolution: {integrity: sha512-foRPGrAuxNwSsI0rAPgVi8dsOclVxEVCQ8HO8Oat+HUgOPGzsKi45+tUjXBEuECMeRNdhEOXLystheW65SsEaw==}
 
-  /@windingtree/sdk-client@1.3.6(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-h6gHm1lPB7QMz6If0XKfhuie916jSAElUgdaOQ6BhJlESUW0Es8OAThq7O/bUUKI2cL1BfVFamgJbqkyVfjk9Q==}
+  /@windingtree/sdk-client@1.4.0(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-HntHnSi8AlZaFWVVAQbDEZbOeVeZ1e1bo6HAke8QrHYoxMztBI1RjVqp4NJ/Bv1S1p49iCGGXCON3lWWQXzj8Q==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5561,8 +5564,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.4:
-    resolution: {integrity: sha512-t/waNLtanlY4lAMT4i2imx0O9upilcdrnrG7XPmFROQhOt21TJSCOsvvLdel1nTo+34L04T+1efAik5ZGAgpYg==}
+  /@windingtree/sdk-react@1.4.5:
+    resolution: {integrity: sha512-gk1QN+S7lr2BhJQEx/9RxBSBv5Ve9rCLOUM8mCH7s8JPuwXy1klUCFebKctjbsxw6x1/kgbTZNNSw1+z+efn9Q==}
     dev: true
 
   /@windingtree/sdk-server@1.2.7(typescript@5.3.3):
@@ -9996,6 +9999,14 @@ packages:
   /punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+    dev: true
+
+  /qrcode.react@3.1.0(react@18.2.0):
+    resolution: {integrity: sha512-oyF+Urr3oAMUG/OiOuONL3HXM+53wvuH3mtIWQrYmsXoAq0DkvZp2RYUWFSMFtbdOpuS++9v+WAkzNVkMlNW6Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: true
 
   /qrcode@1.5.3:
