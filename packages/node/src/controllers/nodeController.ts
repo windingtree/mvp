@@ -42,6 +42,7 @@ import {
 import { createLogger } from '@windingtree/sdk-logger';
 import { config } from '../common/config.js';
 import { DateTime } from 'luxon';
+import { JobHandler, Queue } from '@windingtree/sdk-queue';
 
 const appRouter = router({
   service: serviceRouter,
@@ -61,10 +62,21 @@ process.once('unhandledRejection', (error) => {
   process.exit(1);
 });
 
-const dealHandler = async (
-  offer: OfferData<RequestQuery, OfferOptions>,
-  options: DealHandlerOptions,
-) => {
+const createJobHandler =
+  <JobData = unknown, HandlerOptions = unknown>(
+    handler: JobHandler<JobData, HandlerOptions>,
+  ) =>
+  (options: HandlerOptions = {} as HandlerOptions) =>
+  (data: JobData) =>
+    handler(data, options);
+
+/**
+ * This handler looking up for a deal
+ */
+const dealHandler = createJobHandler<
+  OfferData<RequestQuery, OfferOptions>,
+  DealHandlerOptions
+>(async (offer, options) => {
   if (!offer || !options) {
     throw new Error('Invalid job execution configuration');
   }
@@ -105,7 +117,9 @@ const dealHandler = async (
     asset,
     status,
   });
-};
+
+  return false; // Returning false means that the job must be stopped
+});
 
 /**
  * This handler creates offer then publishes it and creates a job for deal handling
@@ -118,7 +132,7 @@ const createRequestsHandler =
   ({ detail }) => {
     const handler = async () => {
       logger.trace(`📨 Request on topic #${detail.topic}:`, detail.data);
-      const { airplanesDb, offersDb } = options;
+      const { airplanesDb, offersStorage } = options;
 
       for (const record of await airplanesDb.entries<AirplaneInput>()) {
         const airplane = {
@@ -140,10 +154,12 @@ const createRequestsHandler =
             };
           });
 
-          const nowTimestamp = Math.ceil(DateTime.now().toSeconds());
-          const nowTimestampBn = BigInt(nowTimestamp);
+          const offerTimestamp = Math.ceil(
+            DateTime.fromISO(detail.data.query.date).toSeconds(),
+          );
+          const offerTimestampBn = BigInt(offerTimestamp);
           const currentTime = DateTime.now().toSeconds();
-          const timeDiff = nowTimestamp - currentTime;
+          const timeDiff = offerTimestamp - currentTime;
           const halfTime = Math.round(currentTime + timeDiff / 2);
 
           const offer = await node.makeOffer({
@@ -165,11 +181,11 @@ const createRequestsHandler =
               },
             ],
             /** Check-in time */
-            checkIn: nowTimestampBn,
-            checkOut: nowTimestampBn,
+            checkIn: offerTimestampBn,
+            checkOut: offerTimestampBn,
           });
 
-          await offersDb.set(offer.id, offer);
+          await offersStorage.set(offer.id, offer);
         }
       }
     };
@@ -211,38 +227,61 @@ const mapAirplane = (
 const subscribeChangeStatusEvent = async (
   options: EventSubscribeOptions,
 ): Promise<() => void> => {
-  const { contractsManager, apiServer, offerDb } = options;
-  let blockNumber = BigInt(0); //todo сохранить в базу последний блок номер + 1
+  const { contractsManager, offersStorage, queue, commonConfigStorage } =
+    options;
+
+  let blockNumber = await commonConfigStorage.get<bigint | undefined>(
+    'blockNumber',
+  );
+
+  if (!blockNumber) {
+    blockNumber = BigInt(0);
+  }
 
   return await contractsManager.subscribeMarket(
     'Status', // Event name
-    (logs) => {
-      logs.forEach((log) => {
-        const { offerId } = log.args as {
-          offerId?: `0x${string}` | undefined;
-          status?: DealStatus | number | undefined;
-          sender?: `0x${string}` | undefined;
-        };
-        offerDb
-          .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
-          .then((offer) => {
-            if (offer) {
-              dealHandler(offer, {
-                contracts: contractsManager,
-                dealsDb: apiServer.deals!,
-              }).catch((e) => logger.error(e));
-            }
-          })
-          .catch((e) => logger.error(e));
-      });
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    async (logs) => {
+      let blockNumber = await commonConfigStorage.get<bigint | undefined>(
+        'blockNumber',
+      );
+
+      if (!blockNumber) {
+        blockNumber = BigInt(0);
+      }
 
       const maxBlockNumber = logs.reduce(
         (max, log) => (log.blockNumber > max ? log.blockNumber : max),
         BigInt(0),
       );
 
-      blockNumber = maxBlockNumber + BigInt(1);
-      console.log(12341234121234, blockNumber);
+      if (maxBlockNumber <= blockNumber) {
+        return;
+      }
+
+      logs.forEach((log) => {
+        const { offerId } = log.args as {
+          offerId?: `0x${string}` | undefined;
+          status?: DealStatus | number | undefined;
+          sender?: `0x${string}` | undefined;
+        };
+        offersStorage
+          .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
+          .then((offer) => {
+            if (offer) {
+              queue.add({
+                handlerName: 'claim',
+                data: offer,
+                maxRetries: 5, //todo const
+                retriesDelay: 5, //todo const
+                expire: Number(offer.expire),
+              });
+            }
+          })
+          .catch((e) => logger.error(e));
+      });
+
+      await commonConfigStorage.set('blockNumber', maxBlockNumber + BigInt(1));
     },
     blockNumber, // Block number to listen from
   );
@@ -289,10 +328,18 @@ export const main = async (): Promise<void> => {
     walletClient: createWalletClient({
       chain: config.chain,
       transport: http(),
-      account: node.signer.address,
+      account: node.signer,
     }),
   });
 
+  const queueStorage = await levelStorage.createInitializer({
+    path: './queue.db',
+    scope: 'queue',
+  })();
+  const commonConfigStorage = await levelStorage.createInitializer({
+    path: './common.db',
+    scope: 'common',
+  })();
   const usersStorage = await levelStorage.createInitializer({
     path: './users.db',
     scope: 'users',
@@ -305,18 +352,24 @@ export const main = async (): Promise<void> => {
     path: './airplanes.db',
     scope: 'airplanes',
   })();
-  const offerDb = await levelStorage.createInitializer({
+  const offersStorage = await levelStorage.createInitializer({
     path: './offer.db',
     scope: 'offer',
   })();
   // console.log('@@@', await usersStorage.entries());
+
+  const queue = new Queue({
+    storage: queueStorage,
+    idsKeyName: 'jobsIds',
+    concurrencyLimit: 3,
+  });
 
   const apiServerConfig: NodeApiServerOptions = {
     storage: {
       users: usersStorage,
       deals: dealsStorage,
       airplanes: airplanesStorage,
-      offers: offerDb,
+      offers: offersStorage,
     },
     prefix: 'test',
     port: 3456,
@@ -341,7 +394,7 @@ export const main = async (): Promise<void> => {
     'request',
     createRequestsHandler(node, {
       airplanesDb: airplanesStorage,
-      offersDb: offerDb,
+      offersStorage,
     }),
   );
 
@@ -355,10 +408,20 @@ export const main = async (): Promise<void> => {
     requestManager.add(topic, data);
   });
 
+  queue.registerHandler(
+    'claim',
+    dealHandler({
+      contracts: contractsManager,
+      dealsDb: apiServer.deals!,
+    }),
+  );
+
   const unsubscribe = await subscribeChangeStatusEvent({
     contractsManager,
     apiServer,
-    offerDb,
+    offersStorage,
+    commonConfigStorage,
+    queue,
   });
 
   /**
