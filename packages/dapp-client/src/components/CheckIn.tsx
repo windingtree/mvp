@@ -60,7 +60,7 @@ export const CheckIn = ({ dealsManager, deal }: CheckInProps) => {
         .checkInOutSignature(deal.offer.id, walletClient)
         .then((s) => {
           setSignLoading(false);
-          setSign(() => s);
+          setSign(() => `${deal.offer.id};${s}`); // Voucher format: "<offerId>;<signature>"
         })
         .catch((err) => {
           logger.error('checkInOutSignature', err);
