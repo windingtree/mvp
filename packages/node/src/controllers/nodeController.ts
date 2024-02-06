@@ -1,11 +1,6 @@
 import 'dotenv/config';
 import { EventHandler } from '@libp2p/interface/events';
-import {
-  createPublicClient,
-  createWalletClient,
-  http,
-  zeroAddress,
-} from 'viem';
+import { createPublicClient, createWalletClient, http } from 'viem';
 import { randomSalt } from '@windingtree/contracts';
 import {
   contractsConfig,
@@ -17,11 +12,11 @@ import {
 import { DealStatus, OfferData, PaymentOption } from '@windingtree/sdk-types';
 import {
   DealHandlerOptions,
+  EventSubscribeOptions,
   OfferOptions,
   RequestHandlerOptions,
 } from '../types.js';
 import { noncePeriod } from '@windingtree/sdk-constants';
-import { JobHandler, Queue } from '@windingtree/sdk-queue';
 import {
   NodeApiServer,
   NodeApiServerOptions,
@@ -47,6 +42,7 @@ import {
 import { createLogger } from '@windingtree/sdk-logger';
 import { config } from '../common/config.js';
 import { DateTime } from 'luxon';
+import { JobHandler, Queue } from '@windingtree/sdk-queue';
 
 const appRouter = router({
   service: serviceRouter,
@@ -96,13 +92,10 @@ const dealHandler = createJobHandler<
   // Check for a deal
   const [created, offerPayload, retailerId, buyer, price, asset, status] =
     await contracts.getDeal(offer);
+  // check for double booking in the availability system
+  // If double booking detected - rejects (and refunds) the deal
 
-  // Deal must be exists and not cancelled
-  if (buyer !== zeroAddress && status === Number(DealStatus.Created)) {
-    // check for double booking in the availability system
-    // If double booking detected - rejects (and refunds) the deal
-
-    // If not detected - claims the deal
+  if ((status as DealStatus) === DealStatus.Created) {
     await contracts.claimDeal(
       offer,
       undefined,
@@ -112,22 +105,20 @@ const dealHandler = createJobHandler<
         );
       },
     );
-
-    await dealsDb.set({
-      chainId: Number(offerPayload.chainId),
-      created,
-      offer,
-      retailerId,
-      buyer,
-      price,
-      asset,
-      status: DealStatus.Claimed,
-    });
-
-    return false; // Returning false means that the job must be stopped
   }
 
-  return true; // Job continuing
+  await dealsDb.set({
+    chainId: Number(offerPayload.chainId),
+    created,
+    offer,
+    retailerId,
+    buyer,
+    price,
+    asset,
+    status,
+  });
+
+  return false; // Returning false means that the job must be stopped
 });
 
 /**
@@ -141,7 +132,7 @@ const createRequestsHandler =
   ({ detail }) => {
     const handler = async () => {
       logger.trace(`📨 Request on topic #${detail.topic}:`, detail.data);
-      const { airplanesDb, offersDb } = options;
+      const { airplanesDb, offersStorage } = options;
 
       for (const record of await airplanesDb.entries<AirplaneInput>()) {
         const airplane = {
@@ -194,7 +185,7 @@ const createRequestsHandler =
             checkOut: offerTimestampBn,
           });
 
-          await offersDb.set(offer.id, offer);
+          await offersStorage.set(offer.id, offer);
         }
       }
     };
@@ -231,6 +222,69 @@ const mapAirplane = (
     capacity: airplane.capacity,
     media: airplane.media,
   };
+};
+
+const subscribeChangeStatusEvent = async (
+  options: EventSubscribeOptions,
+): Promise<() => void> => {
+  const { contractsManager, offersStorage, queue, commonConfigStorage } =
+    options;
+
+  let blockNumber = await commonConfigStorage.get<bigint | undefined>(
+    'blockNumber',
+  );
+
+  if (!blockNumber) {
+    blockNumber = BigInt(0);
+  }
+
+  return await contractsManager.subscribeMarket(
+    'Status', // Event name
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    async (logs) => {
+      let blockNumber = await commonConfigStorage.get<bigint | undefined>(
+        'blockNumber',
+      );
+
+      if (!blockNumber) {
+        blockNumber = BigInt(0);
+      }
+
+      const maxBlockNumber = logs.reduce(
+        (max, log) => (log.blockNumber > max ? log.blockNumber : max),
+        BigInt(0),
+      );
+
+      if (maxBlockNumber <= blockNumber) {
+        return;
+      }
+
+      logs.forEach((log) => {
+        const { offerId } = log.args as {
+          offerId?: `0x${string}` | undefined;
+          status?: DealStatus | number | undefined;
+          sender?: `0x${string}` | undefined;
+        };
+        offersStorage
+          .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
+          .then((offer) => {
+            if (offer) {
+              queue.add({
+                handlerName: 'claim',
+                data: offer,
+                maxRetries: 5, //todo const
+                retriesDelay: 5, //todo const
+                expire: Number(offer.expire),
+              });
+            }
+          })
+          .catch((e) => logger.error(e));
+      });
+
+      await commonConfigStorage.set('blockNumber', maxBlockNumber + BigInt(1));
+    },
+    blockNumber, // Block number to listen from
+  );
 };
 
 /**
@@ -282,6 +336,10 @@ export const main = async (): Promise<void> => {
     path: './queue.db',
     scope: 'queue',
   })();
+  const commonConfigStorage = await levelStorage.createInitializer({
+    path: './common.db',
+    scope: 'common',
+  })();
   const usersStorage = await levelStorage.createInitializer({
     path: './users.db',
     scope: 'users',
@@ -294,17 +352,24 @@ export const main = async (): Promise<void> => {
     path: './airplanes.db',
     scope: 'airplanes',
   })();
-  const offerDb = await levelStorage.createInitializer({
+  const offersStorage = await levelStorage.createInitializer({
     path: './offer.db',
     scope: 'offer',
   })();
   // console.log('@@@', await usersStorage.entries());
+
+  const queue = new Queue({
+    storage: queueStorage,
+    idsKeyName: 'jobsIds',
+    concurrencyLimit: 3,
+  });
 
   const apiServerConfig: NodeApiServerOptions = {
     storage: {
       users: usersStorage,
       deals: dealsStorage,
       airplanes: airplanesStorage,
+      offers: offersStorage,
     },
     prefix: 'test',
     port: 3456,
@@ -321,12 +386,6 @@ export const main = async (): Promise<void> => {
 
   apiServer.start(appRouter);
 
-  const queue = new Queue({
-    storage: queueStorage,
-    idsKeyName: 'jobsIds',
-    concurrencyLimit: 3,
-  });
-
   const requestManager = new NodeRequestManager<RequestQuery>({
     noncePeriod: Number(parseSeconds(noncePeriod)),
   });
@@ -335,7 +394,7 @@ export const main = async (): Promise<void> => {
     'request',
     createRequestsHandler(node, {
       airplanesDb: airplanesStorage,
-      offersDb: offerDb,
+      offersStorage,
     }),
   );
 
@@ -350,13 +409,20 @@ export const main = async (): Promise<void> => {
   });
 
   queue.registerHandler(
-    'deal',
+    'claim',
     dealHandler({
       contracts: contractsManager,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dealsDb: apiServer.deals!,
     }),
   );
+
+  const unsubscribe = await subscribeChangeStatusEvent({
+    contractsManager,
+    apiServer,
+    offersStorage,
+    commonConfigStorage,
+    queue,
+  });
 
   /**
    * Graceful Shutdown handler
@@ -365,6 +431,7 @@ export const main = async (): Promise<void> => {
     const stopHandler = async () => {
       await apiServer.stop();
       await node.stop();
+      unsubscribe();
     };
     stopHandler()
       .catch((error) => {

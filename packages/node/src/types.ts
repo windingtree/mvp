@@ -1,8 +1,10 @@
-import type { GenericOfferOptions } from '@windingtree/sdk-types';
+import type { GenericOfferOptions, GenericQuery } from '@windingtree/sdk-types';
 import type { AirplaneInput } from './api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
 import { DealsDb } from '@windingtree/sdk-db';
 import { LevelDBStorage } from '@windingtree/sdk-storage/level';
+import { NodeApiServer } from '@windingtree/sdk-node-api/server';
+import { Queue } from '@windingtree/sdk-queue';
 export type { AppRouter } from './controllers/nodeController.js';
 export type { AirplaneInput };
 
@@ -22,5 +24,13 @@ export interface DealHandlerOptions {
 
 export interface RequestHandlerOptions {
   airplanesDb: LevelDBStorage;
-  offersDb: LevelDBStorage;
+  offersStorage: LevelDBStorage;
+}
+
+export interface EventSubscribeOptions {
+  contractsManager: ProtocolContracts<GenericQuery, GenericOfferOptions>;
+  apiServer: NodeApiServer;
+  offersStorage: LevelDBStorage;
+  commonConfigStorage: LevelDBStorage;
+  queue: Queue;
 }
