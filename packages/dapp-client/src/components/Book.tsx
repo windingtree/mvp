@@ -18,7 +18,7 @@ import {
   copyToClipboard,
   parseWalletError,
 } from '@windingtree/sdk-react/utils';
-import { LoadingButton } from './LoadingButton.js';
+import { LoadingButton } from 'mvp-shared-files/react';
 import { useNavigate } from 'react-router-dom';
 import { createLogger } from '@windingtree/sdk-logger';
 

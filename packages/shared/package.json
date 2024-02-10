@@ -38,6 +38,7 @@
     "viem": "^1.19.9",
     "@windingtree/sdk-types": "^1.1.4",
     "wagmi": "^1.4.12",
-    "@windingtree/contracts": "^1.0.0"
+    "@windingtree/contracts": "^1.0.0",
+    "@mui/material": "^5.15.7"
   }
 }

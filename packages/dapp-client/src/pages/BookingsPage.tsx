@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import { MoreHoriz as MoreIcon } from '@mui/icons-material';
-import { LoadingButton } from '../components/LoadingButton.js';
+import { LoadingButton } from 'mvp-shared-files/react';
 import { OfferOptions } from '@windingtree/mvp-node/types';
 import { useDealsManager } from '@windingtree/sdk-react/providers';
 import { RequestQuery } from 'mvp-shared-files';
