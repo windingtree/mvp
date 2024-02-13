@@ -8,7 +8,7 @@ import { Chain, switchNetwork } from '@wagmi/core';
 import { centerEllipsis } from '@windingtree/sdk-react/utils';
 import { ClientDealsManager } from '@windingtree/sdk-client';
 import { Hash } from 'viem';
-import { LoadingButton } from './LoadingButton.js';
+import { LoadingButton } from 'mvp-shared-files/react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { createLogger } from '@windingtree/sdk-logger';
 
@@ -145,7 +145,7 @@ export const CheckIn = ({ dealsManager, deal }: CheckInProps) => {
         <Stack direction="column" spacing={2}>
           {sign && (
             <Box ref={qrRef}>
-              <QRCodeCanvas value={sign} size={300} />
+              <QRCodeCanvas value={sign} size={300} level="M" />
             </Box>
           )}
           {sign && (

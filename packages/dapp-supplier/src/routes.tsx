@@ -6,6 +6,7 @@ import { AuthPage } from './pages/AuthPage.js';
 import { RequireAuth } from './components/Auth/RequireAuth.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
 import { AirplanesPage } from './pages/AirplanesPage.js';
+import { DealsPage } from './pages/DealsPage.js';
 
 export const routes: RouteObject[] = [
   {
@@ -61,6 +62,14 @@ export const routes: RouteObject[] = [
           </RequireAuth>
         ),
       },
+      {
+        path: 'deals',
+        element: (
+          <RequireAuth>
+            <DealsPage />
+          </RequireAuth>
+        ),
+      },
     ],
   },
 ];
@@ -75,6 +84,7 @@ export const routesTitlesObj: Record<string, string> = {
   'supplier/deals': 'Deals',
   'supplier/config': 'Supplier Config',
   airplanes: 'Airplanes Management',
+  deals: 'Deals',
 };
 
 export const menuTitlesObj: Record<string, string> = {
@@ -82,6 +92,7 @@ export const menuTitlesObj: Record<string, string> = {
   'supplier/setup': 'Setup',
   auth: 'Users',
   airplanes: 'Airplanes',
+  deals: 'Deals',
 };
 
 export const routesTitles = Object.entries(routesTitlesObj);

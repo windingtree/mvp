@@ -7,6 +7,6 @@ config.init();
 
 /** Let's go */
 export default nodeRun().catch((error) => {
-  logger.trace('🚨 Internal application error', error);
+  logger.error('🚨 Internal application error', error);
   process.exit(1);
 });
