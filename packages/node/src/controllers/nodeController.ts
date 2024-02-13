@@ -416,6 +416,7 @@ export const main = async (): Promise<void> => {
     }),
   );
 
+  // TODO As for now, if the blockchain network is unavailable it causes a crash of the whole node. We must implement a conditional mechanism to avoid crashes and wait until connection before the node starts
   const unsubscribe = await subscribeChangeStatusEvent({
     contractsManager,
     apiServer,
