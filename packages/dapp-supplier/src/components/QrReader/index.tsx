@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BrowserQRCodeReader } from '@zxing/browser';
 import { CameraSelector } from './CameraSelector.js';
 import { Button, Paper, Stack, Typography } from '@mui/material';
-import { FileInput } from '../FIleInput.js';
+import { FileInput } from '../FileInput.js';
 import { ImageBox } from './ImageBox.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
@@ -132,7 +132,7 @@ export const QrReader = ({
         alignItems: 'center',
       }}
     >
-      <CameraSelector onChange={setCamera} sx={{ width: size }} />
+      <CameraSelector onChange={setCamera} sx={{ alignSelf: 'stretch' }} />
 
       {isCamera && (
         <>

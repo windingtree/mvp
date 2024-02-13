@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Box,
@@ -7,8 +8,10 @@ import {
   Select,
   SxProps,
 } from '@mui/material';
-import { useCameras } from '../hooks/useCameras.js';
-import { useEffect, useState } from 'react';
+import { BrowserCodeReader } from '@zxing/browser';
+import { createLogger } from '@windingtree/sdk-logger';
+
+const logger = createLogger('CameraSelector');
 
 interface CameraSelectorProps {
   sx?: SxProps;
@@ -16,8 +19,18 @@ interface CameraSelectorProps {
 }
 
 export const CameraSelector = ({ sx, onChange }: CameraSelectorProps) => {
-  const { devices, error: devicesError } = useCameras();
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [error, setError] = useState<string | undefined>();
   const [cameraId, setCameraId] = useState<string | ''>('');
+
+  useEffect(() => {
+    BrowserCodeReader.listVideoInputDevices()
+      .then((d) => setDevices(() => d))
+      .catch((err) => {
+        logger.error('getVideoInputDevices', err);
+        setError(err.message ?? 'Unknown listVideoInputDevices error');
+      });
+  }, []);
 
   useEffect(() => {
     if (cameraId !== '') {
@@ -40,7 +53,7 @@ export const CameraSelector = ({ sx, onChange }: CameraSelectorProps) => {
             {devices &&
               devices.length > 0 &&
               devices.map((d, index) => (
-                <MenuItem key={index} value={d.id}>
+                <MenuItem key={index} value={d.deviceId}>
                   {d.label}
                 </MenuItem>
               ))}
@@ -48,9 +61,9 @@ export const CameraSelector = ({ sx, onChange }: CameraSelectorProps) => {
           </Select>
         </FormControl>
       </Box>
-      {devicesError && (
+      {error && (
         <Alert sx={{ marginTop: 1, marginBottom: 2 }} severity="error">
-          {devicesError}
+          {error}
         </Alert>
       )}
     </>
