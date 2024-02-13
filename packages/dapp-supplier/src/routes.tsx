@@ -6,7 +6,7 @@ import { AuthPage } from './pages/AuthPage.js';
 import { RequireAuth } from './components/Auth/RequireAuth.js';
 import { RootBoundary } from './components/ErrorBoundary.js';
 import { AirplanesPage } from './pages/AirplanesPage.js';
-import { DealsPage } from './pages/Deals.js';
+import { DealsPage } from './pages/DealsPage.js';
 
 export const routes: RouteObject[] = [
   {
