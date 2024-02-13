@@ -145,7 +145,7 @@ export const CheckIn = ({ dealsManager, deal }: CheckInProps) => {
         <Stack direction="column" spacing={2}>
           {sign && (
             <Box ref={qrRef}>
-              <QRCodeCanvas value={sign} size={300} />
+              <QRCodeCanvas value={sign} size={300} level="M" />
             </Box>
           )}
           {sign && (
