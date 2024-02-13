@@ -129,11 +129,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.3
-        version: 1.5.3(typescript@5.3.3)
+        specifier: ^1.5.6
+        version: 1.5.6(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.5
-        version: 1.4.5
+        specifier: ^1.4.8
+        version: 1.4.8
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -258,11 +258,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.3
-        version: 1.5.3(typescript@5.3.3)
+        specifier: ^1.5.6
+        version: 1.5.6(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.5
-        version: 1.4.5
+        specifier: ^1.4.8
+        version: 1.4.8
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -293,6 +293,9 @@ importers:
       million:
         specifier: ^2.6.4
         version: 2.6.4
+      mui-markdown:
+        specifier: ^1.1.13
+        version: 1.1.13(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.15.1)(markdown-to-jsx@7.4.0)(react-dom@18.2.0)(react@18.2.0)
       mvp-shared-files:
         specifier: workspace:*
         version: link:../shared
@@ -348,8 +351,8 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db':
-        specifier: ^1.2.7
-        version: 1.2.7(typescript@5.3.3)
+        specifier: ^1.2.8
+        version: 1.2.8(typescript@5.3.3)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -357,8 +360,8 @@ importers:
         specifier: ^1.3.5
         version: 1.3.5(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.3
-        version: 1.5.3(typescript@5.3.3)
+        specifier: ^1.5.6
+        version: 1.5.6(typescript@5.3.3)
       '@windingtree/sdk-queue':
         specifier: ^1.2.7
         version: 1.2.7(typescript@5.3.3)(zod@3.22.4)
@@ -5550,8 +5553,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-db@1.2.7(typescript@5.3.3):
-    resolution: {integrity: sha512-GxoH1MXWwAQYoLXGpYb16wjxXzmO6tKRpGV+7xy3q2p3H+3PUSYKgZN6o+6GkjvVBCGicv7OTGFD6bLgcLhrKg==}
+  /@windingtree/sdk-db@1.2.8(typescript@5.3.3):
+    resolution: {integrity: sha512-X7CqZbAJky3s5ID/0O9ejg+vxHAoVDu0abI7tgrydxn8MJA+yPvxmlwjBw0QNuHs2p3eDl7MbNBJiXH0f87QKA==}
     dependencies:
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-storage': 1.4.2
@@ -5586,13 +5589,13 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-node-api@1.5.3(typescript@5.3.3):
-    resolution: {integrity: sha512-pRw8oy8hRAcmY5CBxkMITLdAYYCyw/tIIoEzvyrf1bOHQUQ9JKGPfHMJ+VXpYHtsoNrmviyFPFrEYtGdsiCekQ==}
+  /@windingtree/sdk-node-api@1.5.6(typescript@5.3.3):
+    resolution: {integrity: sha512-uwV9fAaq2gaFnycsdliQwFKVr2TrT7Zeq/KeYVaYZBdQ3REduIejnsFBrDPGSo5KTqmqlqSIEjezwR+gQIOEDg==}
     dependencies:
       '@trpc/client': 10.44.1(@trpc/server@10.45.0)
       '@trpc/server': 10.45.0
       '@windingtree/sdk-contracts-manager': 1.4.0(typescript@5.3.3)(zod@3.22.4)
-      '@windingtree/sdk-db': 1.2.7(typescript@5.3.3)
+      '@windingtree/sdk-db': 1.2.8(typescript@5.3.3)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-storage': 1.4.2
@@ -5672,8 +5675,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.5:
-    resolution: {integrity: sha512-gk1QN+S7lr2BhJQEx/9RxBSBv5Ve9rCLOUM8mCH7s8JPuwXy1klUCFebKctjbsxw6x1/kgbTZNNSw1+z+efn9Q==}
+  /@windingtree/sdk-react@1.4.8:
+    resolution: {integrity: sha512-PMSlkp/WxGmVCVR94Mw30RhTVwgdCNiZ6S3vsTn4838w3Ql4KN1Pcg/En+0YF3w+yCJnup3oik0bvKhcww9NTw==}
     dev: true
 
   /@windingtree/sdk-server@1.2.7(typescript@5.3.3):
@@ -10394,7 +10397,7 @@ packages:
       react: '>=16.0.0'
     dependencies:
       '@types/prismjs': 1.26.3
-      clsx: 2.0.0
+      clsx: 2.1.0
       react: 18.2.0
     dev: true
     optional: true
