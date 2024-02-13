@@ -83,7 +83,7 @@ class Config {
      * Parse CORS configuration
      */
     this._cors = process.env.VITE_SERVER_CORS
-      ? process.env.VITE_SERVER_CORS.split(';').map((uri) => uri.trim())
+      ? process.env.VITE_SERVER_CORS.split(',').map((uri) => uri.trim())
       : ['*'];
   }
 
