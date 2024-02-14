@@ -9,7 +9,7 @@
     "@types/luxon": "^3.3.7",
     "@vitejs/plugin-react": "^4.2.1",
     "vite-plugin-node-polyfills": "^0.17.0",
-    "@windingtree/sdk-react": "^1.4.8",
+    "@windingtree/sdk-react": "^1.4.9",
     "@windingtree/sdk-client": "^1.4.0",
     "@windingtree/sdk-storage": "^1.4.2",
     "@windingtree/sdk-messages": "^1.2.3",
