@@ -30,12 +30,17 @@ interface DealViewProps {
   closeComponent?: ReactNode;
 }
 
+type Media = DealRecord<
+  RequestQuery,
+  OfferOptions
+>['offer']['options']['airplane']['media'][number];
+
 const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
   ({ deal, sx, closeComponent }: DealViewProps, ref) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const [selectedImage, setSelectedImage] = useState<string | undefined>(
-      deal?.offer.options.airplane.media[0].thumbnail,
+    const [selectedImage, setSelectedImage] = useState<Media | undefined>(
+      deal?.offer.options.airplane.media[0],
     );
     const [showImg, setShowImg] = useState<string | undefined>();
 
@@ -66,11 +71,11 @@ const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
             )}
             <Card
               sx={{ maxWidth: '100%', mb: 2 }}
-              onClick={() => setShowImg(selectedImage)}
+              onClick={() => setShowImg(selectedImage?.uri)}
             >
               <CardMedia
                 component="img"
-                image={selectedImage}
+                image={selectedImage?.thumbnail}
                 alt={deal.offer.options.airplane.name}
                 sx={{ width: '100%', height: 'auto' }}
               />
@@ -81,8 +86,8 @@ const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
                 .map((media, index) => (
                   <Grid item xs={3} sm={2} md={1.5} lg={1} key={index}>
                     <Card
-                      onMouseOver={() => setSelectedImage(media.thumbnail)}
-                      onClick={() => setSelectedImage(media.thumbnail)}
+                      onMouseOver={() => setSelectedImage(media)}
+                      onClick={() => setSelectedImage(media)}
                     >
                       <CardMedia
                         component="img"

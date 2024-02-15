@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Box,
@@ -7,6 +7,8 @@ import {
   Stack,
   SxProps,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { ContentCopy as CopyIcon } from '@mui/icons-material';
 import { OfferOptions } from '@windingtree/mvp-node/types';
@@ -20,8 +22,8 @@ import { Price } from './Price.js';
 import { DealView } from './DealView.js';
 import { Pagination } from './Pagination.js';
 import { useNode } from '@windingtree/sdk-react/providers';
-import { createLogger } from '@windingtree/sdk-logger';
 import { LoadingButton } from 'mvp-shared-files/react';
+import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('Deals');
 
@@ -32,7 +34,30 @@ interface DealsProps {
   sx?: SxProps;
 }
 
+interface TableCellWithTitleProps {
+  title: string;
+  children: ReactNode;
+}
+
+const TableCellWithTitle = ({ title, children }: TableCellWithTitleProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <Grid item xs={12} sm={2}>
+      {isMobile && (
+        <Typography variant="caption" component="div">
+          {title}:
+        </Typography>
+      )}
+      {children}
+    </Grid>
+  );
+};
+
 export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { node } = useNode();
   const [dealStates, setDealStates] = useState<Record<string, DealStatus>>({});
   const [selectedDeal, setSelectedDeal] = useState<
@@ -60,7 +85,7 @@ export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
         });
         setLoading('');
       } catch (err) {
-        logger.error('handleCheckin', err);
+        logger.error('handleCheckIn', err);
         setError((err as Error).message || 'Unknown check in error');
         setLoading('');
       }
@@ -91,115 +116,122 @@ export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
 
   return (
     <Box sx={sx}>
-      {deals && deals.length > 0 && (
-        <>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Grid container sx={{ borderBottom: '1px solid grey' }}>
-                {[
-                  { label: 'Offer Id', size: 2 },
-                  { label: 'Created', size: 2 },
-                  { label: 'Buyer', size: 3 },
-                  { label: 'Price', size: 2 },
-                  { label: 'Status', size: 2 },
-                  { label: 'Action', size: 1 },
-                ].map((header, i) => (
-                  <Grid item xs={header.size} key={i}>
-                    <Typography
-                      variant="subtitle2"
-                      component="div"
-                      style={{ textAlign: 'left' }}
-                    >
-                      {header.label}
-                    </Typography>
-                  </Grid>
-                ))}
+      {!isMobile && (
+        <Grid
+          container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            borderBottom: '1px solid grey',
+            marginBottom: 2,
+          }}
+        >
+          {['Offer Id', 'Created', 'Buyer', 'Price', 'Status', 'Action'].map(
+            (label, i) => (
+              <Grid item xs={12} sm={2} key={i}>
+                <Typography
+                  variant="subtitle2"
+                  component="div"
+                  style={{ textAlign: 'left' }}
+                >
+                  {label}
+                </Typography>
               </Grid>
-            </Grid>
-
-            {deals.map((d, index) => (
-              <Grid item xs={12} key={index}>
-                <Grid container>
-                  <Grid item xs={2}>
-                    <Typography
-                      onClick={() => setSelectedDeal(() => d)}
-                      sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-                    >
-                      {centerEllipsis(d.offer.payload.id, 3)}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography>
-                      {DateTime.fromSeconds(Number(d.created)).toISODate()}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Stack direction="row" alignItems="center" spacing={0}>
-                      <Typography
-                        title={d.buyer}
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => copyToClipboard(d.buyer)}
-                      >
-                        {centerEllipsis(d.buyer, 3)}
-                      </Typography>
-                      <CopyIcon
-                        sx={{ width: 15, height: 15, cursor: 'pointer' }}
-                        onClick={() => copyToClipboard(d.buyer)}
-                      />
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Price deal={d} />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography
-                      sx={{
-                        color: getDealStatusColor(dealStates[d.offer.id]),
-                      }}
-                    >
-                      {DealStatus[dealStates[d.offer.id]]}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={1}>
-                    {dealStates[d.offer.id] === 1 && (
-                      <LoadingButton
-                        variant="contained"
-                        size="small"
-                        loading={loading === d.offer.id}
-                        disabled={loading !== ''}
-                        onClick={() => handleCheckIn(d)}
-                      >
-                        Check In
-                      </LoadingButton>
-                    )}
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
-          </Grid>
-          <Pagination
-            page={page}
-            onChange={(newPage) => onPageChange({ ...page, ...newPage })}
-            sx={{
-              marginTop: 1,
-              paddingTop: 1,
-              borderTop: '1px solid grey',
-            }}
-          />
-        </>
+            ),
+          )}
+        </Grid>
       )}
+
+      {deals.map((deal, index) => (
+        <Grid
+          container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: 2,
+            backgroundColor: 'transparent',
+            ':hover': { backgroundColor: 'rgba(0,0,0,0.05)' },
+          }}
+          key={index}
+        >
+          {isMobile && <Grid item xs={12} sx={{ borderBottom: 1 }} />}
+          <TableCellWithTitle title="Offer Id">
+            <Typography
+              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+              onClick={() => setSelectedDeal(() => deal)}
+            >
+              {centerEllipsis(deal.offer.payload.id)}
+            </Typography>
+          </TableCellWithTitle>
+          <TableCellWithTitle title="Created">
+            <Typography>
+              {DateTime.fromSeconds(Number(deal.created)).toISODate()}
+            </Typography>
+          </TableCellWithTitle>
+          <TableCellWithTitle title="Buyer">
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography
+                sx={{ cursor: 'pointer' }}
+                onClick={() => copyToClipboard(deal.buyer)}
+              >
+                {centerEllipsis(deal.buyer)}
+              </Typography>
+              <CopyIcon
+                sx={{ width: 15, height: 15, cursor: 'pointer' }}
+                onClick={() => copyToClipboard(deal.buyer)}
+              />
+            </Stack>
+          </TableCellWithTitle>
+          <TableCellWithTitle title="Price">
+            <Price deal={deal} />
+          </TableCellWithTitle>
+          <TableCellWithTitle title="Status">
+            <Typography
+              sx={{
+                color: getDealStatusColor(dealStates[deal.offer.id]),
+              }}
+            >
+              {DealStatus[dealStates[deal.offer.id]]}
+            </Typography>
+          </TableCellWithTitle>
+          <TableCellWithTitle title="Action">
+            {dealStates[deal.offer.id] === DealStatus.Claimed && (
+              <LoadingButton
+                loading={loading === deal.offer.id}
+                onClick={() => handleCheckIn(deal)}
+                variant="contained"
+                size="small"
+              >
+                Check In
+              </LoadingButton>
+            )}
+          </TableCellWithTitle>
+        </Grid>
+      ))}
+
+      <Pagination
+        page={page}
+        onChange={(newPage) => onPageChange({ ...page, ...newPage })}
+        sx={{
+          marginTop: 2,
+          paddingTop: 1,
+          borderTop: '1px solid grey',
+        }}
+      />
 
       {error && (
         <Alert sx={{ marginTop: 2 }} severity="error">
-          <Typography>{error}</Typography>
+          {error}
         </Alert>
       )}
 
-      <DealView
-        isModal={true}
-        deal={selectedDeal}
-        onClose={() => setSelectedDeal(undefined)}
-      />
+      {selectedDeal && (
+        <DealView
+          isModal={true}
+          deal={selectedDeal}
+          onClose={() => setSelectedDeal(undefined)}
+        />
+      )}
     </Box>
   );
 };
