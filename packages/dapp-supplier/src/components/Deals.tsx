@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
   Box,
   CircularProgress,
   Grid,
@@ -18,6 +19,11 @@ import { Page } from '../utils/types.js';
 import { Price } from './Price.js';
 import { DealView } from './DealView.js';
 import { Pagination } from './Pagination.js';
+import { useNode } from '@windingtree/sdk-react/providers';
+import { createLogger } from '@windingtree/sdk-logger';
+import { LoadingButton } from 'mvp-shared-files/react';
+
+const logger = createLogger('Deals');
 
 interface DealsProps {
   deals?: DealRecord<RequestQuery, OfferOptions>[];
@@ -27,10 +33,40 @@ interface DealsProps {
 }
 
 export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
+  const { node } = useNode();
   const [dealStates, setDealStates] = useState<Record<string, DealStatus>>({});
   const [selectedDeal, setSelectedDeal] = useState<
     DealRecord<RequestQuery, OfferOptions> | undefined
   >();
+  const [error, setError] = useState<string | undefined>();
+  const [loading, setLoading] = useState<string>('');
+
+  const handleCheckIn = useCallback(
+    async (deal: DealRecord<RequestQuery, OfferOptions>) => {
+      try {
+        if (!deal) {
+          throw new Error('Invalid deal record');
+        }
+
+        if (!node) {
+          throw new Error('Not connected to the node');
+        }
+
+        setError(undefined);
+
+        setLoading(deal.offer.id);
+        await node.deals.checkIn.mutate({
+          id: deal.offer.id,
+        });
+        setLoading('');
+      } catch (err) {
+        logger.error('handleCheckin', err);
+        setError((err as Error).message || 'Unknown check in error');
+        setLoading('');
+      }
+    },
+    [node],
+  );
 
   useEffect(() => {
     if (deals && deals.length > 0) {
@@ -125,7 +161,17 @@ export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={1}>
-                    <Typography></Typography>
+                    {dealStates[d.offer.id] === 1 && (
+                      <LoadingButton
+                        variant="contained"
+                        size="small"
+                        loading={loading === d.offer.id}
+                        disabled={loading !== ''}
+                        onClick={() => handleCheckIn(d)}
+                      >
+                        Check In
+                      </LoadingButton>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
@@ -143,7 +189,14 @@ export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
         </>
       )}
 
+      {error && (
+        <Alert sx={{ marginTop: 2 }} severity="error">
+          <Typography>{error}</Typography>
+        </Alert>
+      )}
+
       <DealView
+        isModal={true}
         deal={selectedDeal}
         onClose={() => setSelectedDeal(undefined)}
       />

@@ -12,14 +12,13 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import { centerEllipsis } from '@windingtree/sdk-react/utils';
 import { LoadingButton } from 'mvp-shared-files/react';
-import { Hash, stringify } from 'viem';
+import { Hash } from 'viem';
 import { QrReader } from './QrReader/index.js';
 import { useNode } from '@windingtree/sdk-react/providers';
-import {
-  DealRecord,
-  GenericQuery,
-  GenericOfferOptions,
-} from '@windingtree/sdk-types';
+import { DealRecord } from '@windingtree/sdk-types';
+import { DealView } from './DealView.js';
+import { OfferOptions } from '@windingtree/mvp-node/types';
+import { RequestQuery } from 'mvp-shared-files';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('CheckIn');
@@ -33,7 +32,7 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
   const { node } = useNode();
   const [voucher, setVoucher] = useState<string | undefined>();
   const [deal, setDeal] = useState<
-    DealRecord<GenericQuery, GenericOfferOptions> | undefined
+    DealRecord<RequestQuery, OfferOptions> | undefined
   >();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
@@ -71,7 +70,9 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
       }
 
       setLoading(true);
-      const record = await node.deals.get.query({ id: offerId });
+      const record = (await node.deals.get.query({
+        id: offerId,
+      })) as unknown as DealRecord<RequestQuery, OfferOptions>;
       logger.trace('Deal with id:', offerId, record);
       setDeal(() => record);
       setLoading(false);
@@ -167,7 +168,7 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
             </Stack>
           )}
 
-          {deal && <textarea>{stringify(deal)}</textarea>}
+          {deal && <DealView deal={deal} isModal={false} />}
 
           {deal && !done && (
             <LoadingButton

@@ -1,3 +1,4 @@
+import { ReactNode, forwardRef, useState } from 'react';
 import {
   Modal,
   Paper,
@@ -23,62 +24,53 @@ import { getDealStatusColor } from '../utils/deals.js';
 
 interface DealViewProps {
   deal?: DealRecord<RequestQuery, OfferOptions>;
-  onClose: () => void;
+  onClose?: () => void;
   sx?: SxProps;
+  isModal?: boolean;
+  closeComponent?: ReactNode;
 }
 
-export const DealView = ({ deal, onClose, sx }: DealViewProps) => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
+  ({ deal, sx, closeComponent }: DealViewProps, ref) => {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const [selectedImage, setSelectedImage] = useState<string | undefined>(
+      deal?.offer.options.airplane.media[0].thumbnail,
+    );
+    const [showImg, setShowImg] = useState<string | undefined>();
 
-  if (!deal) {
-    return null;
-  }
+    if (!deal) {
+      return null;
+    }
 
-  return (
-    <Modal
-      open={Boolean(deal) ?? false}
-      onClose={onClose}
-      sx={{
-        display: 'flex',
-        alignItems: 'stretch',
-        justifyContent: 'center',
-      }}
-    >
+    return (
       <Paper
+        ref={ref}
+        tabIndex={0}
         sx={{
           padding: 2,
           paddingTop: '32px',
           width: '85%',
           position: 'relative',
           margin: 'auto',
+          ...sx,
         }}
       >
-        <IconButton
-          sx={{
-            position: 'absolute',
-            top: 6,
-            right: 6,
-            zIndex: 1,
-            bgcolor: 'white',
-          }}
-          size="small"
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-
-        <Grid container spacing={2} sx={sx}>
+        {closeComponent && <>{closeComponent}</>}
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={5} md={4} lg={3}>
             {isSmallScreen && (
               <Typography variant="h5" component="h2" gutterBottom>
                 {deal.offer.options.airplane.name}
               </Typography>
             )}
-            <Card sx={{ maxWidth: '100%', mb: 2 }}>
+            <Card
+              sx={{ maxWidth: '100%', mb: 2 }}
+              onClick={() => setShowImg(selectedImage)}
+            >
               <CardMedia
                 component="img"
-                image={deal.offer.options.airplane.media[0].thumbnail}
+                image={selectedImage}
                 alt={deal.offer.options.airplane.name}
                 sx={{ width: '100%', height: 'auto' }}
               />
@@ -88,7 +80,10 @@ export const DealView = ({ deal, onClose, sx }: DealViewProps) => {
                 .slice(0, 4)
                 .map((media, index) => (
                   <Grid item xs={3} sm={2} md={1.5} lg={1} key={index}>
-                    <Card>
+                    <Card
+                      onMouseOver={() => setSelectedImage(media.thumbnail)}
+                      onClick={() => setSelectedImage(media.thumbnail)}
+                    >
                       <CardMedia
                         component="img"
                         image={media.thumbnail}
@@ -148,7 +143,76 @@ export const DealView = ({ deal, onClose, sx }: DealViewProps) => {
             </Box>
           </Grid>
         </Grid>
+
+        <Modal
+          open={Boolean(showImg)}
+          onClose={() => setShowImg(undefined)}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Card sx={{ width: '95vw', maxHeight: '86vh', overflowY: 'auto' }}>
+            <IconButton
+              onClick={() => setShowImg(undefined)}
+              sx={{
+                position: 'absolute',
+                top: 6,
+                right: 6,
+                zIndex: 1,
+                bgcolor: 'white',
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <CardMedia component="img" image={showImg} />
+          </Card>
+        </Modal>
       </Paper>
-    </Modal>
-  );
+    );
+  },
+);
+
+export const DealView = ({
+  isModal = true,
+  deal,
+  onClose = () => {},
+  sx,
+}: DealViewProps) => {
+  if (isModal) {
+    return (
+      <Modal
+        open={Boolean(deal) ?? false}
+        onClose={onClose}
+        sx={{
+          display: 'flex',
+          alignItems: 'stretch',
+          justifyContent: 'center',
+        }}
+      >
+        <DealViewInner
+          deal={deal}
+          sx={sx}
+          closeComponent={
+            <IconButton
+              sx={{
+                position: 'absolute',
+                top: 6,
+                right: 6,
+                zIndex: 1,
+                bgcolor: 'white',
+              }}
+              size="small"
+              onClick={onClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          }
+        />
+      </Modal>
+    );
+  }
+
+  return <DealViewInner deal={deal} sx={sx} />;
 };
