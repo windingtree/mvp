@@ -10,6 +10,8 @@ class Config {
   private _cors: string[] | undefined;
   private _chain: Chain | undefined;
   private _offerGap: number | undefined;
+  private _nodeRestartMaxCount: number | undefined;
+  private _nodeRestartEveryTimeSec: number | undefined;
 
   public init() {
     this.setSignerMnemonicFromConfig();
@@ -19,6 +21,8 @@ class Config {
     this.setChainFromConfig();
     this.setCorsFromConfig();
     this.setOfferGapFromConfig();
+    this.setNodeRestartMaxCount();
+    this.setNodeRestartEveryTimeSec();
   }
 
   private setSignerMnemonicFromConfig() {
@@ -106,6 +110,32 @@ class Config {
     this._offerGap = offerGap;
   }
 
+  private setNodeRestartMaxCount() {
+    const nodeRestartMaxCount = Number(process.env.NODE_RESTART_MAX_COUNT);
+
+    if (!nodeRestartMaxCount) {
+      throw new Error(
+        'Node restart max count must be provided with NODE_RESTART_MAX_COUNT env',
+      );
+    }
+
+    this._nodeRestartMaxCount = nodeRestartMaxCount;
+  }
+
+  private setNodeRestartEveryTimeSec() {
+    const nodeRestartEveryTimeSec = Number(
+      process.env.NODE_RESTART_EVERY_TIME_SEC,
+    );
+
+    if (!nodeRestartEveryTimeSec) {
+      throw new Error(
+        'Node restart every sec time must be provided with NODE_RESTART_EVERY_TIME_SEC env',
+      );
+    }
+
+    this._nodeRestartEveryTimeSec = nodeRestartEveryTimeSec;
+  }
+
   get signerMnemonic(): string | undefined {
     return this._signerMnemonic;
   }
@@ -152,6 +182,26 @@ class Config {
     }
 
     return this._offerGap;
+  }
+
+  get nodeRestartMaxCount(): number {
+    if (!this._nodeRestartMaxCount) {
+      throw new Error(
+        'Node restart max count must be provided with NODE_RESTART_MAX_COUNT env',
+      );
+    }
+
+    return this._nodeRestartMaxCount;
+  }
+
+  get nodeRestartEveryTimeSec(): number {
+    if (!this._nodeRestartEveryTimeSec) {
+      throw new Error(
+        'Node restart every sec time must be provided with NODE_RESTART_EVERY_TIME_SEC env',
+      );
+    }
+
+    return this._nodeRestartEveryTimeSec;
   }
 }
 

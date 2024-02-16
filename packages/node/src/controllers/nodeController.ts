@@ -287,6 +287,8 @@ const subscribeChangeStatusEvent = async (
   );
 };
 
+let restartsCount = 0;
+
 /**
  * Starts the suppliers node
  *
@@ -296,154 +298,181 @@ export const main = async (): Promise<void> => {
   //todo check smart contract status
   //todo listen to ToggleEnabled event smart contract every new block and shutdown service if config == false
 
-  const options: NodeOptions = {
-    topics: [nodeTopic],
-    chain: config.chain,
-    contracts: contractsConfig,
-    serverAddress,
-    supplierId: config.supplierId,
-    signerSeedPhrase: config.signerMnemonic,
-    signerPk: config.signerPk,
-  };
-  const node = createNode<RequestQuery, OfferOptions>(options);
+  let apiServer: NodeApiServer | null = null;
+  let node: Node<RequestQuery, OfferOptions> | null = null;
 
-  node.addEventListener('start', () => {
-    logger.trace('🚀 Node started at', new Date().toISOString());
-  });
-
-  node.addEventListener('connected', () => {
-    logger.trace('🔗 Node connected to server at:', new Date().toISOString());
-  });
-
-  node.addEventListener('stop', () => {
-    logger.trace('👋 Node stopped at:', new Date().toISOString());
-  });
-
-  const contractsManager = new ProtocolContracts({
-    contracts: contractsConfig,
-    publicClient: createPublicClient({
+  try {
+    const options: NodeOptions = {
+      topics: [nodeTopic],
       chain: config.chain,
-      transport: http(),
-    }),
-    walletClient: createWalletClient({
-      chain: config.chain,
-      transport: http(),
-      account: node.signer,
-    }),
-  });
-
-  const queueStorage = await levelStorage.createInitializer({
-    path: './queue.db',
-    scope: 'queue',
-  })();
-  const commonConfigStorage = await levelStorage.createInitializer({
-    path: './common.db',
-    scope: 'common',
-  })();
-  const usersStorage = await levelStorage.createInitializer({
-    path: './users.db',
-    scope: 'users',
-  })();
-  const dealsStorage = await levelStorage.createInitializer({
-    path: './deals.db',
-    scope: 'deals',
-  })();
-  const airplanesStorage = await levelStorage.createInitializer({
-    path: './airplanes.db',
-    scope: 'airplanes',
-  })();
-  const offersStorage = await levelStorage.createInitializer({
-    path: './offer.db',
-    scope: 'offer',
-  })();
-  // console.log('@@@', await usersStorage.entries());
-
-  const queue = new Queue({
-    storage: queueStorage,
-    idsKeyName: 'jobsIds',
-    concurrencyLimit: 3,
-  });
-
-  const apiServerConfig: NodeApiServerOptions = {
-    storage: {
-      users: usersStorage,
-      deals: dealsStorage,
-      airplanes: airplanesStorage,
-      offers: offersStorage,
-    },
-    prefix: 'test',
-    port: 3456,
-    secret: 'secret',
-    ownerAccount: config.entityOwnerAddress,
-    protocolContracts: contractsManager,
-    cors: config.cors,
-  };
-
-  const apiServer = new NodeApiServer(apiServerConfig);
-
-  // TODO: Show better URL
-  logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
-
-  apiServer.start(appRouter);
-
-  const requestManager = new NodeRequestManager<RequestQuery>({
-    noncePeriod: Number(parseSeconds(noncePeriod)),
-  });
-
-  requestManager.addEventListener(
-    'request',
-    createRequestsHandler(node, {
-      airplanesDb: airplanesStorage,
-      offersStorage,
-    }),
-  );
-
-  node.addEventListener('heartbeat', () => {
-    requestManager.prune();
-  });
-
-  node.addEventListener('message', (e) => {
-    const { topic, data } = e.detail;
-    // here you are able to pre-validate arrived messages
-    requestManager.add(topic, data);
-  });
-
-  queue.registerHandler(
-    'claim',
-    dealHandler({
-      contracts: contractsManager,
-      dealsDb: apiServer.deals!,
-    }),
-  );
-
-  // TODO As for now, if the blockchain network is unavailable it causes a crash of the whole node. We must implement a conditional mechanism to avoid crashes and wait until connection before the node starts
-  const unsubscribe = await subscribeChangeStatusEvent({
-    contractsManager,
-    apiServer,
-    offersStorage,
-    commonConfigStorage,
-    queue,
-  });
-
-  /**
-   * Graceful Shutdown handler
-   */
-  const shutdown = () => {
-    const stopHandler = async () => {
-      await apiServer.stop();
-      await node.stop();
-      unsubscribe();
+      contracts: contractsConfig,
+      serverAddress,
+      supplierId: config.supplierId,
+      signerSeedPhrase: config.signerMnemonic,
+      signerPk: config.signerPk,
     };
-    stopHandler()
-      .catch((error) => {
-        logger.trace(error);
-        process.exit(1);
-      })
-      .finally(() => process.exit(0));
-  };
+    node = createNode<RequestQuery, OfferOptions>(options);
 
-  process.once('SIGTERM', shutdown);
-  process.once('SIGINT', shutdown);
+    node.addEventListener('start', () => {
+      logger.trace('🚀 Node started at', new Date().toISOString());
+    });
 
-  await node.start();
+    node.addEventListener('connected', () => {
+      logger.trace('🔗 Node connected to server at:', new Date().toISOString());
+    });
+
+    node.addEventListener('stop', () => {
+      logger.trace('👋 Node stopped at:', new Date().toISOString());
+    });
+
+    const contractsManager = new ProtocolContracts({
+      contracts: contractsConfig,
+      publicClient: createPublicClient({
+        chain: config.chain,
+        transport: http(),
+      }),
+      walletClient: createWalletClient({
+        chain: config.chain,
+        transport: http(),
+        account: node.signer,
+      }),
+    });
+
+    const queueStorage = await levelStorage.createInitializer({
+      path: './queue.db',
+      scope: 'queue',
+    })();
+    const commonConfigStorage = await levelStorage.createInitializer({
+      path: './common.db',
+      scope: 'common',
+    })();
+    const usersStorage = await levelStorage.createInitializer({
+      path: './users.db',
+      scope: 'users',
+    })();
+    const dealsStorage = await levelStorage.createInitializer({
+      path: './deals.db',
+      scope: 'deals',
+    })();
+    const airplanesStorage = await levelStorage.createInitializer({
+      path: './airplanes.db',
+      scope: 'airplanes',
+    })();
+    const offersStorage = await levelStorage.createInitializer({
+      path: './offer.db',
+      scope: 'offer',
+    })();
+    // console.log('@@@', await usersStorage.entries());
+
+    const queue = new Queue({
+      storage: queueStorage,
+      idsKeyName: 'jobsIds',
+      concurrencyLimit: 3,
+    });
+
+    const apiServerConfig: NodeApiServerOptions = {
+      storage: {
+        users: usersStorage,
+        deals: dealsStorage,
+        airplanes: airplanesStorage,
+        offers: offersStorage,
+      },
+      prefix: 'test',
+      port: 3456,
+      secret: 'secret',
+      ownerAccount: config.entityOwnerAddress,
+      protocolContracts: contractsManager,
+      cors: config.cors,
+    };
+
+    apiServer = new NodeApiServer(apiServerConfig);
+
+    // TODO: Show better URL
+    logger.trace(`Node API URL: http://localhost:${apiServerConfig.port}`);
+
+    apiServer.start(appRouter);
+
+    const requestManager = new NodeRequestManager<RequestQuery>({
+      noncePeriod: Number(parseSeconds(noncePeriod)),
+    });
+
+    requestManager.addEventListener(
+      'request',
+      createRequestsHandler(node, {
+        airplanesDb: airplanesStorage,
+        offersStorage,
+      }),
+    );
+
+    node.addEventListener('heartbeat', () => {
+      requestManager.prune();
+    });
+
+    node.addEventListener('message', (e) => {
+      const { topic, data } = e.detail;
+      // here you are able to pre-validate arrived messages
+      requestManager.add(topic, data);
+    });
+
+    queue.registerHandler(
+      'claim',
+      dealHandler({
+        contracts: contractsManager,
+        dealsDb: apiServer.deals!,
+      }),
+    );
+
+    // TODO As for now, if the blockchain network is unavailable it causes a crash of the whole node. We must implement a conditional mechanism to avoid crashes and wait until connection before the node starts
+    const unsubscribe = await subscribeChangeStatusEvent({
+      contractsManager,
+      apiServer,
+      offersStorage,
+      commonConfigStorage,
+      queue,
+    });
+
+    /**
+     * Graceful Shutdown handler
+     */
+    const shutdown = () => {
+      const stopHandler = async () => {
+        await apiServer!.stop();
+        await node!.stop();
+        unsubscribe();
+      };
+      stopHandler()
+        .catch((error) => {
+          logger.trace(error);
+          process.exit(1);
+        })
+        .finally(() => process.exit(0));
+    };
+
+    process.once('SIGTERM', shutdown);
+    process.once('SIGINT', shutdown);
+
+    await node.start();
+  } catch (error) {
+    logger.trace(error);
+
+    if (node && node.connected) {
+      await node.stop();
+    }
+    if (apiServer) {
+      await apiServer.stop();
+    }
+
+    restartsCount++;
+
+    if (restartsCount < config.nodeRestartMaxCount) {
+      logger.trace(`Restart node try count ${restartsCount}`);
+
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      setTimeout(main, config.nodeRestartEveryTimeSec * 1000);
+    } else {
+      logger.trace(`Restart node try count limit reached`);
+
+      process.exit(0);
+    }
+  }
 };
