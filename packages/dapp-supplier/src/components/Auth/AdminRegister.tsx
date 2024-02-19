@@ -17,11 +17,13 @@ import {
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 import type { AppRouter } from '@windingtree/mvp-node/types';
 import { CustomConfig } from '../../main.js';
+import { Login } from './Login.js';
 
 /**
  * Register an Admin user
  */
 export const AdminRegister = () => {
+  const { isAuth, role } = useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const { setAuth, resetAuth, setConfig } = useConfig<CustomConfig>();
   const { data: walletClient } = useWalletClient();
@@ -72,6 +74,19 @@ export const AdminRegister = () => {
       setError((err as Error).message ?? 'Unknown user registration error');
     }
   }, [walletClient, node, login, setAuth, resetAuth, setConfig]);
+
+  if (!isAuth || (isAuth && role !== 'admin')) {
+    return (
+      <>
+        <Alert severity="warning">
+          Only the Node admins are allowed to mange team
+        </Alert>
+        <Box sx={{ marginTop: 2 }}>
+          <Login admin={true} reset hideSelector />
+        </Box>
+      </>
+    );
+  }
 
   if (!walletClient) {
     return (

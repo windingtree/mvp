@@ -1,4 +1,12 @@
-import { Alert, Grid, Typography, IconButton, Stack } from '@mui/material';
+import {
+  Alert,
+  Grid,
+  Typography,
+  IconButton,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import type { AppRouter } from '@windingtree/mvp-node/types';
 import { useNode } from '@windingtree/sdk-react/providers';
@@ -20,6 +28,8 @@ export const AirplanesList = ({
   version = 1,
   onSelected,
 }: AirplanesListProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { node, nodeConnected } = useNode<AppRouter>();
   const { stableCoins } = useProtocolConfig();
   const [records, setRecords] = useState<AirplanesResponseGetAll>([]);
@@ -120,47 +130,107 @@ export const AirplanesList = ({
 
       {records.length > 0 && (
         <>
-          <Grid container spacing={2}>
-            <Grid item xs={4} sx={{ padding: 2, textAlign: 'left' }}>
-              <Typography variant="caption">Name (type)</Typography>
+          {!isMobile && (
+            <Grid container spacing={2} sx={{ borderBottom: 1 }}>
+              <Grid item xs={4} sx={{ textAlign: 'left' }}>
+                <Typography variant="caption">Name (type)</Typography>
+              </Grid>
+              <Grid item xs={2} sx={{ textAlign: 'center' }}>
+                <Typography variant="caption">Capacity</Typography>
+              </Grid>
+              <Grid item xs={2} sx={{ textAlign: 'center' }}>
+                <Typography variant="caption">Min hours</Typography>
+              </Grid>
+              <Grid item xs={2} sx={{ textAlign: 'center' }}>
+                <Typography variant="caption">Max hours</Typography>
+              </Grid>
+              <Grid item xs={2} sx={{ textAlign: 'center' }}>
+                <Typography variant="caption">Action</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-              <Typography variant="caption">Capacity</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-              <Typography variant="caption">Min hours</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-              <Typography variant="caption">Max hours</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-              <Typography variant="caption">Action</Typography>
-            </Grid>
-          </Grid>
+          )}
 
           {records.map((r, i) => (
-            <Grid key={i} container spacing={2}>
-              <Grid item xs={4} sx={{ padding: 2, textAlign: 'left' }}>
-                <Typography variant="body1">{r.name}</Typography>
+            <Grid
+              key={i}
+              container
+              spacing={2}
+              sx={{
+                borderBottom: isMobile ? 1 : 'none',
+                marginTop: isMobile ? 2 : 0,
+                ':first-child': { marginTop: 0 },
+                marginBottom: isMobile ? 2 : 0,
+                paddingBottom: isMobile ? 2 : 0,
+              }}
+            >
+              <Grid item xs={isMobile ? 12 : 4} sx={{ textAlign: 'left' }}>
+                {isMobile && (
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h6">Name (type):</Typography>
+                    <Typography variant="body1">{r.name}</Typography>
+                  </Stack>
+                )}
+                {!isMobile && <Typography variant="body1">{r.name}</Typography>}
               </Grid>
-              <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-                <Typography variant="body1">{r.capacity}</Typography>
+              <Grid item xs={isMobile ? 12 : 2} sx={{ textAlign: 'center' }}>
+                {isMobile && (
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h6">Capacity:</Typography>
+                    <Typography variant="body1">{r.capacity}</Typography>
+                  </Stack>
+                )}
+                {!isMobile && (
+                  <Typography variant="body1">{r.capacity}</Typography>
+                )}
               </Grid>
-              <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-                <Typography variant="body1">{r.minTime}</Typography>
+              <Grid item xs={isMobile ? 12 : 2} sx={{ textAlign: 'center' }}>
+                {isMobile && (
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h6">Min hours:</Typography>
+                    <Typography variant="body1">{r.minTime}</Typography>
+                  </Stack>
+                )}
+                {!isMobile && (
+                  <Typography variant="body1">{r.minTime}</Typography>
+                )}
               </Grid>
-              <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-                <Typography variant="body1">{r.maxTime}</Typography>
+              <Grid item xs={isMobile ? 12 : 2} sx={{ textAlign: 'center' }}>
+                {isMobile && (
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h6">Max hours:</Typography>
+                    <Typography variant="body1">{r.maxTime}</Typography>
+                  </Stack>
+                )}
+                {!isMobile && (
+                  <Typography variant="body1">{r.maxTime}</Typography>
+                )}
               </Grid>
-              <Grid item xs={2} sx={{ padding: 2, textAlign: 'center' }}>
-                <Stack direction="row" spacing={2}>
-                  <IconButton size="small" onClick={() => handleSelect(r)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => handleDelete(r.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Stack>
+              <Grid
+                item
+                xs={isMobile ? 12 : 2}
+                sx={{ textAlign: isMobile ? 'left' : 'center' }}
+              >
+                {isMobile && (
+                  <Stack direction="row" spacing={2}>
+                    <Typography variant="h6">Action:</Typography>
+                    <IconButton size="small" onClick={() => handleSelect(r)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton size="small" onClick={() => handleDelete(r.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
+                )}
+                {!isMobile && (
+                  <Stack direction="row" spacing={2}>
+                    <IconButton size="small" onClick={() => handleSelect(r)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton size="small" onClick={() => handleDelete(r.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
+                )}
               </Grid>
             </Grid>
           ))}

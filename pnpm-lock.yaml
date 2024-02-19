@@ -129,11 +129,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.7
-        version: 1.5.7(typescript@5.3.3)
+        specifier: ^1.7.0
+        version: 1.7.0(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.10
-        version: 1.4.10
+        specifier: ^1.4.13
+        version: 1.4.13
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -258,11 +258,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.7
-        version: 1.5.7(typescript@5.3.3)
+        specifier: ^1.7.0
+        version: 1.7.0(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.10
-        version: 1.4.10
+        specifier: ^1.4.13
+        version: 1.4.13
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -351,8 +351,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db':
-        specifier: ^1.2.8
-        version: 1.2.8(typescript@5.3.3)
+        specifier: ^1.3.2
+        version: 1.3.2(typescript@5.3.3)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -360,11 +360,11 @@ importers:
         specifier: ^1.3.6
         version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.5.7
-        version: 1.5.7(typescript@5.3.3)
+        specifier: ^1.7.0
+        version: 1.7.0(typescript@5.3.3)
       '@windingtree/sdk-queue':
-        specifier: ^1.2.7
-        version: 1.2.7(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.0
+        version: 1.3.0(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -5571,8 +5571,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-db@1.2.8(typescript@5.3.3):
-    resolution: {integrity: sha512-X7CqZbAJky3s5ID/0O9ejg+vxHAoVDu0abI7tgrydxn8MJA+yPvxmlwjBw0QNuHs2p3eDl7MbNBJiXH0f87QKA==}
+  /@windingtree/sdk-db@1.3.2(typescript@5.3.3):
+    resolution: {integrity: sha512-ubPojEWxsQyhmUlEsqJ852uqzxcJMbXO3kKM0gPPR6MZHn/1QG7pQGCXSv7E892XyUub9C4id9SzhsjKpRu7og==}
     dependencies:
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-storage': 1.4.2
@@ -5607,13 +5607,13 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-node-api@1.5.7(typescript@5.3.3):
-    resolution: {integrity: sha512-EIkVFVwa4lQirR9q2lB1AIAxqTv8qh1A1nt/U8v02GrmR7KxKojPGsoKb64xb1IyADA9PcOskjDLNqPqkl4A6Q==}
+  /@windingtree/sdk-node-api@1.7.0(typescript@5.3.3):
+    resolution: {integrity: sha512-kg7x/Nf5BQj7wE5ymwSRDAMC+xYtMzK72CKNQSt8nNDC/wsyelBrLG7k4ekmZwDIzvP37oVLE/hGxRjlL+vAyw==}
     dependencies:
       '@trpc/client': 10.44.1(@trpc/server@10.45.0)
       '@trpc/server': 10.45.0
       '@windingtree/sdk-contracts-manager': 1.5.0(typescript@5.3.3)(zod@3.22.4)
-      '@windingtree/sdk-db': 1.2.8(typescript@5.3.3)
+      '@windingtree/sdk-db': 1.3.2(typescript@5.3.3)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-storage': 1.4.2
@@ -5678,8 +5678,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-queue@1.2.7(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-iT7VbkqSXOqnOiQ6rS4LGzmDT6R85Ynxo2Lzz3lfLvEtF0CZCMuKU9UPw5Fw9H3dscwoTI9PiLqBBYSZlxg5Lw==}
+  /@windingtree/sdk-queue@1.3.0(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-dxu59CIHIjlY1uWqXIY/7MnE3n84d/2L5NB7nyVM2NiFassmml4BMrALrwcmiXC7798MzOYM+3CZ17zSqcccLw==}
     dependencies:
       '@libp2p/interface': 0.1.6
       '@windingtree/contracts': 1.0.0
@@ -5694,8 +5694,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.10:
-    resolution: {integrity: sha512-3YfcspEJ0W2iiP2H4yJr/Bz0enWsifWhBHWKLYuElT1uhCtJ5dJ6WWnzGGAej2SZSoJxO2l7OqVp/cJ3I7Hkug==}
+  /@windingtree/sdk-react@1.4.13:
+    resolution: {integrity: sha512-YonWgW50AfXpx+l8rF3qM6uX/XMKQ5gy86slZbX9TZHHjI3yGCb+INX0eHJzh9oNEAXpuOv1fqREHDx7qiPidQ==}
     dev: true
 
   /@windingtree/sdk-server@1.2.8(typescript@5.3.3):

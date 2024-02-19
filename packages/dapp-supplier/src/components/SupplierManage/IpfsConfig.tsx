@@ -1,5 +1,5 @@
 import { ConfigActions, useConfig } from '@windingtree/sdk-react/providers';
-import { Stack, TextField, Typography } from '@mui/material';
+import { Link, Stack, TextField, Typography } from '@mui/material';
 import { type CustomConfig } from '../../main.js';
 
 export const IpfsConfig = () => {
@@ -16,6 +16,12 @@ export const IpfsConfig = () => {
             Using this form you are able to configure the IPFS provider's API
             credentials. This is required to enable files and images storage
             feature.
+          </Typography>
+          <Typography variant="subtitle1" color="GrayText">
+            To get the following credentials please register an account on{' '}
+            <Link target="_blank" href="https://particle.network/">
+              https://particle.network/
+            </Link>
           </Typography>
           <TextField
             label="Particle Network Project Id"

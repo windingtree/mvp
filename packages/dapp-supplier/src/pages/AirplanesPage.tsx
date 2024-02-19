@@ -1,8 +1,9 @@
-import { Container, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { AddAirplane } from '../components/Airplanes/AddAirplane.js';
 import { AirplanesList } from '../components/Airplanes/AirplanesList.js';
 import { useCallback, useEffect, useState } from 'react';
 import { AirplaneMeta } from '../components/Airplanes/type.js';
+import { PageContainer } from '../components/PageContainer.js';
 
 export const AirplanesPage = () => {
   const [showAdd, setShowAdd] = useState<boolean>(false);
@@ -22,16 +23,17 @@ export const AirplanesPage = () => {
   }, [selected]);
 
   return (
-    <Container sx={{ paddingTop: 2 }}>
+    <PageContainer>
       <AirplanesList version={version} onSelected={setSelected} />
       <Button
         variant="contained"
         disabled={showAdd}
         onClick={() => setShowAdd(true)}
+        sx={{ marginTop: 2 }}
       >
         Create
       </Button>
       <AddAirplane show={showAdd} record={selected} onDone={onDone} />
-    </Container>
+    </PageContainer>
   );
 };

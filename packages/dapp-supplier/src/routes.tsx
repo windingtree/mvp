@@ -57,7 +57,7 @@ export const routes: RouteObject[] = [
       {
         path: 'airplanes',
         element: (
-          <RequireAuth admin>
+          <RequireAuth admin hideSelector>
             <AirplanesPage />
           </RequireAuth>
         ),
@@ -65,7 +65,7 @@ export const routes: RouteObject[] = [
       {
         path: 'deals',
         element: (
-          <RequireAuth>
+          <RequireAuth hideSelector>
             <DealsPage />
           </RequireAuth>
         ),
@@ -83,7 +83,7 @@ export const routesTitlesObj: Record<string, string> = {
   'supplier/access': 'Supplier Access',
   'supplier/deals': 'Deals',
   'supplier/config': 'Supplier Config',
-  airplanes: 'Airplanes Management',
+  airplanes: 'Airplanes',
   deals: 'Deals',
 };
 
@@ -100,4 +100,4 @@ export const routesTitles = Object.entries(routesTitlesObj);
 export const menuTitles = Object.entries(menuTitlesObj);
 
 export const getTitleByPath = (currentPath: string) =>
-  routesTitlesObj[currentPath.replace(/^\//, '')] || 'Node Manager';
+  routesTitlesObj[currentPath.replace(/^\//, '')] || 'Home';

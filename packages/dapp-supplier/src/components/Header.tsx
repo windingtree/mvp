@@ -10,6 +10,8 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { CheckCircle, PowerOff, Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -61,6 +63,8 @@ const MainMenu = () => {
 export const Header = () => {
   const location = useLocation();
   const { nodeConnected, nodeError } = useNode<AppRouter>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <AppBar position="static">
@@ -71,7 +75,7 @@ export const Header = () => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Box>
+            {!isMobile && (
               <Tooltip
                 title={
                   nodeConnected
@@ -85,7 +89,7 @@ export const Header = () => {
                   {!nodeConnected && <PowerOff color="error" />}
                 </>
               </Tooltip>
-            </Box>
+            )}
             <w3m-button size="sm" balance="hide" />
             <MainMenu />
           </Stack>

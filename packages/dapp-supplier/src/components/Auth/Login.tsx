@@ -21,9 +21,10 @@ import { CustomConfig } from '../../main.js';
 interface LoginProps {
   reset?: boolean;
   admin?: boolean;
+  hideSelector?: boolean;
 }
 
-export const Login = ({ reset, admin }: LoginProps) => {
+export const Login = ({ reset, admin, hideSelector = false }: LoginProps) => {
   const { node } = useNode<AppRouter>();
   const {
     isAuth,
@@ -153,16 +154,18 @@ export const Login = ({ reset, admin }: LoginProps) => {
   return (
     <>
       <Stack spacing={4}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Typography>Log In as admin</Typography>
-          <Switch
-            checked={asAdmin}
-            onChange={(e) => {
-              setAsAdmin(e.target.checked);
-            }}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </Stack>
+        {!hideSelector && (
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography>Log In as admin</Typography>
+            <Switch
+              checked={asAdmin}
+              onChange={(e) => {
+                setAsAdmin(e.target.checked);
+              }}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Stack>
+        )}
         {asAdmin && (
           <Alert severity="info">
             During the login procedure you will be prompted to sign login

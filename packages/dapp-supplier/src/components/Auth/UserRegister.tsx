@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Stack,
@@ -21,7 +21,8 @@ import { CustomConfig } from '../../main.js';
  * Register a new user
  */
 export const UserRegister = () => {
-  const { isAuth, setAuth, resetAuth, setConfig } = useConfig<CustomConfig>();
+  const { isAuth, role, setAuth, resetAuth, setConfig } =
+    useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -38,43 +39,34 @@ export const UserRegister = () => {
       }
 
       setIsLoading(true);
-
       await node.user.register.mutate({
         login,
         password,
-      });
-
-      setAuth(login);
-      setConfig({
-        type: ConfigActions.SET_CONFIG,
-        payload: {
-          role: 'manager',
-        },
       });
       setDone(true);
       setIsLoading(false);
     } catch (err) {
       setDone(false);
-      resetAuth();
-      setConfig({
-        type: ConfigActions.SET_CONFIG,
-        payload: {
-          role: undefined,
-        },
-      });
       setIsLoading(false);
       setError((err as Error).message ?? 'Unknown user registration error');
     }
-  }, [node, login, password, setAuth, setConfig, resetAuth]);
+  }, [node, login, password]);
 
-  if (!isAuth) {
+  useEffect(() => {
+    if (done) {
+      setLogin('');
+      setPassword('');
+    }
+  }, [done]);
+
+  if (!isAuth || (isAuth && role !== 'admin')) {
     return (
       <>
         <Alert severity="warning">
-          Only the connected Node admins are allowed to register new users
+          Only the Node admins are allowed to register new users
         </Alert>
         <Box sx={{ marginTop: 2 }}>
-          <Login admin={true} />
+          <Login admin={true} reset hideSelector />
         </Box>
       </>
     );
@@ -119,7 +111,7 @@ export const UserRegister = () => {
             </Stack>
           </Button>
           {error && <Alert severity="error">{error}</Alert>}
-          {done && (
+          {done && login && (
             <Alert severity="success">
               User "{login}" has been successfully registered
             </Alert>

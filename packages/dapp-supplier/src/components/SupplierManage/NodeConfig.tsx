@@ -12,8 +12,9 @@ export const NodeConfig = () => {
             Supplier's Node Configuration
           </Typography>
           <Typography variant="subtitle1" color="GrayText">
-            Using this form you are able to configure the node address. This is
-            required to enable access to the node from this Dapp
+            This URL is your deployed Node server address. You can get it from
+            your deployment configuration and it looks like{' '}
+            <strong>https://[domain-name]:[port]</strong>.
           </Typography>
           <TextField
             label="Node API server URL"

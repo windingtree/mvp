@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Button, Container } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import { CheckIn } from '../components/CheckIn.js';
 import { useNode } from '@windingtree/sdk-react/providers';
 import { usePoller } from '@windingtree/sdk-react/hooks';
@@ -8,8 +8,9 @@ import { DealRecord, PaginationOptions } from '@windingtree/sdk-types';
 import { RequestQuery } from 'mvp-shared-files';
 import { defaultPageSkip } from '../utils/defaults.js';
 import { Page } from '../utils/types.js';
-import { createLogger } from '@windingtree/sdk-logger';
 import { Deals } from '../components/Deals.js';
+import { PageContainer } from '../components/PageContainer.js';
+import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('DealsPage');
 
@@ -89,7 +90,7 @@ export const DealsPage = () => {
   usePoller(() => getDeals(page), 5000, nodeConnected, 'RefreshDeals');
 
   return (
-    <Container sx={{ paddingTop: 2 }}>
+    <PageContainer>
       <Button
         variant="contained"
         size="medium"
@@ -112,6 +113,6 @@ export const DealsPage = () => {
           {error}
         </Alert>
       )}
-    </Container>
+    </PageContainer>
   );
 };
