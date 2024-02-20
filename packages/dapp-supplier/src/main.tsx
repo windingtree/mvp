@@ -11,6 +11,8 @@ import { WagmiConfig } from 'wagmi';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { contractsConfig, wcProjectId } from 'mvp-shared-files';
 import { AirplaneConfiguration } from './components/Airplanes/type.js';
+import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 import { hardhat, gnosisChiado } from 'viem/chains';
 
 export const targetChain =
@@ -35,6 +37,20 @@ createWeb3Modal({
   projectId: wcProjectId,
 });
 
+const themeOptions: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#00DA95',
+    },
+    secondary: {
+      main: '#21BDE2',
+    },
+  },
+};
+
+const clientTheme = createTheme(themeOptions);
+
 export interface CustomConfig extends AppConfig {
   supplierId?: Hash;
   ipfsProjectId?: string;
@@ -56,7 +72,10 @@ root.render(
     <NodeProvider>
       <WagmiConfig config={wagmiConfig}>
         <ContractsProvider contractsConfig={contractsConfig}>
-          <App />
+          <ThemeProvider theme={clientTheme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
         </ContractsProvider>
       </WagmiConfig>
     </NodeProvider>

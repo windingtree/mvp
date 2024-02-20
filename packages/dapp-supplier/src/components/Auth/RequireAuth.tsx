@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 import { Login } from './Login.js';
 import { useConfig } from '@windingtree/sdk-react/providers';
 import { CustomConfig } from '../../main.js';
-import { PageContainer } from '../PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 
 interface RequireAuthProps {
   admin?: boolean;
