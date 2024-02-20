@@ -12,6 +12,8 @@ class Config {
   private _offerGap: number | undefined;
   private _nodeRestartMaxCount: number | undefined;
   private _nodeRestartEveryTimeSec: number | undefined;
+  private _queueMaxRetries: number | undefined;
+  private _queueRetriesDelay: number | undefined;
 
   public init() {
     this.setSignerMnemonicFromConfig();
@@ -23,6 +25,8 @@ class Config {
     this.setOfferGapFromConfig();
     this.setNodeRestartMaxCount();
     this.setNodeRestartEveryTimeSec();
+    this.setQueueMaxRetries();
+    this.setQueueRetriesDelay();
   }
 
   private setSignerMnemonicFromConfig() {
@@ -136,6 +140,30 @@ class Config {
     this._nodeRestartEveryTimeSec = nodeRestartEveryTimeSec;
   }
 
+  private setQueueMaxRetries() {
+    const maxRetries = Number(process.env.QUEUE_MAX_RETRIES);
+
+    if (!maxRetries) {
+      throw new Error(
+        'Max retries must be provided with QUEUE_MAX_RETRIES env',
+      );
+    }
+
+    this._queueMaxRetries = maxRetries;
+  }
+
+  private setQueueRetriesDelay() {
+    const retriesDelay = Number(process.env.QUEUE_RETRIES_DELAY);
+
+    if (!retriesDelay) {
+      throw new Error(
+        'Retries delay must be provided with QUEUE_RETRIES_DELAY env',
+      );
+    }
+
+    this._queueRetriesDelay = retriesDelay;
+  }
+
   get signerMnemonic(): string | undefined {
     return this._signerMnemonic;
   }
@@ -202,6 +230,24 @@ class Config {
     }
 
     return this._nodeRestartEveryTimeSec;
+  }
+
+  get queueMaxRetries(): number | undefined {
+    if (!this._queueMaxRetries) {
+      throw new Error(
+        'max retries must be provided with QUEUE_MAX_RETRIES env',
+      );
+    }
+    return this._queueMaxRetries;
+  }
+
+  get queueRetriesDelay(): number | undefined {
+    if (!this._queueRetriesDelay) {
+      throw new Error(
+        'retries delay must be provided with QUEUE_RETRIES_DELAY env',
+      );
+    }
+    return this._queueRetriesDelay;
   }
 }
 
