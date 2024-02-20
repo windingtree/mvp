@@ -6,6 +6,8 @@ import {
   Alert,
   Button,
   Stack,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { MoreHoriz as MoreIcon } from '@mui/icons-material';
 import { LoadingButton } from 'mvp-shared-files/react';
@@ -40,6 +42,8 @@ type DealsRegistryRecord = Required<DealRecord<RequestQuery, OfferOptions>>;
 // };
 
 export const BookingsPage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
   const { dealsManager } = useDealsManager<RequestQuery, OfferOptions>();
   const { data: walletClient } = useWalletClient();
@@ -121,7 +125,7 @@ export const BookingsPage = () => {
           </Button>
         </>
       )}
-      {deals.length > 0 && (
+      {!isMobile && deals.length > 0 && (
         <Grid container spacing={2} sx={{ borderBottom: 1 }}>
           <Grid item xs={3}>
             <Typography variant="caption">Booking</Typography>
@@ -138,47 +142,117 @@ export const BookingsPage = () => {
         </Grid>
       )}
       {deals.map((deal, i) => (
-        <Grid container key={i} sx={{ display: 'flex', alignItems: 'center' }}>
-          <Grid item xs={3}>
-            <Typography
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-              onClick={() => navigate(`/details?offerId=${deal.offer.id}`)}
-            >
-              {deal.offer.options.airplane.name}
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography>{deal.offer.options.date}</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography
-              sx={{
-                color: deal.status === DealStatus.Cancelled ? 'red' : 'inherit',
-              }}
-            >
-              {DealStatus[dealStates[deal.offer.id]] ?? 'Unknown'}
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              {[DealStatus.Created, DealStatus.Claimed].includes(
-                deal.status,
-              ) && (
-                <LoadingButton
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  disabled={loadingId === deal.offer.id || Boolean(tx)}
-                  loading={loadingId === deal.offer.id}
-                  onClick={() => handleCancel(deal)}
+        <Grid
+          container
+          key={i}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            borderBottom: isMobile ? 1 : 0,
+            marginBottom: isMobile ? 2 : 0,
+          }}
+        >
+          <Grid item xs={12} sm={true}>
+            {isMobile && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography variant="h6">Booking:</Typography>
+                <Typography
+                  sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => navigate(`/details?offerId=${deal.offer.id}`)}
                 >
-                  Cancel
-                </LoadingButton>
-              )}
-              <IconButton>
-                <MoreIcon />
-              </IconButton>
-            </Stack>
+                  {deal.offer.options.airplane.name}
+                </Typography>
+              </Stack>
+            )}
+            {!isMobile && (
+              <Typography
+                sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+                onClick={() => navigate(`/details?offerId=${deal.offer.id}`)}
+              >
+                {deal.offer.options.airplane.name}
+              </Typography>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={true}>
+            {isMobile && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography variant="h6">Date</Typography>
+                <Typography>{deal.offer.options.date}</Typography>
+              </Stack>
+            )}
+            {!isMobile && <Typography>{deal.offer.options.date}</Typography>}
+          </Grid>
+          <Grid item xs={12} sm={true}>
+            {isMobile && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography variant="h6">Status</Typography>
+                <Typography
+                  sx={{
+                    color:
+                      deal.status === DealStatus.Cancelled ? 'red' : 'inherit',
+                  }}
+                >
+                  {DealStatus[dealStates[deal.offer.id]] ?? 'Unknown'}
+                </Typography>
+              </Stack>
+            )}
+            {!isMobile && (
+              <Typography
+                sx={{
+                  color:
+                    deal.status === DealStatus.Cancelled ? 'red' : 'inherit',
+                }}
+              >
+                {DealStatus[dealStates[deal.offer.id]] ?? 'Unknown'}
+              </Typography>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={true}>
+            {isMobile && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography variant="h6">Action</Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  {[DealStatus.Created, DealStatus.Claimed].includes(
+                    deal.status,
+                  ) && (
+                    <LoadingButton
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      disabled={loadingId === deal.offer.id || Boolean(tx)}
+                      loading={loadingId === deal.offer.id}
+                      onClick={() => handleCancel(deal)}
+                    >
+                      Cancel
+                    </LoadingButton>
+                  )}
+                  <IconButton>
+                    <MoreIcon />
+                  </IconButton>
+                </Stack>
+              </Stack>
+            )}
+            {!isMobile && (
+              <Stack direction="row" spacing={2} alignItems="center">
+                {[DealStatus.Created, DealStatus.Claimed].includes(
+                  deal.status,
+                ) && (
+                  <LoadingButton
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    disabled={loadingId === deal.offer.id || Boolean(tx)}
+                    loading={loadingId === deal.offer.id}
+                    onClick={() => handleCancel(deal)}
+                  >
+                    Cancel
+                  </LoadingButton>
+                )}
+                <IconButton>
+                  <MoreIcon />
+                </IconButton>
+              </Stack>
+            )}
           </Grid>
         </Grid>
       ))}
