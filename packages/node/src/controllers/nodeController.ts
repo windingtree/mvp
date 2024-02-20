@@ -298,8 +298,7 @@ const subscribeChangeStatusEvent = async (
                     : Number(offer.expire),
                 scheduledTime:
                   status === DealStatus.CheckedIn
-                    ? // * 1000 = convert to ms
-                      (Number(offer.payload.checkOut) + 100) * 1000
+                    ? (Number(offer.payload.checkOut) * 1000) + 100 // * 1000 = convert to ms; 100 - extra gap
                     : undefined,
               });
             }
