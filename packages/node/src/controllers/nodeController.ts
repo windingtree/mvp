@@ -95,6 +95,8 @@ const dealHandler = createJobHandler<
   // check for double booking in the availability system
   // If double booking detected - rejects (and refunds) the deal
 
+  let finalStatus: DealStatus = status;
+
   if ((status as DealStatus) === DealStatus.Created) {
     await contracts.claimDeal(
       offer,
@@ -105,6 +107,22 @@ const dealHandler = createJobHandler<
         );
       },
     );
+
+    finalStatus = DealStatus.Claimed;
+  }
+
+  if ((status as DealStatus) === DealStatus.CheckedIn) {
+    await contracts.checkOutDeal(
+      offer,
+      undefined,
+      (txHash: string, txSubj?: string) => {
+        logger.trace(
+          `Offer #${offer.payload.id} ${txSubj ?? 'claim'} tx hash: ${txHash}`,
+        );
+      },
+    );
+
+    finalStatus = DealStatus.CheckedOut;
   }
 
   await dealsDb.set({
@@ -115,7 +133,7 @@ const dealHandler = createJobHandler<
     buyer,
     price,
     asset,
-    status,
+    status: finalStatus,
   });
 
   return false; // Returning false means that the job must be stopped
@@ -260,7 +278,7 @@ const subscribeChangeStatusEvent = async (
       }
 
       logs.forEach((log) => {
-        const { offerId } = log.args as {
+        const { offerId, status } = log.args as {
           offerId?: `0x${string}` | undefined;
           status?: DealStatus | number | undefined;
           sender?: `0x${string}` | undefined;
@@ -272,9 +290,17 @@ const subscribeChangeStatusEvent = async (
               queue.add({
                 handlerName: 'claim',
                 data: offer,
-                maxRetries: 5, //todo const
-                retriesDelay: 5, //todo const
-                expire: Number(offer.expire),
+                maxRetries: config.queueMaxRetries,
+                retriesDelay: config.queueRetriesDelay,
+                expire:
+                  status === DealStatus.CheckedIn
+                    ? undefined
+                    : Number(offer.expire),
+                scheduledTime:
+                  status === DealStatus.CheckedIn
+                    ? // * 1000 = convert to ms
+                      (Number(offer.payload.checkOut) + 100) * 1000
+                    : undefined,
               });
             }
           })
