@@ -21,8 +21,7 @@ import { CustomConfig } from '../../main.js';
  * Register a new user
  */
 export const UserRegister = () => {
-  const { isAuth, role, setAuth, resetAuth, setConfig } =
-    useConfig<CustomConfig>();
+  const { isAuth, login: currentAdmin, role } = useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -66,7 +65,7 @@ export const UserRegister = () => {
           Only the Node admins are allowed to register new users
         </Alert>
         <Box sx={{ marginTop: 2 }}>
-          <Login admin={true} reset hideSelector />
+          <Login admin={true} hideSelector />
         </Box>
       </>
     );

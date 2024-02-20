@@ -20,7 +20,7 @@ export const RequireAuth: FC<RequireAuthProps> = ({
   if (!(isAuth && role === (admin ? 'admin' : 'manager'))) {
     return (
       <PageContainer>
-        <Login admin={Boolean(admin)} hideSelector={hideSelector} reset />
+        <Login admin={Boolean(admin)} hideSelector={hideSelector} />
       </PageContainer>
     );
   }

@@ -84,7 +84,7 @@ export const ManageTeam = () => {
           Only the Node admins are allowed to mange team
         </Alert>
         <Box sx={{ marginTop: 2 }}>
-          <Login admin={true} reset hideSelector />
+          <Login admin={true} hideSelector />
         </Box>
       </>
     );

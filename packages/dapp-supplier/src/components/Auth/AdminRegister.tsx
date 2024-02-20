@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Stack,
@@ -17,13 +17,11 @@ import {
 import { createAdminSignature } from '@windingtree/sdk-node-api/client';
 import type { AppRouter } from '@windingtree/mvp-node/types';
 import { CustomConfig } from '../../main.js';
-import { Login } from './Login.js';
 
 /**
  * Register an Admin user
  */
 export const AdminRegister = () => {
-  const { isAuth, role } = useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const { setAuth, resetAuth, setConfig } = useConfig<CustomConfig>();
   const { data: walletClient } = useWalletClient();
@@ -58,7 +56,7 @@ export const AdminRegister = () => {
       setConfig({
         type: ConfigActions.SET_CONFIG,
         payload: {
-          role: 'manager',
+          role: 'admin',
         },
       });
     } catch (err) {
@@ -74,6 +72,12 @@ export const AdminRegister = () => {
       setError((err as Error).message ?? 'Unknown user registration error');
     }
   }, [walletClient, node, login, setAuth, resetAuth, setConfig]);
+
+  useEffect(() => {
+    if (done) {
+      setLogin('');
+    }
+  }, [done]);
 
   if (!walletClient) {
     return (

@@ -19,16 +19,16 @@ import { useWalletClient } from 'wagmi';
 import { CustomConfig } from '../../main.js';
 
 interface LoginProps {
-  reset?: boolean;
   admin?: boolean;
   hideSelector?: boolean;
 }
 
-export const Login = ({ reset, admin, hideSelector = false }: LoginProps) => {
+export const Login = ({ admin, hideSelector = false }: LoginProps) => {
   const { node } = useNode<AppRouter>();
   const {
     isAuth,
     login: account,
+    role,
     setAuth,
     resetAuth,
     setConfig,
@@ -138,17 +138,16 @@ export const Login = ({ reset, admin, hideSelector = false }: LoginProps) => {
   }, [node, login, password, setAuth, setConfig, resetAuth]);
 
   useEffect(() => {
-    if (Boolean(reset)) {
+    if (
+      account &&
+      ((admin && role !== 'admin') || (!admin && role !== 'manager'))
+    ) {
       handleReset();
     }
-  }, [handleReset, reset]);
+  }, [handleReset, account, role, admin]);
 
   if (isAuth && account) {
-    return (
-      <>
-        <Typography>Hello {account}</Typography>
-      </>
-    );
+    return null;
   }
 
   return (
