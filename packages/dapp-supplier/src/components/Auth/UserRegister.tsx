@@ -8,11 +8,7 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-import {
-  ConfigActions,
-  useConfig,
-  useNode,
-} from '@windingtree/sdk-react/providers';
+import { useConfig, useNode } from '@windingtree/sdk-react/providers';
 import type { AppRouter } from '@windingtree/mvp-node/types';
 import { Login } from './Login.js';
 import { CustomConfig } from '../../main.js';
@@ -21,13 +17,13 @@ import { CustomConfig } from '../../main.js';
  * Register a new user
  */
 export const UserRegister = () => {
-  const { isAuth, login: currentAdmin, role } = useConfig<CustomConfig>();
+  const { isAuth, role } = useConfig<CustomConfig>();
   const { node } = useNode<AppRouter>();
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [done, setDone] = useState<boolean>(false);
+  const [done, setDone] = useState<string | undefined>();
 
   const handleRegister = useCallback(async () => {
     try {
@@ -42,10 +38,10 @@ export const UserRegister = () => {
         login,
         password,
       });
-      setDone(true);
+      setDone(`User "${login}" has been successfully registered`);
       setIsLoading(false);
     } catch (err) {
-      setDone(false);
+      setDone(undefined);
       setIsLoading(false);
       setError((err as Error).message ?? 'Unknown user registration error');
     }
@@ -85,7 +81,7 @@ export const UserRegister = () => {
             name="login"
             value={login}
             onChange={(e) => {
-              setDone(false);
+              setDone(undefined);
               setLogin(() => e.target.value);
             }}
           />
@@ -95,7 +91,7 @@ export const UserRegister = () => {
             name="password"
             value={password}
             onChange={(e) => {
-              setDone(false);
+              setDone(undefined);
               setPassword(() => e.target.value);
             }}
           />
@@ -110,11 +106,7 @@ export const UserRegister = () => {
             </Stack>
           </Button>
           {error && <Alert severity="error">{error}</Alert>}
-          {done && login && (
-            <Alert severity="success">
-              User "{login}" has been successfully registered
-            </Alert>
-          )}
+          {done && <Alert severity="success">{done}</Alert>}
         </Stack>
       </form>
     </>

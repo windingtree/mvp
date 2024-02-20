@@ -30,7 +30,7 @@ export const ManageTeam = () => {
     try {
       setError(undefined);
 
-      if (!node) {
+      if (!node || role !== 'admin') {
         return;
       }
 
@@ -43,7 +43,7 @@ export const ManageTeam = () => {
       setIsLoading(false);
       setError((err as Error).message ?? 'Unknown user registration error');
     }
-  }, [node]);
+  }, [node, role]);
 
   const handleDelete = useCallback(
     async (login: string) => {
@@ -75,7 +75,12 @@ export const ManageTeam = () => {
     }
   }, [getTeam, nodeConnected]);
 
-  usePoller(() => getTeam(), 5000, nodeConnected, 'RefreshTeam');
+  usePoller(
+    () => getTeam(),
+    5000,
+    nodeConnected || role !== 'admin',
+    'RefreshTeam',
+  );
 
   if (!isAuth || (isAuth && role !== 'admin')) {
     return (
