@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Container } from '@mui/material';
+import { Alert } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import { useDealsManager } from '@windingtree/sdk-react/providers';
 import { RequestQuery } from 'mvp-shared-files';
@@ -9,6 +9,7 @@ import { Hash } from 'viem';
 import { OfferDetails } from '../components/OfferDetails.js';
 import { createLogger } from '@windingtree/sdk-logger';
 import { CheckIn } from '../components/CheckIn.js';
+import { PageContainer } from 'mvp-shared-files/react';
 
 const logger = createLogger('DetailsPage');
 
@@ -40,7 +41,7 @@ export const DetailsPage = () => {
   }, [dealsManager, offerId]);
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+    <PageContainer>
       {error && (
         <Alert severity="error" sx={{ marginBottom: 2 }}>
           {error}
@@ -49,6 +50,6 @@ export const DetailsPage = () => {
 
       <OfferDetails offer={deal?.offer} sx={{ marginBottom: 4 }} />
       <CheckIn dealsManager={dealsManager} deal={deal} />
-    </Container>
+    </PageContainer>
   );
 };

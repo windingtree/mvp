@@ -25,6 +25,8 @@ import {
 } from '@windingtree/sdk-storage/local';
 import { SearchProvider } from './providers/SearchProvider/index.js';
 import { requestExpiration, nodeTopic } from './config.js';
+import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('Main');
@@ -50,6 +52,20 @@ createWeb3Modal({
   chains: [targetChain],
   projectId: wcProjectId,
 });
+
+const themeOptions: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#00DA95',
+    },
+    secondary: {
+      main: '#21BDE2',
+    },
+  },
+};
+
+const clientTheme = createTheme(themeOptions);
 
 export interface CustomConfig extends AppConfig {
   //
@@ -86,7 +102,10 @@ root.render(
                 contracts={contractsConfig}
               >
                 <SearchProvider topic={nodeTopic} expire={requestExpiration}>
-                  <App />
+                  <ThemeProvider theme={clientTheme}>
+                    <CssBaseline />
+                    <App />
+                  </ThemeProvider>
                 </SearchProvider>
               </DealsManagerProvider>
             </RequestsManagerProvider>

@@ -70,14 +70,14 @@ const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
               </Typography>
             )}
             <Card
-              sx={{ maxWidth: '100%', mb: 2 }}
+              sx={{ maxWidth: '100%', mb: 2, cursor: 'pointer' }}
               onClick={() => setShowImg(selectedImage?.uri)}
             >
               <CardMedia
                 component="img"
                 image={selectedImage?.thumbnail}
                 alt={deal.offer.options.airplane.name}
-                sx={{ width: '100%', height: 'auto' }}
+                sx={{ width: '100%', height: 'auto', cursor: 'pointer' }}
               />
             </Card>
             <Grid container spacing={1}>

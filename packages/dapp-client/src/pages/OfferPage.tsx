@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Container, Grid, Typography, Button } from '@mui/material';
+import { Alert, Grid, Typography, Button } from '@mui/material';
 import { OfferOptions } from '@windingtree/mvp-node/types';
 import { OfferData } from '@windingtree/sdk-types';
 import { isExpired } from '@windingtree/sdk-utils/time';
@@ -12,6 +12,7 @@ import { ParsedPrice, parsePayment } from '../utils/offer.js';
 import { useAccount, useBlockNumber } from 'wagmi';
 import { Book } from '../components/Book.js';
 import { OfferDetails } from '../components/OfferDetails.js';
+import { PageContainer } from 'mvp-shared-files/react';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('OfferPage');
@@ -64,7 +65,7 @@ export const OfferPage = () => {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+    <PageContainer>
       {!offerLoading && !offer && (
         <Alert severity="error" sx={{ marginBottom: 2 }}>
           Offer not found or expired
@@ -186,6 +187,6 @@ export const OfferPage = () => {
           )}
         </>
       )}
-    </Container>
+    </PageContainer>
   );
 };

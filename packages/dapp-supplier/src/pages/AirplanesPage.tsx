@@ -3,7 +3,7 @@ import { AddAirplane } from '../components/Airplanes/AddAirplane.js';
 import { AirplanesList } from '../components/Airplanes/AirplanesList.js';
 import { useCallback, useEffect, useState } from 'react';
 import { AirplaneMeta } from '../components/Airplanes/type.js';
-import { PageContainer } from '../components/PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 
 export const AirplanesPage = () => {
   const [showAdd, setShowAdd] = useState<boolean>(false);

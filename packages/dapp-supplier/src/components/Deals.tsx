@@ -99,7 +99,7 @@ export const Deals = ({ deals, page, onPageChange, sx }: DealsProps) => {
       deals.forEach((d) => {
         newDealStates[d.offer.id] = d.status;
       });
-      setDealStates(newDealStates);
+      setDealStates(() => newDealStates);
     }
   }, [deals]);
 

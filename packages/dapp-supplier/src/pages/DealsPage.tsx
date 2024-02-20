@@ -9,7 +9,7 @@ import { RequestQuery } from 'mvp-shared-files';
 import { defaultPageSkip } from '../utils/defaults.js';
 import { Page } from '../utils/types.js';
 import { Deals } from '../components/Deals.js';
-import { PageContainer } from '../components/PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('DealsPage');

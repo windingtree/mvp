@@ -11,7 +11,7 @@ import { SupplierView } from '../components/SupplierManage/SupplierView.js';
 import { SupplierManage } from '../components/SupplierManage/SupplierManage.js';
 import { NodeConfig } from '../components/SupplierManage/NodeConfig.js';
 import { IpfsConfig } from '../components/SupplierManage/IpfsConfig.js';
-import { PageContainer } from '../components/PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 
 export const SupplierSetupPage = () => {
   const location = useLocation();

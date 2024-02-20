@@ -8,6 +8,7 @@ import {
   Button,
   Paper,
   IconButton,
+  Box,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { centerEllipsis } from '@windingtree/sdk-react/utils';
@@ -171,19 +172,28 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
           {deal && <DealView deal={deal} isModal={false} />}
 
           {deal && !done && (
-            <LoadingButton
-              variant="contained"
-              size="large"
-              disabled={!deal || loading}
-              loading={loading}
-              onClick={() => handleCheckIn()}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              CheckIn deal
-            </LoadingButton>
+              <LoadingButton
+                variant="contained"
+                size="large"
+                disabled={!deal || loading}
+                loading={loading}
+                onClick={() => handleCheckIn()}
+                sx={{ marginTop: 2 }}
+              >
+                CheckIn deal
+              </LoadingButton>
+            </Box>
           )}
 
           {done && (
-            <Alert severity="success">
+            <Alert severity="success" sx={{ marginTop: 2 }}>
               <Typography>Deal has been successfully checked in</Typography>
               <Button variant="contained" size="small" onClick={close}>
                 Close

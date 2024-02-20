@@ -75,12 +75,7 @@ export const ManageTeam = () => {
     }
   }, [getTeam, nodeConnected]);
 
-  usePoller(
-    () => getTeam(),
-    5000,
-    nodeConnected || role !== 'admin',
-    'RefreshTeam',
-  );
+  usePoller(getTeam, 5000, nodeConnected && role === 'admin', 'RefreshTeam');
 
   if (!isAuth || (isAuth && role !== 'admin')) {
     return (

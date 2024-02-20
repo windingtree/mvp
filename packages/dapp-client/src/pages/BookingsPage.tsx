@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   IconButton,
-  Container,
   Grid,
   Typography,
   Alert,
@@ -22,50 +21,62 @@ import {
 } from '@windingtree/sdk-react/utils';
 import { Hash } from 'viem';
 import { useNavigate } from 'react-router-dom';
+import { PageContainer } from 'mvp-shared-files/react';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('BookingsPage');
 
 type DealsRegistryRecord = Required<DealRecord<RequestQuery, OfferOptions>>;
 
-const statusMap: Record<DealStatus, string> = {
-  [DealStatus.Created]: 'Pending',
-  [DealStatus.Claimed]: 'Confirmed',
-  [DealStatus.Rejected]: 'Rejected',
-  [DealStatus.Refunded]: 'Refunded',
-  [DealStatus.Cancelled]: 'Cancelled',
-  [DealStatus.CheckedIn]: 'Checked In',
-  [DealStatus.CheckedOut]: 'Checked Out',
-  [DealStatus.Disputed]: 'Disputed',
-};
+// const statusMap: Record<DealStatus, string> = {
+//   [DealStatus.Created]: 'Pending',
+//   [DealStatus.Claimed]: 'Confirmed',
+//   [DealStatus.Rejected]: 'Rejected',
+//   [DealStatus.Refunded]: 'Refunded',
+//   [DealStatus.Cancelled]: 'Cancelled',
+//   [DealStatus.CheckedIn]: 'Checked In',
+//   [DealStatus.CheckedOut]: 'Checked Out',
+//   [DealStatus.Disputed]: 'Disputed',
+// };
 
 export const BookingsPage = () => {
   const navigate = useNavigate();
   const { dealsManager } = useDealsManager<RequestQuery, OfferOptions>();
   const { data: walletClient } = useWalletClient();
   const [deals, setDeals] = useState<DealsRegistryRecord[]>([]);
+  const [dealStates, setDealStates] = useState<Record<string, DealStatus>>({});
   const [tx, setTx] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [loadingId, setLoadingId] = useState<Hash | undefined>();
 
   useEffect(() => {
-    const updateDeals = async () => {
-      try {
-        const newDeals = (await dealsManager?.getAll()) ?? [];
-        setDeals(() => newDeals);
-        logger.trace('deals', newDeals);
-      } catch (err) {
-        logger.error('setDeals', err);
-      }
-    };
+    if (deals && deals.length > 0) {
+      const newDealStates: Record<string, DealStatus> = {};
+      deals.forEach((d) => {
+        newDealStates[d.offer.id] = d.status;
+      });
+      setDealStates(() => newDealStates);
+    }
+  }, [deals]);
 
+  const updateDeals = useCallback(async () => {
+    try {
+      const newDeals = (await dealsManager?.getAll()) ?? [];
+      setDeals(() => newDeals);
+      logger.trace('deals', newDeals);
+    } catch (err) {
+      logger.error('setDeals', err);
+    }
+  }, [dealsManager]);
+
+  useEffect(() => {
     dealsManager?.addEventListener('changed', updateDeals);
     updateDeals();
 
     return () => {
       dealsManager?.removeEventListener('changed', updateDeals);
     };
-  }, [dealsManager]);
+  }, [dealsManager, updateDeals]);
 
   const handleCancel = useCallback(
     async (deal: DealsRegistryRecord) => {
@@ -94,7 +105,7 @@ export const BookingsPage = () => {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+    <PageContainer>
       {deals.length === 0 && (
         <>
           <Typography>
@@ -111,18 +122,18 @@ export const BookingsPage = () => {
         </>
       )}
       {deals.length > 0 && (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ borderBottom: 1 }}>
           <Grid item xs={3}>
-            <Typography variant="h6">Booking</Typography>
+            <Typography variant="caption">Booking</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Date</Typography>
+            <Typography variant="caption">Date</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Status</Typography>
+            <Typography variant="caption">Status</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Actions</Typography>
+            <Typography variant="caption">Actions</Typography>
           </Grid>
         </Grid>
       )}
@@ -145,7 +156,7 @@ export const BookingsPage = () => {
                 color: deal.status === DealStatus.Cancelled ? 'red' : 'inherit',
               }}
             >
-              {statusMap[deal.status] ?? 'Unknown'}
+              {DealStatus[dealStates[deal.offer.id]] ?? 'Unknown'}
             </Typography>
           </Grid>
           <Grid item xs={3}>
@@ -171,6 +182,15 @@ export const BookingsPage = () => {
           </Grid>
         </Grid>
       ))}
+
+      <Button
+        variant="contained"
+        size="medium"
+        onClick={updateDeals}
+        sx={{ marginTop: 2 }}
+      >
+        Refresh
+      </Button>
 
       {error && (
         <Alert severity="error" sx={{ marginTop: 4, marginBottom: 2 }}>
@@ -199,6 +219,6 @@ export const BookingsPage = () => {
           </Button>
         </Alert>
       )}
-    </Container>
+    </PageContainer>
   );
 };

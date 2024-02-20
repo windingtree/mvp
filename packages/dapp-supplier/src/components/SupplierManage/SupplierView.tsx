@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   Tooltip,
+  Box,
 } from '@mui/material';
 import { Hash } from 'viem';
 import {
@@ -17,14 +18,24 @@ import {
 } from '@windingtree/sdk-react/utils';
 import { AddressBalance } from '../AddressBalance.js';
 import { useEntity } from '../../hooks/useEntity.js';
+import { useBalance } from 'wagmi';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const SupplierView = () => {
+  const navigate = useNavigate();
   const { supplierId, setConfig } = useConfig<CustomConfig>();
   const {
     data: { kind, owner, signer, status, deposit },
     error,
     isLoading,
   } = useEntity(supplierId);
+  const { data: signerBalance } = useBalance({
+    address: signer,
+    formatUnits: 'ether',
+    enabled: Boolean(signer),
+    watch: true,
+    staleTime: 2_000,
+  });
 
   if (!supplierId) {
     return (
@@ -93,17 +104,42 @@ export const SupplierView = () => {
               (<AddressBalance address={signer} />)
             </Typography>
           )}
-          {status !== undefined && (
-            <Typography>
-              <strong>Status</strong>:{' '}
-              {Boolean(status) ? 'enabled' : 'disabled'}
-            </Typography>
+          {signerBalance?.value === 0n && (
+            <Box>
+              <Alert severity="warning" sx={{ marginBottom: 2 }}>
+                Do not forget to top up the signer account with some ETH to make
+                it possible to send transactions from server side
+              </Alert>
+            </Box>
           )}
           {deposit !== undefined && (
             <Typography>
-              <strong>Deposit status</strong>: {formatBalance(deposit ?? 0n, 2)}{' '}
-              LIF
+              <strong>Deposit status</strong>:{' '}
+              <span style={{ color: deposit === 0n ? 'red' : '' }}>
+                {formatBalance(deposit ?? 0n, 2)} LIF
+              </span>
             </Typography>
+          )}
+          {status !== undefined && (
+            <Typography>
+              <strong>Status</strong>:{' '}
+              <span style={{ color: Boolean(status) ? 'green' : 'red' }}>
+                {Boolean(status) ? 'enabled' : 'disabled'}
+              </span>
+            </Typography>
+          )}
+          {!status && (
+            <Box>
+              <Alert severity="info" sx={{ marginBottom: 2 }}>
+                To enable the entity you have to deposit LIF tokens and enable
+                organization in the protocol by sending transaction. Check In on
+                the{' '}
+                <Link to="/supplier/setup/manage?panel=deposit">
+                  entity manage
+                </Link>{' '}
+                page.
+              </Alert>
+            </Box>
           )}
         </Stack>
       </Stack>

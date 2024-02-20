@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import {
   Alert,
-  Container,
   Grid,
   Card,
   CardMedia,
@@ -22,9 +21,10 @@ import { OfferOptions } from '@windingtree/mvp-node/types';
 import { RequestQuery } from 'mvp-shared-files';
 import { ClientRequestRecord } from '@windingtree/sdk-client';
 import { Offers } from '../components/Offers.js';
-import { createLogger } from '@windingtree/sdk-logger';
 import { useClient } from '@windingtree/sdk-react/providers';
 import { useSearchProvider } from '../providers/SearchProvider/SearchProviderContext.js';
+import { PageContainer } from 'mvp-shared-files/react';
+import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('SearchPage');
 
@@ -104,7 +104,7 @@ export const SearchPage = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+      <PageContainer>
         {tour && (
           <Grid
             container
@@ -217,7 +217,7 @@ export const SearchPage = () => {
             {requestsError}
           </Alert>
         )}
-      </Container>
+      </PageContainer>
     </LocalizationProvider>
   );
 };

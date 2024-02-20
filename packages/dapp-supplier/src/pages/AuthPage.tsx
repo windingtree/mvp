@@ -8,7 +8,7 @@ import {
 import { ExpandMore as ExpandMoreIconIcon } from '@mui/icons-material';
 import { UserRegister } from '../components/Auth/UserRegister.js';
 import { AdminRegister } from '../components/Auth/AdminRegister.js';
-import { PageContainer } from '../components/PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 import { ManageTeam } from '../components/Auth/ManageTeam.js';
 
 export const AuthPage = () => {

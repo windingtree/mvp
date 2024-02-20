@@ -18,7 +18,7 @@ import {
 import { FeatureCard } from '../components/FeatureCard/index.js';
 import { useConfig } from '@windingtree/sdk-react/providers';
 import { CustomConfig } from '../main.js';
-import { PageContainer } from '../components/PageContainer.js';
+import { PageContainer } from 'mvp-shared-files/react';
 import { useEntity } from '../hooks/useEntity.js';
 
 export const HomePage = () => {

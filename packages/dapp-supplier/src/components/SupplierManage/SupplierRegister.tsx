@@ -156,10 +156,16 @@ export const SupplierRegister = () => {
 VITE_SERVER_IP=${serverIp}
 VITE_SERVER_PORT=${serverPort}
 VITE_SERVER_ID=${serverId}
+# VITE_SERVER_PR_KEY= # Add this key on the servers env side
+# VITE_SERVER_PB_KEY= # Add this key on the servers env side
+# VITE_WC_PROJECT_ID= # Register this Id on https://walletconnect.com/
 VITE_SERVER_CORS=${window.location.origin}
 ENTITY_SIGNER_MNEMONIC=${signerMnemonic}
 ENTITY_ID=${newSupplierId}
 ENTITY_OWNER_ADDRESS=${account.address}
+ENTITY_OFFER_GAP=0.5 # Price changing gap for offers
+NODE_RESTART_MAX_COUNT=10
+NODE_RESTART_EVERY_TIME_SEC=5
 `,
       );
     } else {
