@@ -75,19 +75,6 @@ export const AdminRegister = () => {
     }
   }, [walletClient, node, login, setAuth, resetAuth, setConfig]);
 
-  if (!isAuth || (isAuth && role !== 'admin')) {
-    return (
-      <>
-        <Alert severity="warning">
-          Only the Node admins are allowed to mange team
-        </Alert>
-        <Box sx={{ marginTop: 2 }}>
-          <Login admin={true} reset hideSelector />
-        </Box>
-      </>
-    );
-  }
-
   if (!walletClient) {
     return (
       <>
