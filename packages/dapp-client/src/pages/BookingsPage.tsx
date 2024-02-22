@@ -258,14 +258,20 @@ export const BookingsPage = () => {
         </Grid>
       ))}
 
-      <Button
-        variant="contained"
-        size="medium"
-        onClick={updateDeals}
-        sx={{ marginTop: 2 }}
-      >
-        Refresh
-      </Button>
+      {deals && deals.length > 0 && (
+        <Grid container>
+          <Grid item>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={updateDeals}
+              sx={{ marginTop: 2 }}
+            >
+              Refresh
+            </Button>
+          </Grid>
+        </Grid>
+      )}
 
       {error && (
         <Paper
