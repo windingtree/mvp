@@ -141,7 +141,11 @@ export const CheckIn = ({ dealsManager, deal }: CheckInProps) => {
           </Stack>
         </Alert>
       )}
-      <Paper variant="outlined" sx={{ padding: 2 }}>
+      <Paper
+        variant="outlined"
+        elevation={0}
+        sx={{ padding: 2, border: 0, backgroundColor: 'rgba(255,255,255,0.5)' }}
+      >
         <Stack direction="column" spacing={2}>
           {sign && (
             <Box ref={qrRef}>

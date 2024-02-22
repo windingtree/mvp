@@ -7,6 +7,7 @@ import {
   Box,
   Alert,
   Link,
+  Paper,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { mainShowcase } from '../config.js';
@@ -25,13 +26,18 @@ export const HomePage = () => {
           marginBottom: 4,
         }}
       >
-        <Alert severity="info">
-          This project demonstrates features of the{' '}
-          <Link href="https://windingtree.github.io/sdk/">
-            Winding Tree Market Protocol
-          </Link>
-          .<br /> All the content is synthetic and used for illustration.
-        </Alert>
+        <Paper
+          elevation={0}
+          sx={{ padding: 2, backgroundColor: 'rgba(255,255,255,0.7)' }}
+        >
+          <Alert severity="info">
+            This project demonstrates features of the{' '}
+            <Link href="https://windingtree.github.io/sdk/">
+              Winding Tree Market Protocol
+            </Link>
+            .<br /> All the content is synthetic and used for illustration.
+          </Alert>
+        </Paper>
       </Box>
       <Grid container spacing={2}>
         {mainShowcase.map((item, index) => (
@@ -41,7 +47,7 @@ export const HomePage = () => {
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
-                maxWidth: 300,
+                maxWidth: { xs: '100%', sm: 300 },
                 height: '100%',
               }}
               onClick={() => navigate(`search?tour=${item.id}`)}

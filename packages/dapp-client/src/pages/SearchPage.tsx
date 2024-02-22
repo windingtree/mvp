@@ -8,6 +8,8 @@ import {
   CardContent,
   Typography,
   useMediaQuery,
+  CircularProgress,
+  Stack,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import dayjs, { Dayjs } from 'dayjs';
@@ -152,7 +154,7 @@ export const SearchPage = () => {
               <Grid item>
                 <DatePicker
                   label="Choose a Date"
-                  disabled={Boolean(requestId)}
+                  disabled={Boolean(requestId) || !clientConnected}
                   value={selectedDate !== null ? dayjs(selectedDate) : null}
                   onChange={setSelectedDate}
                   minDate={dayjs().add(1, 'day')}
@@ -189,14 +191,22 @@ export const SearchPage = () => {
                     {currentRequest?.subscribed ? 'Cancel' : 'Back'}
                   </Button>
                 </Grid>
-                <Grid item>
-                  {!clientConnected && (
-                    <Alert severity="warning">
-                      Connecting to the server...
-                    </Alert>
-                  )}
-                </Grid>
               </Grid>
+              {!clientConnected && (
+                <Grid item>
+                  <Alert severity="warning">
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ overflow: 'hidden' }}
+                    >
+                      <Typography>Connecting to the server</Typography>
+                      <CircularProgress size={16} />
+                    </Stack>
+                  </Alert>
+                </Grid>
+              )}
             </Grid>
           </Grid>
         )}

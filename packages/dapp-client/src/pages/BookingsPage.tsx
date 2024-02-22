@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  IconButton,
   Grid,
   Typography,
   Alert,
@@ -8,9 +7,8 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  Paper,
 } from '@mui/material';
-import { MoreHoriz as MoreIcon } from '@mui/icons-material';
-import { LoadingButton } from 'mvp-shared-files/react';
 import { OfferOptions } from '@windingtree/mvp-node/types';
 import { useDealsManager } from '@windingtree/sdk-react/providers';
 import { RequestQuery } from 'mvp-shared-files';
@@ -25,6 +23,7 @@ import { Hash } from 'viem';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from 'mvp-shared-files/react';
 import { createLogger } from '@windingtree/sdk-logger';
+import { ActionMenu } from '../components/ActionMenu.js';
 
 const logger = createLogger('BookingsPage');
 
@@ -126,17 +125,25 @@ export const BookingsPage = () => {
         </>
       )}
       {!isMobile && deals.length > 0 && (
-        <Grid container spacing={2} sx={{ borderBottom: 1 }}>
-          <Grid item xs={3}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            backgroundColor: 'rgba(255,255,255,0.6)',
+            marginTop: 1,
+            borderBottom: '1px solid grey',
+          }}
+        >
+          <Grid item sm={true}>
             <Typography variant="caption">Booking</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={true}>
             <Typography variant="caption">Date</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={true}>
             <Typography variant="caption">Status</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={true}>
             <Typography variant="caption">Actions</Typography>
           </Grid>
         </Grid>
@@ -144,12 +151,18 @@ export const BookingsPage = () => {
       {deals.map((deal, i) => (
         <Grid
           container
+          spacing={2}
           key={i}
           sx={{
             display: 'flex',
             alignItems: 'center',
+            marginTop: 0,
             borderBottom: isMobile ? 1 : 0,
             marginBottom: isMobile ? 2 : 0,
+            backgroundColor: 'rgba(255,255,255,0.6)',
+            ':hover': {
+              backgroundColor: 'rgba(255,255,255,1)',
+            },
           }}
         >
           <Grid item xs={12} sm={true}>
@@ -211,47 +224,35 @@ export const BookingsPage = () => {
             {isMobile && (
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography variant="h6">Action</Typography>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  {[DealStatus.Created, DealStatus.Claimed].includes(
-                    deal.status,
-                  ) && (
-                    <LoadingButton
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      disabled={loadingId === deal.offer.id || Boolean(tx)}
-                      loading={loadingId === deal.offer.id}
-                      onClick={() => handleCancel(deal)}
-                    >
-                      Cancel
-                    </LoadingButton>
-                  )}
-                  <IconButton>
-                    <MoreIcon />
-                  </IconButton>
-                </Stack>
+                <ActionMenu
+                  loading={deal.offer.id === loadingId}
+                  items={{
+                    ...([DealStatus.Created, DealStatus.Claimed].includes(
+                      deal.status,
+                    )
+                      ? {
+                          Cancel: () => handleCancel(deal),
+                        }
+                      : {}),
+                    View: `/details?offerId=${deal.offer.id}`,
+                  }}
+                />
               </Stack>
             )}
             {!isMobile && (
-              <Stack direction="row" spacing={2} alignItems="center">
-                {[DealStatus.Created, DealStatus.Claimed].includes(
-                  deal.status,
-                ) && (
-                  <LoadingButton
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                    disabled={loadingId === deal.offer.id || Boolean(tx)}
-                    loading={loadingId === deal.offer.id}
-                    onClick={() => handleCancel(deal)}
-                  >
-                    Cancel
-                  </LoadingButton>
-                )}
-                <IconButton>
-                  <MoreIcon />
-                </IconButton>
-              </Stack>
+              <ActionMenu
+                loading={deal.offer.id === loadingId}
+                items={{
+                  ...(![DealStatus.Created, DealStatus.Claimed].includes(
+                    deal.status,
+                  )
+                    ? {
+                        Cancel: () => handleCancel(deal),
+                      }
+                    : {}),
+                  View: `/details?offerId=${deal.offer.id}`,
+                }}
+              />
             )}
           </Grid>
         </Grid>
@@ -267,31 +268,49 @@ export const BookingsPage = () => {
       </Button>
 
       {error && (
-        <Alert severity="error" sx={{ marginTop: 4, marginBottom: 2 }}>
-          {error}
-        </Alert>
+        <Paper
+          elevation={0}
+          sx={{
+            padding: 2,
+            marginTop: 4,
+            marginBottom: 2,
+            backgroundColor: 'rgba(255,255,255,0.6)',
+          }}
+        >
+          <Alert severity="error">{error}</Alert>
+        </Paper>
       )}
 
       {tx && (
-        <Alert severity="info" sx={{ marginTop: 4, marginBottom: 2 }}>
-          <Typography
-            variant="body1"
-            color="inherit"
-            title="Copy to clipboard"
-            sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-            onClick={() => copyToClipboard(tx)}
-          >
-            Tx hash: {centerEllipsis(tx)}
-          </Typography>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={() => setTx(undefined)}
-            sx={{ marginBottom: 2 }}
-          >
-            Close
-          </Button>
-        </Alert>
+        <Paper
+          elevation={0}
+          sx={{
+            padding: 2,
+            marginTop: 4,
+            marginBottom: 2,
+            backgroundColor: 'rgba(255,255,255,0.6)',
+          }}
+        >
+          <Alert severity="info">
+            <Typography
+              variant="body1"
+              color="inherit"
+              title="Copy to clipboard"
+              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+              onClick={() => copyToClipboard(tx)}
+            >
+              Tx hash: {centerEllipsis(tx)}
+            </Typography>
+            <Button
+              size="small"
+              variant="contained"
+              onClick={() => setTx(undefined)}
+              sx={{ marginBottom: 2 }}
+            >
+              Close
+            </Button>
+          </Alert>
+        </Paper>
       )}
     </PageContainer>
   );

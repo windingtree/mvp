@@ -54,6 +54,19 @@ createWeb3Modal({
 });
 
 const themeOptions: ThemeOptions = {
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundImage: 'url(/assets/images/background.webp)',
+          backgroundSize: '100% 100%',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center center',
+          backgroundAttachment: 'fixed',
+        },
+      },
+    },
+  },
   palette: {
     mode: 'light',
     primary: {
