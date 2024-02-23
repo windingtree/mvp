@@ -4,13 +4,13 @@
   "description": "The WindingTree market protocol MVP shared files",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
     },
     "./react": {
-      "import": "./src/react/index.ts"
+      "import": "./dist/react/index.js"
     }
   },
   "keywords": [
@@ -24,6 +24,7 @@
   ],
   "license": "ISC",
   "scripts": {
+    "build": "tsc -p ./tsconfig.json",
     "test": "echo \"no test specified\" && exit 0",
     "lint": "eslint . --ext .ts --ignore-path ../../.lintignore",
     "lint:fix": "eslint . --ext .ts --ignore-path ../../.lintignore --fix && prettier --ignore-path ../../.lintignore  --write ."
