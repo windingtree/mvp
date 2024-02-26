@@ -48,7 +48,9 @@
     "vite": "^5.0.10",
     "vite-plugin-dts": "^3.6.4",
     "vite-plugin-node-polyfills": "^0.17.0",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "@libp2p/crypto": "^1.0.17",
+    "uint8arrays": "^5.0.0"
   },
   "scripts": {
     "prepare": "husky install",
@@ -63,6 +65,8 @@
     "start:node": "DEBUG=* pnpm -C packages/node run start",
     "start:node:dev": "DEBUG=* pnpm -C packages/node run start:dev",
     "start:client": "pnpm -C packages/dapp-client run start",
-    "start:manager": "pnpm -C packages/dapp-supplier run start"
+    "start:manager": "pnpm -C packages/dapp-supplier run start",
+    "gen:key": "node ./setup/peerKey.js",
+    "gen:address": "node ./setup/serverAddress.js"
   }
 }
