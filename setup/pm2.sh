@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE="/path/to/logs/setup.log"
-mkdir -p $LOG_FILE
+mkdir -p "$(dirname $LOG_FILE)" && touch $LOG_FILE
 
 # Ensure npm is installed
 if ! command -v npm &> /dev/null; then

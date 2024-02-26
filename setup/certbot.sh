@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE="/path/to/logs/setup.log"
-mkdir -p $LOG_FILE
+mkdir -p "$(dirname $LOG_FILE)" && touch $LOG_FILE
 
 echo "Starting certbot setup on $(date)" | tee -a $LOG_FILE
 
