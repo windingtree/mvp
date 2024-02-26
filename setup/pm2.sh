@@ -1,6 +1,12 @@
 #!/bin/bash
 
-LOG_FILE="/path/to/logs/setup.log"
+# Check if the MVP_LOGS_DIR environment variable is set
+if [ -z "${MVP_LOGS_DIR}" ]; then
+    echo "Warning: MVP_LOGS_DIR is not set. Exiting..."
+    exit 1
+fi
+
+LOG_FILE="$MVP_LOGS_DIR/setup.log"
 mkdir -p "$(dirname $LOG_FILE)" && touch $LOG_FILE
 
 # Ensure npm is installed

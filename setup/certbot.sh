@@ -1,6 +1,12 @@
 #!/bin/bash
 
-LOG_FILE="/path/to/logs/setup.log"
+# Check if the MVP_LOGS_DIR environment variable is set
+if [ -z "${MVP_LOGS_DIR}" ]; then
+    echo "Warning: MVP_LOGS_DIR is not set. Exiting..."
+    exit 1
+fi
+
+LOG_FILE="$MVP_LOGS_DIR/setup.log"
 mkdir -p "$(dirname $LOG_FILE)" && touch $LOG_FILE
 
 echo "Starting certbot setup on $(date)" | tee -a $LOG_FILE
@@ -13,8 +19,7 @@ if ! which certbot > /dev/null 2>&1; then
 fi
 
 # Obtain and Install SSL certificates for your domains
-# Replace domain names with your actual domain names
-sudo certbot --nginx -d example.com -d www.example.com -d coordinator.windingtree.com -d node.windingtree.com -d mvp.windingtree.com | tee -a $LOG_FILE
+sudo certbot --nginx -d coordinator.windingtree.com -d node.windingtree.com -d mvp.windingtree.com | tee -a $LOG_FILE
 
 # Restart nginx to apply changes
 sudo systemctl restart nginx | tee -a $LOG_FILE
