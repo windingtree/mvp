@@ -10,7 +10,7 @@ LOG_FILE="$MVP_LOGS_DIR/deploy.log"
 mkdir -p "$(dirname $LOG_FILE)" && touch $LOG_FILE
 
 # Navigate to project directory
-cd /root/project || { echo "Failed to enter project directory"; exit 1; }
+cd /path/to/project || { echo "Failed to enter project directory"; exit 1; }
 
 # Pull latest code from repository
 git pull
@@ -26,8 +26,8 @@ echo "Dependencies are installed on $(date)" | tee -a $LOG_FILE
 
 # Build the project
 pnpm run build
-cp -r /root/project/packages/dapp-client/dist /var/www/client
-cp -r /root/project/packages/dapp-supplier/dist /var/www/node
+cp -r /path/to/project/packages/dapp-client/dist /var/www/client
+cp -r /path/to/project/packages/dapp-supplier/dist /var/www/node
 echo "Client and Manager static files are moved to nginx on $(date)" | tee -a $LOG_FILE
 
 # Stop all PM2 processes
