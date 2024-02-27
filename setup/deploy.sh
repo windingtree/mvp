@@ -25,7 +25,7 @@ pnpm install
 echo "Dependencies are installed on $(date)" | tee -a $LOG_FILE
 
 # Build the project
-run_with_env "pnpm run build"
+pnpm run build
 cp -r /root/project/packages/dapp-client/dist /var/www/client
 cp -r /root/project/packages/dapp-supplier/dist /var/www/node
 echo "Client and Manager static files are moved to nginx on $(date)" | tee -a $LOG_FILE
@@ -35,7 +35,7 @@ pm2 stop all | tee -a $LOG_FILE
 echo "PM2 stopped on $(date)" | tee -a $LOG_FILE
 
 # Start services using PM2
-run_with_env "pm2 start ecosystem.config.js" | tee -a $LOG_FILE
+pm2 start ecosystem.config.js | tee -a $LOG_FILE
 echo "PM2 started on $(date)" | tee -a $LOG_FILE
 
 # Log the startup process
