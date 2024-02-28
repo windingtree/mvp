@@ -8,6 +8,7 @@ import {
   stableCoins as stableCoinsConfig,
 } from 'mvp-shared-files';
 import { Address, Hash, toHex } from 'viem';
+import { chain } from '../config.js';
 
 export interface StableCoin extends Erc20Token {
   name: string;
@@ -26,7 +27,7 @@ export const useProtocolConfig = (): UseProtocolConfigHook => {
   const [stableCoins, setStableCoins] = useState<StableCoin[]>([]);
 
   const { data: minDeposit, isLoading: isLoadingMinDeposit } = useContractRead({
-    address: contractsConfig.config.address,
+    address: contractsConfig[chain.name].config.address,
     abi: configABI,
     functionName: 'getMinDeposit',
     args: [kinds['supplier'] as Hash],
@@ -34,7 +35,7 @@ export const useProtocolConfig = (): UseProtocolConfigHook => {
   });
 
   const { data: lifAddress, isLoading: isLoadingLifAddress } = useContractRead({
-    address: contractsConfig.config.address,
+    address: contractsConfig[chain.name].config.address,
     abi: configABI,
     functionName: 'getAddress',
     args: [toHex('asset', { size: 32 })],
@@ -51,7 +52,7 @@ export const useProtocolConfig = (): UseProtocolConfigHook => {
         const tokens = (
           (
             await Promise.allSettled(
-              stableCoinsConfig.map((t) =>
+              stableCoinsConfig[chain.name].map((t) =>
                 fetchToken({
                   address: t.address,
                 }).then((s) => ({

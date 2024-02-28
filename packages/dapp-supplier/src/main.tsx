@@ -9,11 +9,13 @@ import {
 } from '@windingtree/sdk-react/providers';
 import { WagmiConfig } from 'wagmi';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-import { contractsConfig, wcProjectId } from 'mvp-shared-files';
+import { contractsConfig } from 'mvp-shared-files';
+import { wcProjectId } from './config.js';
 import { AirplaneConfiguration } from './components/Airplanes/type.js';
 import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { hardhat, gnosisChiado } from 'viem/chains';
+import { chain } from './config.js';
 
 export const targetChain =
   import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
@@ -71,7 +73,7 @@ root.render(
   <ConfigProvider>
     <NodeProvider>
       <WagmiConfig config={wagmiConfig}>
-        <ContractsProvider contractsConfig={contractsConfig}>
+        <ContractsProvider contractsConfig={contractsConfig[chain.name]}>
           <ThemeProvider theme={clientTheme}>
             <CssBaseline />
             <App />

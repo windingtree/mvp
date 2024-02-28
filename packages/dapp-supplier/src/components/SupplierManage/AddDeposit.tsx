@@ -26,6 +26,7 @@ import {
   centerEllipsis,
 } from '@windingtree/sdk-react/utils';
 import { LifBalance } from '../LifBalance.js';
+import { chain } from '../../config.js';
 
 export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
   const [depositValue, setDepositValue] = useState<string>('0');
@@ -35,7 +36,7 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
   const { address: owner } = useAccount();
 
   const { data: currentDeposit } = useContractRead({
-    address: contractsConfig.entities.address,
+    address: contractsConfig[chain.name].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'balanceOfEntity',
     enabled: Boolean(supplierId),
@@ -49,8 +50,8 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
     error: permitError,
   } = usePermit({
     owner,
-    verifyingContract: contractsConfig.token.address,
-    spender: contractsConfig.entities.address,
+    verifyingContract: contractsConfig[chain.name].token.address,
+    spender: contractsConfig[chain.name].entities.address,
     decimals: 18,
     version: '1',
     value: BigInt(depositValue),
@@ -64,7 +65,7 @@ export const AddDeposit = ({ supplierId }: { supplierId: Hash }) => {
     reset,
     error: txError,
   } = useContractWrite({
-    address: contractsConfig.entities.address,
+    address: contractsConfig[chain.name].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'addDeposit',
   });

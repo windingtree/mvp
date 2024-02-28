@@ -74,6 +74,7 @@
   "scripts": {
     "start": "vite --force --port 5174",
     "build": "tsc && vite build",
+    "build:prod": "NODE_ENV=production pnpm build",
     "lint": "eslint . --ext .ts --ignore-path ../../.lintignore",
     "lint:fix": "eslint . --ext .ts --ignore-path ../../.lintignore --fix && prettier --ignore-path ../../.lintignore  --write .",
     "cosmos": "cosmos"

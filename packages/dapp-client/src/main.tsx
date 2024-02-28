@@ -11,31 +11,28 @@ import {
 } from '@windingtree/sdk-react/providers';
 import { WagmiConfig } from 'wagmi';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
+import { RequestQuery, contractsConfig } from 'mvp-shared-files';
 import {
-  RequestQuery,
-  contractsConfig,
-  serverAddress,
   wcProjectId,
-} from 'mvp-shared-files';
+  serverAddress,
+  requestExpiration,
+  nodeTopic,
+  chain,
+} from './config.js';
 import type { OfferOptions } from '@windingtree/mvp-node/types';
-import { hardhat, gnosisChiado } from 'viem/chains';
 import {
   LocalStorage,
   createInitializer,
 } from '@windingtree/sdk-storage/local';
 import { SearchProvider } from './providers/SearchProvider/index.js';
-import { requestExpiration, nodeTopic } from './config.js';
 import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('Main');
 
-export const targetChain =
-  import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
-
 const wagmiConfig = defaultWagmiConfig({
-  chains: [targetChain],
+  chains: [chain],
   projectId: wcProjectId,
   metadata: {
     name: 'WTMP',
@@ -49,7 +46,7 @@ const wagmiConfig = defaultWagmiConfig({
 
 createWeb3Modal({
   wagmiConfig,
-  chains: [targetChain],
+  chains: [chain],
   projectId: wcProjectId,
 });
 
@@ -92,10 +89,10 @@ window.addEventListener('unhandledrejection', (event) => {
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <WalletProvider targetChain={targetChain}>
+  <WalletProvider targetChain={chain}>
     <ConfigProvider>
       <WagmiConfig config={wagmiConfig}>
-        <ContractsProvider contractsConfig={contractsConfig}>
+        <ContractsProvider contractsConfig={contractsConfig[chain.name]}>
           <ClientProvider<RequestQuery, OfferOptions>
             serverAddress={serverAddress}
           >
@@ -111,8 +108,8 @@ root.render(
                 })}
                 prefix={'mvp_'}
                 checkInterval={'5s'}
-                chain={targetChain}
-                contracts={contractsConfig}
+                chain={chain}
+                contracts={contractsConfig[chain.name]}
               >
                 <SearchProvider topic={nodeTopic} expire={requestExpiration}>
                   <ThemeProvider theme={clientTheme}>

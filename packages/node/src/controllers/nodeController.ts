@@ -1,14 +1,6 @@
-import 'dotenv/config';
 import { EventHandler } from '@libp2p/interface/events';
 import { createPublicClient, createWalletClient, http } from 'viem';
 import { randomSalt } from '@windingtree/contracts';
-import {
-  contractsConfig,
-  nodeTopic,
-  offerExpiration,
-  RequestQuery,
-  serverAddress,
-} from 'mvp-shared-files';
 import { DealStatus, OfferData, PaymentOption } from '@windingtree/sdk-types';
 import {
   DealHandlerOptions,
@@ -40,9 +32,25 @@ import {
   RequestEvent,
 } from '@windingtree/sdk-node';
 import { createLogger } from '@windingtree/sdk-logger';
-import { config } from '../common/config.js';
+import {
+  chain,
+  cors,
+  supplierId,
+  entityOwnerAddress,
+  serverAddress,
+  nodeRestartEveryTimeSec,
+  nodeRestartMaxCount,
+  offerExpiration,
+  offerGap,
+  queueMaxRetries,
+  queueRetriesDelay,
+  signerMnemonic,
+  signerPk,
+  nodeTopic,
+} from '../config.js';
 import { DateTime } from 'luxon';
 import { JobHandler, Queue } from '@windingtree/sdk-queue';
+import { RequestQuery, contractsConfig } from 'mvp-shared-files';
 
 const appRouter = router({
   service: serviceRouter,
@@ -161,6 +169,7 @@ const createRequestsHandler =
         const timingCoefficients = processTimingCoefficients(
           airplane.minTime,
           airplane.maxTime,
+          offerGap,
         );
 
         for (const timingCoefficient of timingCoefficients) {
@@ -214,17 +223,24 @@ const createRequestsHandler =
 const processTimingCoefficients = (
   minTime: number,
   maxTime: number,
+  gap: number,
 ): number[] => {
-  const timingCoefficients = [minTime];
-  let time = minTime;
+  if (gap <= 0) {
+    throw new Error('offerGap must be greater than 0');
+  }
 
-  while (time < maxTime) {
-    time = time + config.offerGap;
-    if (time > maxTime) {
-      timingCoefficients.push(maxTime);
-    } else {
-      timingCoefficients.push(+time.toFixed(1));
-    }
+  const timingCoefficients: number[] = [];
+  let time: number = minTime;
+
+  while (time <= maxTime) {
+    timingCoefficients.push(+time.toFixed(1));
+    time += gap;
+  }
+
+  const lastCoefficient = timingCoefficients[timingCoefficients.length - 1];
+
+  if (lastCoefficient < maxTime) {
+    timingCoefficients.push(+maxTime.toFixed(1));
   }
 
   return timingCoefficients;
@@ -290,15 +306,15 @@ const subscribeChangeStatusEvent = async (
               queue.add({
                 handlerName: 'claim',
                 data: offer,
-                maxRetries: config.queueMaxRetries,
-                retriesDelay: config.queueRetriesDelay,
+                maxRetries: queueMaxRetries,
+                retriesDelay: queueRetriesDelay,
                 expire:
                   status === DealStatus.CheckedIn
                     ? undefined
                     : Number(offer.expire),
                 scheduledTime:
                   status === DealStatus.CheckedIn
-                    ? (Number(offer.payload.checkOut) * 1000) + 100 // * 1000 = convert to ms; 100 - extra gap
+                    ? Number(offer.payload.checkOut) * 1000 + 100 // * 1000 = convert to ms; 100 - extra gap
                     : undefined,
               });
             }
@@ -329,12 +345,12 @@ export const main = async (): Promise<void> => {
   try {
     const options: NodeOptions = {
       topics: [nodeTopic],
-      chain: config.chain,
-      contracts: contractsConfig,
+      chain,
+      contracts: contractsConfig[chain.name],
       serverAddress,
-      supplierId: config.supplierId,
-      signerSeedPhrase: config.signerMnemonic,
-      signerPk: config.signerPk,
+      supplierId: supplierId,
+      signerSeedPhrase: signerMnemonic,
+      signerPk,
     };
     node = createNode<RequestQuery, OfferOptions>(options);
 
@@ -351,13 +367,13 @@ export const main = async (): Promise<void> => {
     });
 
     const contractsManager = new ProtocolContracts({
-      contracts: contractsConfig,
+      contracts: contractsConfig[chain.name],
       publicClient: createPublicClient({
-        chain: config.chain,
+        chain: chain,
         transport: http(),
       }),
       walletClient: createWalletClient({
-        chain: config.chain,
+        chain: chain,
         transport: http(),
         account: node.signer,
       }),
@@ -405,9 +421,9 @@ export const main = async (): Promise<void> => {
       prefix: 'test',
       port: 3456,
       secret: 'secret',
-      ownerAccount: config.entityOwnerAddress,
+      ownerAccount: entityOwnerAddress,
       protocolContracts: contractsManager,
-      cors: config.cors,
+      cors: cors,
     };
 
     apiServer = new NodeApiServer(apiServerConfig);
@@ -489,11 +505,11 @@ export const main = async (): Promise<void> => {
 
     restartsCount++;
 
-    if (restartsCount < config.nodeRestartMaxCount) {
+    if (restartsCount < nodeRestartMaxCount) {
       logger.trace(`Restart node try count ${restartsCount}`);
 
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      setTimeout(main, config.nodeRestartEveryTimeSec * 1000);
+      setTimeout(main, nodeRestartEveryTimeSec * 1000);
     } else {
       logger.trace(`Restart node try count limit reached`);
 

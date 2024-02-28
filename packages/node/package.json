@@ -39,6 +39,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p ./tsconfig.json --emitDeclarationOnly  && tsup",
+    "build:prod": "NODE_ENV=production pnpm build",
     "start": "node ./dist/index.js",
     "start:dev": "node --loader ts-node/esm src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",

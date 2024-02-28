@@ -24,13 +24,14 @@ import { copyToClipboard, centerEllipsis } from '@windingtree/sdk-react/utils';
 import { randomSalt, entitiesRegistryABI, kinds } from '@windingtree/contracts';
 import { ConfigActions, useConfig } from '@windingtree/sdk-react/providers';
 import type { Address, Hash } from 'viem';
+import { contractsConfig } from 'mvp-shared-files';
 import {
-  contractsConfig,
-  targetChain,
   serverIp,
   serverPort,
   serverId,
-} from 'mvp-shared-files';
+  targetChain,
+  chain,
+} from '../../config.js';
 import { CustomConfig } from '../../main.js';
 
 const InfoBlock = () => (
@@ -83,7 +84,7 @@ export const SupplierRegister = () => {
     write,
     error: sendError,
   } = useContractWrite({
-    address: contractsConfig.entities.address,
+    address: contractsConfig[chain.name].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'register',
     onError(error) {

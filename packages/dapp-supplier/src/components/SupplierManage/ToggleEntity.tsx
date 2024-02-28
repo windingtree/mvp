@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { NoSupplierAlert } from '../NoSupplierAlert.js';
 import { centerEllipsis, copyToClipboard } from '@windingtree/sdk-react/utils';
+import { chain } from '../../config.js';
 
 export const ToggleEntity = ({ supplierId }: { supplierId: Hash }) => {
   const {
@@ -31,7 +32,7 @@ export const ToggleEntity = ({ supplierId }: { supplierId: Hash }) => {
     reset,
     error: txError,
   } = useContractWrite({
-    address: contractsConfig.entities.address,
+    address: contractsConfig[chain.name].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'toggleEntity',
   });

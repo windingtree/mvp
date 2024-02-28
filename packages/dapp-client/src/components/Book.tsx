@@ -21,6 +21,7 @@ import {
 import { LoadingButton } from 'mvp-shared-files/react';
 import { useNavigate } from 'react-router-dom';
 import { createLogger } from '@windingtree/sdk-logger';
+import { chain } from '../config.js';
 
 const logger = createLogger('Book');
 
@@ -52,7 +53,7 @@ export const Book = ({
     abi: erc20_18PermitABI,
     functionName: 'allowance',
     enabled: !valueApproved,
-    args: [address, contractsConfig.market.address],
+    args: [address, contractsConfig[chain.name].market.address],
     watch: true,
   });
 
@@ -65,7 +66,7 @@ export const Book = ({
     address: price.token,
     abi: erc20_18PermitABI,
     functionName: 'approve',
-    args: [contractsConfig.market.address, price.value],
+    args: [contractsConfig[chain.name].market.address, price.value],
   });
 
   const { isLoading: isApproveTxLoading } = useWaitForTransaction({

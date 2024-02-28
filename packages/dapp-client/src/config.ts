@@ -1,4 +1,23 @@
-export { requestExpiration, nodeTopic } from 'mvp-shared-files';
+import { getEnvVar } from 'mvp-shared-files/utils';
+import { Chain } from 'viem';
+import { hardhat, gnosisChiado } from 'viem/chains';
+
+export const nodeTopic = getEnvVar('VITE_NODE_TOPIC', 'string');
+
+export const targetChain = getEnvVar('VITE_CHAIN', 'string');
+
+export const chain: Chain = targetChain === 'hardhat' ? hardhat : gnosisChiado;
+
+if (!chain) {
+  throw new Error('Invalid targetChain name');
+}
+
+export const wcProjectId = getEnvVar('VITE_WC_PROJECT_ID', 'string');
+
+export const serverAddress = getEnvVar('VITE_SERVER_ADDRESS', 'string');
+
+export const requestExpiration = '1h';
+
 export interface Showcase {
   id: string;
   name: string;

@@ -1,6 +1,6 @@
 import { ServerOptions, createServer } from '@windingtree/sdk-server';
 import { levelStorage } from '@windingtree/sdk-storage';
-import { serverPort, serverPeerKey } from 'mvp-shared-files';
+import { serverPort, serverPeerKey } from './config.js';
 import { createLogger } from '@windingtree/sdk-logger';
 
 const logger = createLogger('ServerMain');
