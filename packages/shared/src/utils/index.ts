@@ -52,13 +52,13 @@ export type EnvVarTransform<
 
 // Cross system environment helper
 export const getEnvironmentVariables = () => {
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env;
-  } else if (
+  if (
     typeof import.meta !== 'undefined' &&
     (import.meta as unknown as ImportMeta).env
   ) {
     return (import.meta as unknown as ImportMeta).env;
+  } else if (typeof process !== 'undefined' && process.env) {
+    return process.env;
   } else {
     return {} as ImportMetaEnv;
   }

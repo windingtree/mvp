@@ -3,7 +3,5 @@
 ## Setup
 
 ```bash
-cp ./.env.example ./.env
+pnpm build
 ```
-
-You have to edit the copied `.env` file according to your needs.
