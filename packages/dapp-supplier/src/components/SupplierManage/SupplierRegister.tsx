@@ -25,13 +25,7 @@ import { randomSalt, entitiesRegistryABI, kinds } from '@windingtree/contracts';
 import { ConfigActions, useConfig } from '@windingtree/sdk-react/providers';
 import type { Address, Hash } from 'viem';
 import { contractsConfig } from 'mvp-shared-files';
-import {
-  serverIp,
-  serverPort,
-  serverId,
-  targetChain,
-  chain,
-} from '../../config.js';
+import { serverIp, serverPort, serverId, targetChain } from '../../config.js';
 import { CustomConfig } from '../../main.js';
 
 const InfoBlock = () => (
@@ -84,7 +78,7 @@ export const SupplierRegister = () => {
     write,
     error: sendError,
   } = useContractWrite({
-    address: contractsConfig[chain.name].entities.address,
+    address: contractsConfig[targetChain].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'register',
     onError(error) {

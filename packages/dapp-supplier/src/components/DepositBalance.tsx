@@ -4,11 +4,11 @@ import { formatBalance } from '@windingtree/sdk-react/utils';
 import { contractsConfig } from 'mvp-shared-files';
 import { Hash, zeroHash } from 'viem';
 import { useContractRead } from 'wagmi';
-import { chain } from '../config.js';
+import { targetChain } from '../config.js';
 
 export const DepositBalance = ({ supplierId }: { supplierId: Hash }) => {
   const { data, error } = useContractRead({
-    address: contractsConfig[chain.name].entities.address,
+    address: contractsConfig[targetChain].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'balanceOfEntity',
     enabled: Boolean(supplierId),

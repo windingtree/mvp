@@ -3,11 +3,11 @@ import { Address, zeroAddress } from 'viem';
 import { contractsConfig } from 'mvp-shared-files';
 import { erc20_18PermitABI } from '@windingtree/contracts';
 import { formatBalance } from '@windingtree/sdk-react/utils';
-import { chain } from '../config.js';
+import { targetChain } from '../config.js';
 
 export const LifBalance = ({ address }: { address?: Address }) => {
   const { data } = useContractRead({
-    address: contractsConfig[chain.name].token.address,
+    address: contractsConfig[targetChain].token.address,
     abi: erc20_18PermitABI,
     functionName: 'balanceOf',
     enabled: Boolean(address),

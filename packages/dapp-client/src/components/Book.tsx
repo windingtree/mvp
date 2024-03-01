@@ -53,7 +53,7 @@ export const Book = ({
     abi: erc20_18PermitABI,
     functionName: 'allowance',
     enabled: !valueApproved,
-    args: [address, contractsConfig[chain.name].market.address],
+    args: [address, contractsConfig[chain.network].market.address],
     watch: true,
   });
 
@@ -66,7 +66,7 @@ export const Book = ({
     address: price.token,
     abi: erc20_18PermitABI,
     functionName: 'approve',
-    args: [contractsConfig[chain.name].market.address, price.value],
+    args: [contractsConfig[chain.network].market.address, price.value],
   });
 
   const { isLoading: isApproveTxLoading } = useWaitForTransaction({

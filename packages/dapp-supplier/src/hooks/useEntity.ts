@@ -3,7 +3,7 @@ import { entitiesRegistryABI, kinds } from '@windingtree/contracts';
 import { contractsConfig } from 'mvp-shared-files';
 import { useContractRead } from 'wagmi';
 import { Address, Hash, zeroHash } from 'viem';
-import { chain } from '../config.js';
+import { targetChain } from '../config.js';
 
 const kindsIndex = Object.entries(kinds).reduce<Record<Hash, string>>(
   (a, v) => ({
@@ -31,7 +31,7 @@ export const useEntity = (supplierId?: Hash): UseEntityHook => {
     isLoading: infoLoading,
     error: infoError,
   } = useContractRead({
-    address: contractsConfig[chain.name].entities.address,
+    address: contractsConfig[targetChain].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'getEntity',
     enabled: Boolean(supplierId),
@@ -45,7 +45,7 @@ export const useEntity = (supplierId?: Hash): UseEntityHook => {
     isLoading: depositLoading,
     error: depositError,
   } = useContractRead({
-    address: contractsConfig[chain.name].entities.address,
+    address: contractsConfig[targetChain].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'balanceOfEntity',
     enabled: Boolean(supplierId),

@@ -7,7 +7,7 @@ import {
 import { PaymentOption } from '@windingtree/sdk-types';
 import { Erc20Token, stableCoins } from 'mvp-shared-files';
 import { Hash, formatUnits } from 'viem';
-import { chain } from '../config.js';
+import { targetChain } from '../config.js';
 
 const tokensCache: Record<Address, FetchTokenResult> = {};
 
@@ -48,7 +48,9 @@ export async function parsePayment(
         token = await fetchToken({ address: o.asset });
 
         // Check token
-        coin = stableCoins[chain.name].find((s) => s.address === token.address);
+        coin = stableCoins[targetChain].find(
+          (s) => s.address === token.address,
+        );
 
         if (!coin) {
           throw new Error(`Token ${token.address} is not supported`);

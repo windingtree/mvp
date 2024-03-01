@@ -47,6 +47,7 @@ import {
   signerMnemonic,
   signerPk,
   nodeTopic,
+  targetChain,
 } from '../config.js';
 import { DateTime } from 'luxon';
 import { JobHandler, Queue } from '@windingtree/sdk-queue';
@@ -346,7 +347,7 @@ export const main = async (): Promise<void> => {
     const options: NodeOptions = {
       topics: [nodeTopic],
       chain,
-      contracts: contractsConfig[chain.name],
+      contracts: contractsConfig[targetChain],
       serverAddress,
       supplierId: supplierId,
       signerSeedPhrase: signerMnemonic,
@@ -367,7 +368,7 @@ export const main = async (): Promise<void> => {
     });
 
     const contractsManager = new ProtocolContracts({
-      contracts: contractsConfig[chain.name],
+      contracts: contractsConfig[targetChain],
       publicClient: createPublicClient({
         chain: chain,
         transport: http(),

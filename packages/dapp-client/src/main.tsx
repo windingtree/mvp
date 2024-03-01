@@ -18,6 +18,7 @@ import {
   requestExpiration,
   nodeTopic,
   chain,
+  targetChain,
 } from './config.js';
 import type { OfferOptions } from '@windingtree/mvp-node/types';
 import {
@@ -92,7 +93,7 @@ root.render(
   <WalletProvider targetChain={chain}>
     <ConfigProvider>
       <WagmiConfig config={wagmiConfig}>
-        <ContractsProvider contractsConfig={contractsConfig[chain.name]}>
+        <ContractsProvider contractsConfig={contractsConfig[targetChain]}>
           <ClientProvider<RequestQuery, OfferOptions>
             serverAddress={serverAddress}
           >
@@ -109,7 +110,7 @@ root.render(
                 prefix={'mvp_'}
                 checkInterval={'5s'}
                 chain={chain}
-                contracts={contractsConfig[chain.name]}
+                contracts={contractsConfig[targetChain]}
               >
                 <SearchProvider topic={nodeTopic} expire={requestExpiration}>
                   <ThemeProvider theme={clientTheme}>

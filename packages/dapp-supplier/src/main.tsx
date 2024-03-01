@@ -14,14 +14,10 @@ import { wcProjectId } from './config.js';
 import { AirplaneConfiguration } from './components/Airplanes/type.js';
 import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { hardhat, gnosisChiado } from 'viem/chains';
-import { chain } from './config.js';
-
-export const targetChain =
-  import.meta.env.VITE_CHAIN === 'hardhat' ? hardhat : gnosisChiado;
+import { chain, targetChain } from './config.js';
 
 const wagmiConfig = defaultWagmiConfig({
-  chains: [targetChain],
+  chains: [chain],
   projectId: wcProjectId,
   metadata: {
     name: 'WTMP',
@@ -35,7 +31,7 @@ const wagmiConfig = defaultWagmiConfig({
 
 createWeb3Modal({
   wagmiConfig,
-  chains: [targetChain],
+  chains: [chain],
   projectId: wcProjectId,
 });
 
@@ -73,7 +69,7 @@ root.render(
   <ConfigProvider>
     <NodeProvider>
       <WagmiConfig config={wagmiConfig}>
-        <ContractsProvider contractsConfig={contractsConfig[chain.name]}>
+        <ContractsProvider contractsConfig={contractsConfig[targetChain]}>
           <ThemeProvider theme={clientTheme}>
             <CssBaseline />
             <App />

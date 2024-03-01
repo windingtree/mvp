@@ -17,7 +17,7 @@ import {
 import { NoSupplierAlert } from '../NoSupplierAlert.js';
 import { AddressBalance } from '../AddressBalance.js';
 import { centerEllipsis, copyToClipboard } from '@windingtree/sdk-react/utils';
-import { chain } from '../../config.js';
+import { targetChain } from '../../config.js';
 
 export const ChangeSigner = ({ supplierId }: { supplierId: Hash }) => {
   const {
@@ -36,7 +36,7 @@ export const ChangeSigner = ({ supplierId }: { supplierId: Hash }) => {
     reset,
     error: txError,
   } = useContractWrite({
-    address: contractsConfig[chain.name].entities.address,
+    address: contractsConfig[targetChain].entities.address,
     abi: entitiesRegistryABI,
     functionName: 'changeSigner',
   });
