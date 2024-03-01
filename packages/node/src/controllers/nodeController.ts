@@ -1,5 +1,5 @@
 import { EventHandler } from '@libp2p/interface/events';
-import { createPublicClient, createWalletClient, http } from 'viem';
+import { createPublicClient, createWalletClient, http, webSocket } from 'viem';
 import { randomSalt } from '@windingtree/contracts';
 import { DealStatus, OfferData, PaymentOption } from '@windingtree/sdk-types';
 import {
@@ -371,7 +371,7 @@ export const main = async (): Promise<void> => {
       contracts: contractsConfig[targetChain],
       publicClient: createPublicClient({
         chain: chain,
-        transport: http(),
+        transport: targetChain === 'hardhat' ? http() : webSocket(),
       }),
       walletClient: createWalletClient({
         chain: chain,
