@@ -20,6 +20,9 @@ if [ $? -ne 0 ]; then
 fi
 echo "Project pulled from repo on $(date)" | tee -a $LOG_FILE
 
+# Update of the pnpm
+npm i -g pnpm
+
 # Install dependencies
 pnpm install
 echo "Dependencies are installed on $(date)" | tee -a $LOG_FILE
