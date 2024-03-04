@@ -28,7 +28,9 @@ pnpm install
 echo "Dependencies are installed on $(date)" | tee -a $LOG_FILE
 
 # Build the project
-pnpm run build
+pnpm run build:main
+pnpm run build:dapp:supplier
+pnpm run build:dapp:client
 cp -r /path/to/project/packages/dapp-client/dist /var/www/client
 cp -r /path/to/project/packages/dapp-supplier/dist /var/www/node
 echo "Client and Manager static files are moved to nginx on $(date)" | tee -a $LOG_FILE
