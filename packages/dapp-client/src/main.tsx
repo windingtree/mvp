@@ -38,7 +38,10 @@ const wagmiConfig = defaultWagmiConfig({
   metadata: {
     name: 'WTMP',
     description: 'WindingTree Market Protocol MVP',
-    url: 'http://',
+    url:
+      targetChain === 'hardhat'
+        ? 'http://localhost'
+        : 'https://mvp.windingtree.com',
     icons: [
       'https://images.squarespace-cdn.com/content/v1/643e7f29524ccc63e86afd69/1681817436348-JRTSZFCHD93I5T4BQM24/WTLOGO.png?format=1500w',
     ],

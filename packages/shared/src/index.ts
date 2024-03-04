@@ -37,22 +37,22 @@ export const contractsConfig: Record<string, Contracts> = {
     config: {
       name: 'Config',
       version: '1',
-      address: '0x098b1d12cAfE7315C77b6d308A62ce02806260Ee',
+      address: '0x4556d5C1486d799f67FA96c84F1d0552486CAAF4',
     },
     entities: {
       name: 'EntitiesRegistry',
       version: '1',
-      address: '0x4bB51528C83844b509E1152EEb05260eE1bf60e6',
+      address: '0x4EcB659060Da61D795D777bb21BAe3599b301C66',
     },
     market: {
       name: 'Market',
       version: '1',
-      address: '0xDd5B6ffB3585E109ECddec5293e31cdc1e9DeD57',
+      address: '0xF54784206A53EF19fd3024D8cdc7A6251A4A0d67',
     },
     token: {
       name: 'LifToken',
       version: '1',
-      address: '0x4d60F4483BaA654CdAF1c5734D9E6B16735efCF8',
+      address: '0x8CB96383609C56af1Fe44DB7591F94AEE2fa43b2',
     },
   },
 };
@@ -82,22 +82,22 @@ export const stableCoins: Record<string, Erc20Token[]> = {
   ],
   gnosisChiado: [
     {
-      address: '0x8CB96383609C56af1Fe44DB7591F94AEE2fa43b2',
+      address: '0xcC28A4e6DEF318A1b88CF34c4F2Eeb2489995513',
       decimals: 6,
       permit: false,
     },
     {
-      address: '0x4556d5C1486d799f67FA96c84F1d0552486CAAF4',
+      address: '0x78F924A7C70213D502E6110567AC556c2EFBBF73',
       decimals: 6,
       permit: true,
     },
     {
-      address: '0x4EcB659060Da61D795D777bb21BAe3599b301C66',
+      address: '0x7067fC74fFCf4096796454747461D098E6bF7241',
       decimals: 18,
       permit: false,
     },
     {
-      address: '0xF54784206A53EF19fd3024D8cdc7A6251A4A0d67',
+      address: '0x44947d69A9F06EF48170BD41Da9B27E74ecd0891',
       decimals: 18,
       permit: true,
     },
