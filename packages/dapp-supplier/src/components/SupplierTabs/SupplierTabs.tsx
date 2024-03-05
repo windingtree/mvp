@@ -45,7 +45,13 @@ export const SupplierTabs = ({ value = 0, tabs, onChange, sx }: TabsProps) => {
   }
 
   return (
-    <Tabs value={currentValue} onChange={(_, newVal) => handleChange(newVal)}>
+    <Tabs
+      variant="scrollable"
+      scrollButtons="auto"
+      allowScrollButtonsMobile
+      value={currentValue}
+      onChange={(_, newVal) => handleChange(newVal)}
+    >
       {tabs.map((t, index) => (
         <Tab key={index} label={t.title} {...getTabProps(index)} sx={sx} />
       ))}

@@ -137,8 +137,7 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
             width: '85%',
             position: 'relative',
             margin: 'auto',
-            maxHeight: '90vh',
-            overflowY: 'auto',
+            maxHeight: '86vh',
           }}
         >
           <IconButton
@@ -155,64 +154,66 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
             <CloseIcon />
           </IconButton>
 
-          {!voucher && (
-            <QrReader
-              onSuccess={onQrScan}
-              onError={(err) => logger.error('QrS', err)}
-            />
-          )}
+          <Box sx={{ overflowY: 'auto' }}>
+            {!voucher && (
+              <QrReader
+                onSuccess={onQrScan}
+                onError={(err) => logger.error('QrS', err)}
+              />
+            )}
 
-          {!deal && offerId && loading && (
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Typography>
-                Loading deal with Id: {centerEllipsis(offerId)}
-              </Typography>
-              <CircularProgress />
-            </Stack>
-          )}
+            {!deal && offerId && loading && (
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Typography>
+                  Loading deal with Id: {centerEllipsis(offerId)}
+                </Typography>
+                <CircularProgress />
+              </Stack>
+            )}
 
-          {deal && <DealView deal={deal} isModal={false} />}
+            {deal && <DealView deal={deal} isModal={false} />}
 
-          {deal && !done && (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <LoadingButton
-                variant="contained"
-                size="large"
-                disabled={!deal || loading}
-                loading={loading}
-                onClick={() => handleCheckIn()}
-                sx={{ marginTop: 2 }}
+            {deal && !done && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
               >
-                CheckIn deal
-              </LoadingButton>
-            </Box>
-          )}
+                <LoadingButton
+                  variant="contained"
+                  size="large"
+                  disabled={!deal || loading}
+                  loading={loading}
+                  onClick={() => handleCheckIn()}
+                  sx={{ marginTop: 2 }}
+                >
+                  CheckIn deal
+                </LoadingButton>
+              </Box>
+            )}
 
-          {done && (
-            <Alert severity="success" sx={{ marginTop: 2 }}>
-              <Typography>Deal has been successfully checked in</Typography>
-              <Button variant="contained" size="small" onClick={close}>
-                Close
-              </Button>
-            </Alert>
-          )}
-
-          {error && (
-            <Alert sx={{ marginTop: 1 }} severity="error">
-              <Typography>{error}</Typography>
-              {offerId && !deal && (
-                <Button variant="contained" size="small" onClick={getDeal}>
-                  Try load the deal again
+            {done && (
+              <Alert severity="success" sx={{ marginTop: 2 }}>
+                <Typography>Deal has been successfully checked in</Typography>
+                <Button variant="contained" size="small" onClick={close}>
+                  Close
                 </Button>
-              )}
-            </Alert>
-          )}
+              </Alert>
+            )}
+
+            {error && (
+              <Alert sx={{ marginTop: 1 }} severity="error">
+                <Typography>{error}</Typography>
+                {offerId && !deal && (
+                  <Button variant="contained" size="small" onClick={getDeal}>
+                    Try load the deal again
+                  </Button>
+                )}
+              </Alert>
+            )}
+          </Box>
         </Paper>
       </Modal>
     </>
