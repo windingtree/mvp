@@ -1,0 +1,21 @@
+{
+  "name": "utils",
+  "version": "0.0.0",
+  "description": "Various utils",
+  "bin": {
+    "leveldb-repair": "dist/repair.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup && chmod +x dist/repair.js"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.32",
+    "@types/node": "^20.11.24",
+    "tsup": "^8.0.2"
+  },
+  "dependencies": {
+    "classic-level": "^1.4.1",
+    "yargs": "^17.7.2"
+  }
+}
