@@ -273,6 +273,13 @@ const subscribeChangeStatusEvent = async (
     blockNumber = BigInt(0);
   }
 
+  const currentBlockNumber =
+    await contractsManager.publicClient.getBlockNumber();
+
+  if (currentBlockNumber < blockNumber) {
+    blockNumber = currentBlockNumber;
+  }
+
   return await contractsManager.subscribeMarket(
     'Status', // Event name
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -405,6 +412,8 @@ export const main = async (): Promise<void> => {
       scope: 'offer',
     })();
     // console.log('@@@', await usersStorage.entries());
+
+    await offersStorage.instance.close();
 
     const queue = new Queue({
       storage: queueStorage,
