@@ -413,8 +413,6 @@ export const main = async (): Promise<void> => {
     })();
     // console.log('@@@', await usersStorage.entries());
 
-    await offersStorage.instance.close();
-
     const queue = new Queue({
       storage: queueStorage,
       idsKeyName: 'jobsIds',
