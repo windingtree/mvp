@@ -138,6 +138,7 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
             position: 'relative',
             margin: 'auto',
             maxHeight: '86vh',
+            overflow: 'hidden',
           }}
         >
           <IconButton
