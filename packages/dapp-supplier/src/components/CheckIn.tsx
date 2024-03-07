@@ -172,7 +172,9 @@ export const CheckIn = ({ show = false, onDone = () => {} }: CheckInProps) => {
               </Stack>
             )}
 
-            {deal && <DealView deal={deal} isModal={false} />}
+            {deal && (
+              <DealView deal={deal} isModal={false} noDescription={true} />
+            )}
 
             {deal && !done && (
               <Box

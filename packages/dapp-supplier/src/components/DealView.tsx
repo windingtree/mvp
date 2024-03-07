@@ -28,6 +28,7 @@ interface DealViewProps {
   sx?: SxProps;
   isModal?: boolean;
   closeComponent?: ReactNode;
+  noDescription?: boolean;
 }
 
 type Media = DealRecord<
@@ -36,7 +37,7 @@ type Media = DealRecord<
 >['offer']['options']['airplane']['media'][number];
 
 const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
-  ({ deal, sx, closeComponent }: DealViewProps, ref) => {
+  ({ deal, sx, closeComponent, noDescription = false }: DealViewProps, ref) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [selectedImage, setSelectedImage] = useState<Media | undefined>(
@@ -130,22 +131,24 @@ const DealViewInner = forwardRef<HTMLDivElement, DealViewProps>(
                 {deal.offer.options.airplane.name}
               </Typography>
             )}
-            <Box>
-              <MuiMarkdown
-                overrides={{
-                  ...getOverrides({}),
-                  span: {
-                    component: Typography,
-                    props: {
-                      variant: 'body2',
-                      color: 'text.secondary',
+            {!noDescription && (
+              <Box>
+                <MuiMarkdown
+                  overrides={{
+                    ...getOverrides({}),
+                    span: {
+                      component: Typography,
+                      props: {
+                        variant: 'body2',
+                        color: 'text.secondary',
+                      },
                     },
-                  },
-                }}
-              >
-                {deal.offer.options.airplane.description}
-              </MuiMarkdown>
-            </Box>
+                  }}
+                >
+                  {deal.offer.options.airplane.description}
+                </MuiMarkdown>
+              </Box>
+            )}
           </Grid>
         </Grid>
 
@@ -183,6 +186,7 @@ export const DealView = ({
   isModal = true,
   deal,
   onClose = () => {},
+  noDescription = false,
   sx,
 }: DealViewProps) => {
   if (isModal) {
@@ -214,6 +218,7 @@ export const DealView = ({
               <CloseIcon />
             </IconButton>
           }
+          noDescription={noDescription}
         />
       </Modal>
     );
