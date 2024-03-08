@@ -273,64 +273,56 @@ const subscribeChangeStatusEvent = async (
     blockNumber = BigInt(0);
   }
 
-  const currentBlockNumber =
-    await contractsManager.publicClient.getBlockNumber();
-
-  if (currentBlockNumber < blockNumber) {
-    blockNumber = currentBlockNumber;
-  }
-
-  return await contractsManager.subscribeMarket(
+  return contractsManager.subscribeMarket(
     'Status', // Event name
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    async (logs) => {
-      let blockNumber = await commonConfigStorage.get<bigint | undefined>(
-        'blockNumber',
-      );
+    async (logs, maxBlockNumber) => {
+      try {
+        let knownBlockNumber = await commonConfigStorage.get<
+          bigint | undefined
+        >('blockNumber');
 
-      if (!blockNumber) {
-        blockNumber = BigInt(0);
+        if (!knownBlockNumber) {
+          knownBlockNumber = BigInt(0);
+        }
+
+        if (maxBlockNumber <= knownBlockNumber) {
+          return;
+        }
+
+        logs.forEach((log) => {
+          const { offerId, status } = log.args as {
+            offerId?: `0x${string}` | undefined;
+            status?: DealStatus | number | undefined;
+            sender?: `0x${string}` | undefined;
+          };
+          offersStorage
+            .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
+            .then((offer) => {
+              if (offer) {
+                queue.add({
+                  handlerName: 'claim',
+                  data: offer,
+                  maxRetries: queueMaxRetries,
+                  retriesDelay: queueRetriesDelay,
+                  expire:
+                    status === DealStatus.CheckedIn
+                      ? undefined
+                      : Number(offer.expire),
+                  scheduledTime:
+                    status === DealStatus.CheckedIn
+                      ? Number(offer.payload.checkOut) * 1000 + 100 // * 1000 = convert to ms; 100 - extra gap
+                      : undefined,
+                });
+              }
+            })
+            .catch((e) => logger.error(e));
+        });
+
+        await commonConfigStorage.set('blockNumber', maxBlockNumber + 1n);
+      } catch (error) {
+        logger.error('subscribeMarket', error);
       }
-
-      const maxBlockNumber = logs.reduce(
-        (max, log) => (log.blockNumber > max ? log.blockNumber : max),
-        BigInt(0),
-      );
-
-      if (maxBlockNumber <= blockNumber) {
-        return;
-      }
-
-      logs.forEach((log) => {
-        const { offerId, status } = log.args as {
-          offerId?: `0x${string}` | undefined;
-          status?: DealStatus | number | undefined;
-          sender?: `0x${string}` | undefined;
-        };
-        offersStorage
-          .get<OfferData<RequestQuery, OfferOptions>>(offerId!)
-          .then((offer) => {
-            if (offer) {
-              queue.add({
-                handlerName: 'claim',
-                data: offer,
-                maxRetries: queueMaxRetries,
-                retriesDelay: queueRetriesDelay,
-                expire:
-                  status === DealStatus.CheckedIn
-                    ? undefined
-                    : Number(offer.expire),
-                scheduledTime:
-                  status === DealStatus.CheckedIn
-                    ? Number(offer.payload.checkOut) * 1000 + 100 // * 1000 = convert to ms; 100 - extra gap
-                    : undefined,
-              });
-            }
-          })
-          .catch((e) => logger.error(e));
-      });
-
-      await commonConfigStorage.set('blockNumber', maxBlockNumber + BigInt(1));
     },
     blockNumber, // Block number to listen from
   );

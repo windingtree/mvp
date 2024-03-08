@@ -126,8 +126,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.4.1
-        version: 1.4.1(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.3
+        version: 1.4.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -135,11 +135,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.7.0
-        version: 1.7.0(typescript@5.3.3)
+        specifier: ^1.7.2
+        version: 1.7.2(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.13
-        version: 1.4.13
+        specifier: ^1.4.15
+        version: 1.4.15
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -198,8 +198,8 @@ importers:
         specifier: ^1.19.11
         version: 1.21.4(typescript@5.3.3)(zod@3.22.4)
       vite-plugin-node-polyfills:
-        specifier: ^0.17.0
-        version: 0.17.0(vite@5.1.4)
+        specifier: ^0.21.0
+        version: 0.21.0(vite@5.1.4)
       wagmi:
         specifier: ^1.4.12
         version: 1.4.13(@types/react@18.2.60)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.4)(zod@3.22.4)
@@ -255,8 +255,8 @@ importers:
         specifier: workspace:*
         version: link:../node
       '@windingtree/sdk-client':
-        specifier: ^1.4.1
-        version: 1.4.1(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.3
+        version: 1.4.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger':
         specifier: ^1.1.4
         version: 1.1.4
@@ -264,11 +264,11 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.7.0
-        version: 1.7.0(typescript@5.3.3)
+        specifier: ^1.7.2
+        version: 1.7.2(typescript@5.3.3)
       '@windingtree/sdk-react':
-        specifier: ^1.4.13
-        version: 1.4.13
+        specifier: ^1.4.15
+        version: 1.4.15
       '@windingtree/sdk-storage':
         specifier: ^1.4.2
         version: 1.4.2
@@ -330,8 +330,8 @@ importers:
         specifier: ^1.19.11
         version: 1.21.4(typescript@5.3.3)(zod@3.22.4)
       vite-plugin-node-polyfills:
-        specifier: ^0.17.0
-        version: 0.17.0(vite@5.1.4)
+        specifier: ^0.21.0
+        version: 0.21.0(vite@5.1.4)
       wagmi:
         specifier: ^1.4.12
         version: 1.4.13(@types/react@18.2.60)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.4)(zod@3.22.4)
@@ -354,8 +354,8 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3
       '@windingtree/sdk-contracts-manager':
-        specifier: ^1.5.0
-        version: 1.5.0(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.5.2
+        version: 1.5.2(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db':
         specifier: ^1.3.2
         version: 1.3.2(typescript@5.3.3)
@@ -363,11 +363,11 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       '@windingtree/sdk-node':
-        specifier: ^1.3.6
-        version: 1.3.6(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.3.8
+        version: 1.3.8(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-node-api':
-        specifier: ^1.7.0
-        version: 1.7.0(typescript@5.3.3)
+        specifier: ^1.7.2
+        version: 1.7.2(typescript@5.3.3)
       '@windingtree/sdk-queue':
         specifier: ^1.3.0
         version: 1.3.0(typescript@5.3.3)(zod@3.22.4)
@@ -5323,8 +5323,8 @@ packages:
   /@windingtree/contracts@1.0.0:
     resolution: {integrity: sha512-foRPGrAuxNwSsI0rAPgVi8dsOclVxEVCQ8HO8Oat+HUgOPGzsKi45+tUjXBEuECMeRNdhEOXLystheW65SsEaw==}
 
-  /@windingtree/sdk-client@1.4.1(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-BdhzN1++a8ivuUzzoSaqFhY0+XeFmUod+yMWrCFLyFZgjmsIzVTNtcJR/8n6hHkchyN2bD3hjg1vsVslRigBdQ==}
+  /@windingtree/sdk-client@1.4.3(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-9mwfqTNDHfXh7bWvmfmQ0g++z0xeMbWFZyJQVHwjay67zaT6QVTkEYB/UHiOoZC/5Ma349kyzMh9FauJG9M+Bg==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5333,7 +5333,7 @@ packages:
       '@libp2p/peer-id': 3.0.6
       '@libp2p/websockets': 7.0.13
       '@multiformats/multiaddr': 12.1.14
-      '@windingtree/sdk-contracts-manager': 1.5.0(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.5.2(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-pubsub': 1.3.5(typescript@5.3.3)(zod@3.22.4)
@@ -5354,8 +5354,8 @@ packages:
   /@windingtree/sdk-constants@1.2.3:
     resolution: {integrity: sha512-yZ2JqbTUPNb00DRpbxN776rro4AB+NalxZ4Ayfmc4CWv9XK2fpElBkTXK1NpnOklHUyO4jGP1eQmcHgfQsgcOg==}
 
-  /@windingtree/sdk-contracts-manager@1.5.0(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-psBCpRjzHUW72j2f7c3J4kdsFcRFkHW6GL4HiT/dYMgyfxedxhMYclCPwkNfJww7lwoIYr0iAt5FiXGOzpsXKg==}
+  /@windingtree/sdk-contracts-manager@1.5.2(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-Ifps/QFoCWRsmZbquzAtIXaDd0sck9JZ8EK8iv2Yl4I/t221T8zBW//0BRyxZzrT/tN8ssSN1Gi4I6yt+/BdJA==}
     dependencies:
       '@windingtree/contracts': 1.0.0
       '@windingtree/sdk-logger': 1.1.4
@@ -5405,12 +5405,12 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-node-api@1.7.0(typescript@5.3.3):
-    resolution: {integrity: sha512-kg7x/Nf5BQj7wE5ymwSRDAMC+xYtMzK72CKNQSt8nNDC/wsyelBrLG7k4ekmZwDIzvP37oVLE/hGxRjlL+vAyw==}
+  /@windingtree/sdk-node-api@1.7.2(typescript@5.3.3):
+    resolution: {integrity: sha512-KvDdg5gnpqHvS9s3So3CAbrxdoTf/knTklNEBWwJpVrJDjbrmkzicsnz6pcvJCo5GQt+vzwKOkmoxR5lp1ucKg==}
     dependencies:
       '@trpc/client': 10.45.1(@trpc/server@10.45.1)
       '@trpc/server': 10.45.1
-      '@windingtree/sdk-contracts-manager': 1.5.0(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.5.2(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-db': 1.3.2(typescript@5.3.3)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
@@ -5427,8 +5427,8 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@windingtree/sdk-node@1.3.6(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-VyhTJ2R+YBqGzuMaX+pienjWvTp1iAAe72DUKDqw9nN/beS0UYHRytTpOHfJG5KCFsJIA19BH0Fs4Ubc+3Edjg==}
+  /@windingtree/sdk-node@1.3.8(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-oFh8qyTfVfEphmUJAb5LgyfiDMJyUisTuMdEauSUTUJ+52FuAj1FzN8Kbv1NrIIpgjtXmsau0l3hs4XI3sOwLQ==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
@@ -5437,7 +5437,7 @@ packages:
       '@libp2p/peer-id': 3.0.6
       '@libp2p/websockets': 7.0.13
       '@multiformats/multiaddr': 12.1.14
-      '@windingtree/sdk-contracts-manager': 1.5.0(typescript@5.3.3)(zod@3.22.4)
+      '@windingtree/sdk-contracts-manager': 1.5.2(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-messages': 1.2.3(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-pubsub': 1.3.5(typescript@5.3.3)(zod@3.22.4)
@@ -5492,8 +5492,8 @@ packages:
       - zod
     dev: false
 
-  /@windingtree/sdk-react@1.4.13:
-    resolution: {integrity: sha512-YonWgW50AfXpx+l8rF3qM6uX/XMKQ5gy86slZbX9TZHHjI3yGCb+INX0eHJzh9oNEAXpuOv1fqREHDx7qiPidQ==}
+  /@windingtree/sdk-react@1.4.15:
+    resolution: {integrity: sha512-tSiRwbtLnjMV5vET/H8+0AmcJh0QQmg0o7dQ0Qs0DGgn1hyD7QKAKS6e2Y72LiFSRs4z2e/JdeoS8Iu84Shahw==}
     dev: true
 
   /@windingtree/sdk-server@1.2.8(typescript@5.3.3):
@@ -8888,6 +8888,7 @@ packages:
 
   /jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+    deprecated: this version is no longer supported
 
   /joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -12057,6 +12058,18 @@ packages:
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
+      vite: 5.1.4(@types/node@20.11.24)
+    transitivePeerDependencies:
+      - rollup
+    dev: true
+
+  /vite-plugin-node-polyfills@0.21.0(vite@5.1.4):
+    resolution: {integrity: sha512-Sk4DiKnmxN8E0vhgEhzLudfJQfaT8k4/gJ25xvUPG54KjLJ6HAmDKbr4rzDD/QWEY+Lwg80KE85fGYBQihEPQA==}
+    peerDependencies:
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      '@rollup/plugin-inject': 5.0.5
+      node-stdlib-browser: 1.2.0
       vite: 5.1.4(@types/node@20.11.24)
     transitivePeerDependencies:
       - rollup
