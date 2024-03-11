@@ -22,7 +22,6 @@ import {
 } from '@windingtree/sdk-node-api/router';
 import { AirplaneInput, airplanesRouter } from '../api/airplanesRoute.js';
 import { ProtocolContracts } from '@windingtree/sdk-contracts-manager';
-import { levelStorage } from '@windingtree/sdk-storage';
 import { parseSeconds } from '@windingtree/sdk-utils';
 import {
   createNode,
@@ -35,23 +34,24 @@ import { createLogger } from '@windingtree/sdk-logger';
 import {
   chain,
   cors,
-  supplierId,
   entityOwnerAddress,
-  serverAddress,
   nodeRestartEveryTimeSec,
   nodeRestartMaxCount,
+  nodeTopic,
   offerExpiration,
   offerGap,
   queueMaxRetries,
   queueRetriesDelay,
+  serverAddress,
   signerMnemonic,
   signerPk,
-  nodeTopic,
+  supplierId,
   targetChain,
 } from '../config.js';
 import { DateTime } from 'luxon';
 import { JobHandler, Queue } from '@windingtree/sdk-queue';
-import { RequestQuery, contractsConfig } from 'mvp-shared-files';
+import { contractsConfig, RequestQuery } from 'mvp-shared-files';
+import { storageController } from './storageController.js';
 
 const appRouter = router({
   service: serviceRouter,
@@ -379,31 +379,16 @@ export const main = async (): Promise<void> => {
       }),
     });
 
-    const queueStorage = await levelStorage.createInitializer({
-      path: './queue.db',
-      scope: 'queue',
-    })();
-    const commonConfigStorage = await levelStorage.createInitializer({
-      path: './common.db',
-      scope: 'common',
-    })();
-    const usersStorage = await levelStorage.createInitializer({
-      path: './users.db',
-      scope: 'users',
-    })();
-    const dealsStorage = await levelStorage.createInitializer({
-      path: './deals.db',
-      scope: 'deals',
-    })();
-    const airplanesStorage = await levelStorage.createInitializer({
-      path: './airplanes.db',
-      scope: 'airplanes',
-    })();
-    const offersStorage = await levelStorage.createInitializer({
-      path: './offer.db',
-      scope: 'offer',
-    })();
-    // console.log('@@@', await usersStorage.entries());
+    await storageController.init();
+
+    const {
+      queueStorage,
+      commonConfigStorage,
+      usersStorage,
+      dealsStorage,
+      airplanesStorage,
+      offersStorage,
+    } = storageController.getStorages();
 
     const queue = new Queue({
       storage: queueStorage,
@@ -477,9 +462,10 @@ export const main = async (): Promise<void> => {
      */
     const shutdown = () => {
       const stopHandler = async () => {
+        unsubscribe();
         await apiServer!.stop();
         await node!.stop();
-        unsubscribe();
+        await storageController.stopAll();
       };
       stopHandler()
         .catch((error) => {
@@ -502,6 +488,7 @@ export const main = async (): Promise<void> => {
     if (apiServer) {
       await apiServer.stop();
     }
+    await storageController.stopAll();
 
     restartsCount++;
 

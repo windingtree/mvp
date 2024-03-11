@@ -34,3 +34,12 @@ export interface EventSubscribeOptions {
   commonConfigStorage: LevelDBStorage;
   queue: Queue;
 }
+
+export interface Storages {
+  queueStorage: LevelDBStorage;
+  commonConfigStorage: LevelDBStorage;
+  usersStorage: LevelDBStorage;
+  dealsStorage: LevelDBStorage;
+  airplanesStorage: LevelDBStorage;
+  offersStorage: LevelDBStorage;
+}
