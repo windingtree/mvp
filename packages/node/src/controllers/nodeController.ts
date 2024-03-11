@@ -341,6 +341,29 @@ export const main = async (): Promise<void> => {
 
   let apiServer: NodeApiServer | null = null;
   let node: Node<RequestQuery, OfferOptions> | null = null;
+  let unsubscribe: () => void | undefined;
+
+  const stopHandler = async () => {
+    unsubscribe && unsubscribe();
+    await apiServer?.stop();
+    await node?.stop();
+    await storageController.stopAll();
+  };
+
+  /**
+   * Graceful Shutdown handler
+   */
+  const shutdown = () => {
+    stopHandler()
+      .catch((error) => {
+        logger.trace(error);
+        process.exit(1);
+      })
+      .finally(() => process.exit(0));
+  };
+
+  process.once('SIGTERM', shutdown);
+  process.once('SIGINT', shutdown);
 
   try {
     const options: NodeOptions = {
@@ -448,8 +471,7 @@ export const main = async (): Promise<void> => {
       }),
     );
 
-    // TODO As for now, if the blockchain network is unavailable it causes a crash of the whole node. We must implement a conditional mechanism to avoid crashes and wait until connection before the node starts
-    const unsubscribe = await subscribeChangeStatusEvent({
+    unsubscribe = await subscribeChangeStatusEvent({
       contractsManager,
       apiServer,
       offersStorage,
@@ -457,38 +479,14 @@ export const main = async (): Promise<void> => {
       queue,
     });
 
-    /**
-     * Graceful Shutdown handler
-     */
-    const shutdown = () => {
-      const stopHandler = async () => {
-        unsubscribe();
-        await apiServer!.stop();
-        await node!.stop();
-        await storageController.stopAll();
-      };
-      stopHandler()
-        .catch((error) => {
-          logger.trace(error);
-          process.exit(1);
-        })
-        .finally(() => process.exit(0));
-    };
-
-    process.once('SIGTERM', shutdown);
-    process.once('SIGINT', shutdown);
-
     await node.start();
   } catch (error) {
     logger.trace(error);
 
-    if (node && node.connected) {
-      await node.stop();
-    }
-    if (apiServer) {
-      await apiServer.stop();
-    }
-    await storageController.stopAll();
+    await stopHandler().catch((err) => logger.error('main.stop', err));
+
+    process.off('SIGTERM', shutdown);
+    process.off('SIGINT', shutdown);
 
     restartsCount++;
 
