@@ -470,10 +470,10 @@ export const main = async (): Promise<void> => {
      */
     const shutdown = () => {
       const stopHandler = async () => {
+        unsubscribe();
         await apiServer!.stop();
         await node!.stop();
         await storageController.stopAll();
-        unsubscribe();
       };
       stopHandler()
         .catch((error) => {
