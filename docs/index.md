@@ -1,7 +1,7 @@
 # The MVP Docs
 
 - [The MVP Purpose: Pioneering Direct Coordination in Travel and Trade](./mvp-purpose.md)
-- The WindingTree Market Protocol Overview
+- [The WindingTree Market Protocol Overview](./protocol.md)
 - The MVP architecture:
   - Smart contracts Layer
   - Coordination Server
