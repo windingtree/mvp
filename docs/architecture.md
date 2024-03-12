@@ -4,45 +4,42 @@
 
 ### Purpose
 
-The purpose of this document is to provide a comprehensive architectural overview of the WindingTree Market Protocol MVP. It aims to outline the structure and design principles of the project, offering insights into the components, workflows, and interactions within the system. This document serves as a guide for developers, stakeholders, and contributors to understand and contribute to the development effectively.
+This document aims to provide a comprehensive architectural overview of the WindingTree Market Protocol MVP. It outlines the project's structure and design principles, offering insights into its components, workflows, and interactions. Serving as a guide, it enables developers, stakeholders, and contributors to effectively understand and participate in the development process.
 
 ### Scope
 
-This document covers the architectural design of the WindingTree Market Protocol MVP, including its major components like Smart Contracts, Supplier Node, Coordination Server, and both Supplier and Customer Dapps. It details the technical stack, modules, use-cases, implementation strategies, and deployment plans. The document aims to provide clarity on how the system components interact, their responsibilities, and how they fit into the broader context of the project.
+The document encompasses the architectural design of the WindingTree Market Protocol MVP, detailing major components such as Smart Contracts, Supplier Node, Coordination Server, and the Supplier and Customer Dapps. It explicates the technical stack, modules, use cases, implementation strategies, and deployment plans, clarifying the system components' interactions, responsibilities, and integration within the project's broader context.
 
 ### Definitions
 
-- **MVP (Minimum Viable Product)**: The initial version of the WindingTree Market Protocol, providing essential features to demonstrate its potential.
-- **Smart Contracts**: The WindingTree Market Protocol smart contracts executed on the EVM-based blockchain.
-- **Supplier Node**: A backend component that interacts with the blockchain and manages supplier-related functionalities.
-- **Coordination Server**: The central server facilitating communication between different protocol parties.
-- **Dapp (Decentralized Application)**: A frontend application interacting with blockchain-based systems.
-- **Ethereum**: A decentralized, blockchain-based platform used for the project.
-- **Node.js**: A JavaScript runtime used for building server-side applications.
-- **React**: A JavaScript library for building user interfaces.
-- **Solidity**: A programming language used for writing smart contracts on Ethereum.
-- **TypeScript**: A typed superset of JavaScript used for writing the application code.
-- **LevelDB**: A lightweight database used for storing data in the MVP.
+- **MVP (Minimum Viable Product):** The initial release of the WindingTree Market Protocol implementation, equipped with essential features to showcase its utility.
+- **Smart Contracts:** Executable contracts on an EVM-based blockchain, facilitating the WindingTree Market Protocol's operations.
+- **Supplier Node:** A backend entity managing supplier-related functionalities and interfacing with the blockchain.
+- **Coordination Server:** A central hub that orchestrates communication among different protocol entities.
+- **Dapp (Decentralized Application):** A frontend application engaging with blockchain systems.
+- **Ethereum:** The decentralized blockchain platform utilized in this project.
+- **Node.js:** The JavaScript runtime for building server-side applications.
+- **React:** A library for crafting user interfaces in JavaScript.
+- **Solidity:** The programming language for developing smart contracts on Ethereum.
+- **TypeScript:** A statically typed superset of JavaScript for application coding.
+- **LevelDB:** A lightweight database for data storage in the MVP.
 
 ## Modules/Components
 
 ```mermaid
 flowchart TB
   subgraph customer[Customer Dapp]
-    direction LR
+    direction TB
     subgraph c_storage[Storage]
       direction TB
       Requests ~~~
       Offers ~~~
-      Transactions ~~~
       Deals
     end
     c_api[Protocol API Connector]
-    c_wallet[Wallet Connect]
+    c_wallet[WalletConnect]
 
-    c_storage ~~~
-    c_api ~~~
-    c_wallet
+    c_storage ~~~ c_api ~~~ c_wallet
   end
 
   server[Coordination Server]
@@ -56,9 +53,7 @@ flowchart TB
     n_api[Protocol API Connector]
     n_rpc[RPC API]
 
-    n_db ~~~
-    n_api ~~~
-    n_rpc
+    n_db ~~~ n_api ~~~ n_rpc
   end
 
   subgraph manager[Supplier Dapp]
@@ -67,11 +62,9 @@ flowchart TB
       direction TB
     end
     m_api[Protocol API Connector]
-    m_wallet[Wallet Connect]
+    m_wallet[WalletConnect]
 
-    m_storage ~~~
-    m_api ~~~
-    m_wallet
+    m_storage ~~~ m_api ~~~ m_wallet
   end
 
   %% Request flow
@@ -83,10 +76,10 @@ flowchart TB
   server -. Offer .-> customer
 
   %% Deal flow
-  customer -- Offer --> contract
   coin -. Balances/Allowance .-> customer
   customer -- Allow spending --> coin
   contract -- Transfers tokens --> coin
+  customer -- Offer --> contract
   contract -. Deal .-> customer
   contract -. Deal .-> node
 
@@ -108,7 +101,7 @@ flowchart TB
 
 ### Supplier Registration
 
-> During this flow, the supplier must copy the Node configuration parameters and provide them with the Node as environment variables
+During this process, suppliers are required to configure their Node with specific parameters provided as environment variables.
 
 ```mermaid
 sequenceDiagram
@@ -118,28 +111,28 @@ sequenceDiagram
 
   supplier->>manager: Connects wallet
   manager->>manager: Selects account
-  supplier->>manager: Starts registration
-  manager->>manager: Generates wallet for the Node
-  manager->>manager: Saves registration data
-  manager->>manager: Prepares registration tx
-  manager->>supplier: Request tx sending confirmation
-  supplier-->>manager: Confirms tx sending
-  manager->>contract: Sends tx
-  contract->>contract: Executes tx
-  contract-->>manager: tx hash
-  manager->>manager: Monitor tx status
-  manager-->>supplier: Confirms tx
-  manager->>supplier: Asks for the Node topics
-  supplier->>supplier: Fills topics form
-  supplier-->>manager: Adds the Node topics
-  manager->>manager: Prepares Node configuration
+  supplier->>manager: Initiates registration
+  manager->>manager: Generates Node's wallet
+  manager->>manager: Stores registration data
+  manager->>manager: Prepares registration transaction
+  manager->>supplier: Requests transaction confirmation
+  supplier-->>manager: Confirms sending
+  manager->>contract: Submits transaction
+  contract->>contract: Processes transaction
+  contract-->>manager: Provides transaction hash
+  manager->>manager: Monitors transaction status
+  manager-->>supplier: Confirms transaction success
+  manager->>supplier: Requests Node topics
+  supplier->>supplier: Completes topics form
+  supplier-->>manager: Submits Node topics
+  manager->>manager: Configures Node
   manager->>supplier: Displays Node configuration
   supplier->>supplier: Copies Node configuration
 ```
 
 ### Supplier Node Configuration
 
-The Node configuration parameters are been generated during the [`Supplier Registration`](#supplier-registration) flow.
+Node configuration parameters are generated during the `Supplier Registration` process.
 
 ```mermaid
 sequenceDiagram
@@ -147,18 +140,16 @@ sequenceDiagram
   participant node as Deployment flow
   participant host as Hosting
 
-  supplier->>supplier: Prepares the Node configuration
-  supplier->>host: Initializes the Node environment
-  supplier->>node: Prepares the Node deployment
-  node->>host: Deploy
-  host->>host: Starts the Node
+  supplier->>supplier: Prepares Node configuration
+  supplier->>host: Sets up Node environment
+  supplier->>node: Arranges Node deployment
+  node->>host: Executes deployment
+  host->>host: Initiates Node
 ```
 
 ### Administrative Log-In
 
-To manage the Node the supplier must use the Node Manager Dapp. To be able to access the dapp features the supplier must log in using the wallet that has been used for sending the registration transaction.
-
-Here is the log-in flow:
+To access the Node Manager Dapp features, suppliers must log in using the wallet associated with the registration transaction.
 
 ```mermaid
 sequenceDiagram
@@ -169,29 +160,29 @@ sequenceDiagram
   supplier->>manager: Connects wallet
   manager->>manager: Selects account
   manager->>manager: Prepares log-in voucher
-  manager->>supplier: Requests voucher sign
-  supplier-->>manager: Signs log-in voucher
-  manager->>node: Log-in with voucher
+  manager->>supplier: Requests voucher signature
+  supplier-->>manager: Signs voucher
+  manager->>node: Logs in with voucher
   node->>node: Validates voucher
 
   alt Valid voucher
-    node->>node: Generates JWT
-    node-->>manager: Set session cookie (http-only)
-    node->>manager: Succeeded log-in
-    manager->>supplier: Succeeded log-in confirmation
+    node->>node: Issues JWT
+    node-->>manager: Sets session cookie (http-only)
+    node->>manager: Log-in successful
+    manager->>supplier: Confirms log-in success
   else Invalid voucher
-    node->>manager: Failed log-in
-    manager->>supplier: Failed log-in confirmation
+    node->>manager: Log-in failed
+    manager->>supplier: Informs about log-in failure
   end
 ```
 
-### Users accounts management
+### User Accounts Management
 
-Users of the Node Manager Dapp are employees who work with customers at the reception desk and manage the check-in flow. The supplier must create accounts for these users.
+The Node Manager Dapp's user accounts are managed by suppliers for employees facilitating customer interactions and check-ins.
 
-#### User account registration
+#### User Account Registration
 
-Here is the users accounts registration flow:
+Suppliers create accounts for employees using the following flow:
 
 ```mermaid
 sequenceDiagram
@@ -199,22 +190,22 @@ sequenceDiagram
   participant manager as Node Manager Dapp
   participant node as Node
 
-  supplier->>manager: Logs In
-  manager-->>node: Logs In
-  node->>node: Validates log-in request
-  node-->>supplier: Auth session
-  Note left of manager: login, password
-  supplier->>manager: Initializes user creation
-  manager->>manager: Validates user creation form
-  manager->>node: User creation request
-  node->>node: Creates new user
-  node-->>manager: Succeeded user account creation
-  manager-->>supplier: Confirms user account creation
+  supplier->>manager: Logs in
+  manager-->>node: Authenticates
+  node->>node: Validates log-in
+  node-->>supplier: Establishes session
+  Note left of manager: Requires login and password
+  supplier->>manager: Initiates user creation
+  manager->>manager: Validates user form
+  manager->>node: Requests user creation
+  node->>node: Registers new user
+  node-->>manager: Confirms user creation
+  manager-->>supplier: User creation confirmed
 ```
 
-#### User account log in
+#### User Account Log In
 
-Here the log-in flow:
+The log-in process for user accounts is as follows:
 
 ```mermaid
 sequenceDiagram
@@ -222,19 +213,19 @@ sequenceDiagram
   participant manager as Node Manager Dapp
   participant node as Node
 
-  user->>manager: Starts log in
-  manager->>manager: Validates log in form
-  manager->>node: Request log in
-  node->>node: Validates log-in request
-  node->>node: Generates session JWT
-  node-->>manager: JWT as http-only cookie
-  node-->>manager: Succeeded log in
-  manager-->>user: Confirms log in
+  user->>manager: Initiates log in
+  manager->>manager: Validates form
+  manager->>node: Requests log in
+  node->>node: Confirms validity
+  node->>node: Generates JWT
+  node-->>manager: Delivers JWT via http-only cookie
+  node-->>manager: Log-in successful
+  manager-->>user: Log-in confirmed
 ```
 
-#### User account password change
+#### User Account Password Change
 
-Logged In user is able to change the password of their account:
+Users can change their account passwords using the following method:
 
 ```mermaid
 sequenceDiagram
@@ -242,50 +233,39 @@ sequenceDiagram
   participant manager as Node Manager Dapp
   participant node as Node
 
-  user->>manager: Initializes password change
-  manager->>manager: Validates request form
-  manager->>node: Request password change
-  node->>node: Validates password change
-  node->>node: Re-generates session JWT
-  node-->>manager: JWT as http-only cookie
-  node-->>manager: Succeeded password change
-  manager-->>user: Confirms password change
+  user->>manager: Requests password change
+  manager->>manager: Validates form
+  manager->>node: Initiates password change
+  node->>node: Confirms change
+  node->>node: Reissues JWT
+  node-->>manager: Updates JWT cookie
+  node-->>manager: Password change successful
+  manager-->>user: Change confirmed
 ```
 
 ### Service Items Management
 
-Service items are products that the supplier sells to its customers. In this MVP, implemented simple flight booking workflow. So, in this case, a service item is flight.
-
-> Assuming that all service management flows are applied to logged-in users.
+Service items refer to the offerings suppliers provide to customers. This MVP includes a simplified flight booking workflow.
 
 #### Service Items Parameters
 
-A flight metadata:
+Each service item includes:
 
-- flight Id
-- flight name
-- flight description
-- list of images
-- type of a plane (balloon, glider, etc)
-- passengers capacity
-- duration (hours)
-- rules (pdf file)
+- ID
+- Name/Type (e.g., airplane type, balloon)
+- Description
+- Image list
+- Passenger capacity
+- Duration (hours)
 
-A flight attributes:
+And attributes:
 
-- date
-- departure time
+- Date
+- Price per hour
 
-A flight availability slot:
+#### Property (Airplanes) Management
 
-- flight Id
-- date
-- time from
-- time to
-- price full (exclusive)
-- price (per each passenger)
-
-#### Flights management
+Managing service items involves creation or update processes as follows:
 
 ```mermaid
 sequenceDiagram
@@ -293,67 +273,41 @@ sequenceDiagram
   participant manager as Node Manager Dapp
   participant node as Node
 
-  user->>manager: Starts flight creation/update
+  user->>manager: Initiates item management
 
-  alt On flight creation
-    manager->>manager: Validates flight data
-    manager->>manager: Prepare flight creation request
-  else On flight update
-    manager->>node: Requests existed flight record
-    node-->>manager: Flight record
-    manager->>manager: Validates flight data
-    manager->>manager: Prepare flight update request
+  alt Item Creation
+    manager->>manager: Validates data
+    manager->>manager: Prepares creation request
+  else Item Update
+    manager->>node: Retrieves item
+    node-->>manager: Provides item
+    manager->>manager: Validates update
+    manager->>manager: Prepares update request
   end
 
-  manager->>node: Request
-  node->>node: Validates request
+  manager->>node: Submits request
+  node->>node: Confirms validity
   node->>node: Updates database
-  node-->>manager: Flight creation/update result
-  manager-->>user: Flight creation/update confirmation
+  node-->>manager: Reports result
+  manager-->>user: Confirms completion
 ```
 
-#### Availability management
+#### Booking Management
 
-Availability management is based on the time-slots concept. A manager must explicitly define flight time slots when they can be booked. Initially, these slots will be marked as "open". When a customer books a concrete slot, this slot is marked as "booked" and the customer's deal is linked with it.
-
-```mermaid
-sequenceDiagram
-  participant user as User
-  participant manager as Node Manager Dapp
-  participant node as Node
-
-  user->>manager: Starts adding time slots
-  manager-->>user: Opens flights list
-  user->>manager: Chooses flight
-  manager->>manager: Saves chosen flight
-  manager-->>user: Opens calendar
-  user->>manager: Selects date or dates range
-  manager->>manager: Saves dates selection
-  manager->>user: Requests time slots definition
-  user-->>manager: Defines time slot(s)
-  manager->>manager: Saves defined time slots
-  manager->>manager: Prepares time slots saving request
-  manager->>node: Time slots saving request
-  node->>node: Validates request
-  node->>node: Validates request
-  node->>node: Updates database
-  node-->>manager: Time slots saving result
-  manager-->>user: Time slots saving confirmation
-```
-
-#### Booking management
-
-The booking management is split into the following flows:
+Booking involves offer creation, deal claiming, and check-in processes. Overbooking and refunds are beyond the MVP scope.
 
 - Offers creation
 - Claiming of deals
-- Overbooking
+- Overbooking management (_not included in the MVP scope_)
 - Check-In
-- Refund
+- Refund management (_not included in the MVP scope_)
+- CheckOut
 
 > Assuming that queries from customers and offers from suppliers are reaching each other via the protocol way and can be omitted on diagrams. On diagrams, such messages will be defined as direct connections.
 
-Here is the offers creation flow:
+> Note: Overbooking is a situation when two or more customers are made a "Deal" for the same offer. The current implementation of the protocol smart contract is not allowed to make two or more Deals on the same offer. Overbooking is mentioned as a potential feature that can be enabled in future, as it, in theory, can solve the scalability issue on the supplier's node side when the supplier wants to trade unlimited service items.
+
+Here's the offer creation flow:
 
 ```mermaid
 sequenceDiagram
@@ -361,86 +315,84 @@ sequenceDiagram
   participant client as Client Dapp
   participant node as Node
 
-  Note left of client: - Topic<br>- Date or dates range<br>- Passengers
-  customer->>client: Initialize search
-  client->>node: Sends search requests
-  node->>node: Gets available slots for dates
-  node->>node: Filters slots by flights capacity
-  node->>node: Iterates through slots and build offers
+  Note left of client: Includes topic, date, and passengers
+  customer->>client: Initiates search
+  client->>node: Requests search
+  node->>node: Identifies available slots
+  node->>node: Filters by capacity
+  node->>node: Constructs offers
   node-->>client: Publishes offers
-  client->>client: Prepare offers list
+  client->>client: Organizes offers
   Note over client: Grouped by date and flight
-  client-->>customer: Shows offers list
+  client-->>customer: Displays offers
 ```
 
 > Deals creation is described [below](#payment-for-offer)
 
-> Overbooking is a situation when two or more customers are made a "Deal" for the same offer
-
-Here is deals claiming flow:
+Here's the deals claiming flow:
 
 ```mermaid
 sequenceDiagram
   participant node as Node
-  participant contract as Smart contract
+  participant contract as Smart Contract
 
   loop Checking "Deal" event
-    node->>contract: Request "Deal" event from known block
+    node->>contract: Requests "Deal" event from known block
     contract->>contract: Executes request
-    contract-->>node: Request result
-    node->>node: Saves last known block
+    contract-->>node: Returns result
+    node->>node: Updates last known block
 
-    alt Deals not found
-      Note over node: Continue the loop
+    alt No Deals found
+      Note over node: Continues loop
     else Deals found
-      loop Iterates through deals
-        node->>node: Checks if not claimed before
+      loop Through each deal
+        node->>node: Verifies if not previously claimed
         alt Deal not claimed
-          node->>node: Prepares claiming tx
-          node->>contract: Sends claiming tx
-          contract->>contract: Executes tx
-          contract-->>node: Tx results
-        else Deal is claimed already
-          Note over node: Here is how overbooking is managed
-          node->>node: Prepares the deal rejecting tx
-          node->>contract: Sends rejecting tx
-          contract-->>node: Tx results
+          node->>node: Prepares claim transaction
+          node->>contract: Submits claim transaction
+          contract->>contract: Processes transaction
+          contract-->>node: Transaction result
+        else Deal already claimed
+          Note over node: This handles overbooking
+          node->>node: Prepares deal rejection transaction
+          node->>contract: Submits rejection transaction
+          contract-->>node: Transaction result
         end
-        node->>node: Logs tx results
+        node->>node: Logs transaction result
       end
     end
   end
 ```
 
-Here is how a deal refund is working:
+Here's the deal refund flow:
 
 ```mermaid
 sequenceDiagram
   participant user as User
   participant manager as Node Manager Dapp
   participant node as Node
-  participant contract as Smart contract
+  participant contract as Smart Contract
 
-  Note right of user: Uses Deal id
-  user->>manager: Prepares search request
-  manager->>node: Sends request
-  node->>node: Checks deal
-  node-->>manager: Deal state
+  Note right of user: Uses Deal ID
+  user->>manager: Initiates refund request
+  manager->>node: Forwards request
+  node->>node: Verifies deal status
+  node-->>manager: Returns deal status
 
-  alt Deal can be refunded
-    node->>node: Prepares refund tx
-    node->>contract: Sends refund tx
-    contract->>contract: Executes refund tx
-    contract-->>node: Refund tx result
-    node-->>manager: Refund tx result
-    manager-->>user: Refund confirmed
-  else Deal cannot be refunded
-    node-->>manager: Cannot be refunded
-    manager-->>user: Cannot be refunded
+  alt Deal is eligible for refund
+    node->>node: Prepares refund transaction
+    node->>contract: Submits refund transaction
+    contract->>contract: Processes refund transaction
+    contract-->>node: Refund transaction result
+    node-->>manager: Refund transaction result
+    manager-->>user: Refund confirmation
+  else Deal is not eligible for refund
+    node-->>manager: Refund not possible
+    manager-->>user: Refund denial
   end
 ```
 
-Here is how Check-In is working:
+Here's the Check-In flow:
 
 > The customer is able to create a check-in QR code and download it before visiting the supplier's reception. This way, the customer will display QR from his device without access to his crypto wallet.
 
@@ -451,55 +403,46 @@ sequenceDiagram
   participant user as User
   participant manager as Node Manager Dapp
   participant node as Node
-  participant contract as Smart contract
+  participant contract as Smart Contract
 
-  customer->>client: Initializes check-in QR creation
-  client->>client: Creates QR
-  client-->>customer: Displays QR
+  customer->>client: Initiates check-in QR code creation
+  client->>client: Generates QR code
+  client-->>customer: Displays QR code
   Note right of customer: Shows QR to receptionist
-  customer->>user: Requests for check-in
-  user->>manager: Scans QR
-  manager->>manager: Decodes QR
+  customer->>user: Requests check-in
+  user->>manager: Scans QR code
+  manager->>manager: Decodes QR code
   Note over manager: QR contains check-in signature
   manager->>manager: Prepares check-in request
   manager->>node: Sends check-in request
   node->>node: Validates request
-  node->>node: Prepares check-in tx
-  node->>contract: Sends check-in tx
-  contract->>contract: Executes check-in tx
-  contract-->>node: Check-in tx result
+  node->>node: Prepares check-in transaction
+  node->>contract: Submits check-in transaction
+  contract->>contract: Executes transaction
+  contract-->>node: Transaction result
   node->>node: Updates database
-  node->>manager: Check-in tx result
+  node->>manager: Check-in transaction result
   manager->>user: Confirms check-in
-  user-->>customer: Confirms check-in
+  user-->>customer: Check-in confirmed
 ```
 
 ## Customer-only Use-Cases
 
 ### Wallet Connection
 
-This is the usual "WalletConnect" flow. The customer is able to connect his Metamask wallet (browser extension) or mobile wallet via this feature.
+This standard "WalletConnect" flow allows customers to link their Metamask wallet (browser extension) or mobile wallet to the application, enhancing security and usability.
 
 ### Blockchain Network Selection
 
-A customer Dapp must be connected to the blockchain network supported by Monerium stablecoin provider (Ethereum, Gnosis, and Polygon).
-If the Dapp is connected to unsupported network a user must be able to re-connect it to the right one.
+The customer Dapp must connect to a blockchain network supported by the Monerium stablecoin provider, including Ethereum, Gnosis, and Polygon. Users are prompted to switch networks if the Dapp is initially connected to an unsupported one, ensuring compatibility and seamless transactions.
 
 ### Search Request
 
-A user of the customer Dapp navigates to the airport location using a map or a simple list of links. Using the airport geo-location the Dapp calculates a search request topic.
-
-The protocol recommends using H3 (Hexagonal hierarchical geospatial indexing system) for representing geolocation-based topics. An example H3 hash looks like this: `87283472bffffff`.
-
-To convert traditional lat/lng coordinates to an H3 hash and vice versa, you can use the `h3` utility from `@windingtree/sdk-utils`.
-
-Suppliers also calculate their topics using the geo-location of airports to which they belong. Suppliers nodes are listening for search requests using these topics.
-
-This way, search requests that contain needed airport topics will be obtained by a node that listens for them.
+Users can locate airports within the customer Dapp via a map or a list. The application uses the airport's geo-location to generate a search request topic, leveraging the H3 geospatial indexing system for precise and efficient query handling. This system enables the matching of customer search requests with supplier nodes based on geographical relevance.
 
 ### Payment for Offer
 
-> Assuming that Dapp is connected to the user's wallet already
+Assuming the Dapp is already connected to the user's wallet, the payment process for an offer is outlined as follows:
 
 ```mermaid
 sequenceDiagram
@@ -514,37 +457,37 @@ sequenceDiagram
   customer->>client: Selects an offer
   client->>client: Prepares selected offer details
   client->>customer: Displays offer details
-  customer->>client: Initializes payment for offer
+  customer->>client: Initiates payment for offer
   client->>coin: Queries allowance
 
   alt Allowance not enough
     client->>client: Prepares data for "permit" signature
-    client->>customer: Request "permit" signature
+    client->>customer: Requests "permit" signature
     customer->>client: Signs "permit" voucher
   end
 
-  client->>client: Prepares payment tx
-  client->>contract: Sends payment tx
-  contract->>contract: Executes payment tx
-  contract-->>client: Payment tx result
-  client->>client: Saves deal to storage
+  client->>client: Prepares payment transaction
+  client->>contract: Submits payment transaction
+  contract->>contract: Processes transaction
+  contract-->>client: Transaction result
+  client->>client: Stores deal in storage
   client-->>customer: Confirms payment
-  client->>client: Starts deal claim lookup loop
+  client->>client: Begins deal claim lookup loop
 
-  loop Lookup for the deal claim event
+  loop Lookup for deal claim event
     alt Deal claimed
       client->>client: Updates deal status in storage
-      client-->>customer: Confirms the deal claiming by the supplier
+      client-->>customer: Confirms deal claiming by supplier
     else Deal rejected
       client->>client: Updates deal status in storage
-      client-->>customer: Confirms the deal reject by the supplier
+      client-->>customer: Confirms deal rejection by supplier
     end
   end
 ```
 
 ### Deal Cancellation
 
-Deal can be cancelled according the protocol and offer rules.
+Deals can be cancelled according to the protocol and specific offer conditions, providing flexibility and control to the customer:
 
 ```mermaid
 sequenceDiagram
@@ -552,70 +495,51 @@ sequenceDiagram
   participant client as Client Dapp
   participant contract as Protocol contract
 
-  customer->>client: Initializes cancellation flow
+  customer->>client: Initiates cancellation flow
   client->>client: Prepares list of deals
-  client-->>customer: Displays list of deals
-  customer->>client: Selecting the deal to cancel
-  client->>client: Checks if deals can be cancelled
+  client-->>customer: Displays deals
+  customer->>client: Selects deal to cancel
+  client->>client: Verifies cancellation eligibility
 
   alt Deal can be cancelled
-    client->>client: Prepares cancellation tx
-    client->>customer: Request tx approval
-    customer->>client: Approves tx
-    client->>contract: Sends cancellation tx
-    contract->>contract: Executes cancellation tx
-    contract-->>client: Cancellation tx result
+    client->>client: Prepares cancellation transaction
+    client->>customer: Requests transaction approval
+    customer->>client: Approves transaction
+    client->>contract: Sends cancellation transaction
+    contract->>contract: Executes transaction
+    contract-->>client: Transaction result
     client->>client: Updates storage
     client-->>customer: Confirms cancellation
   else Deal cannot be cancelled
-    client-->>customer: Rejects deals cancellation
+    client-->>customer: Informs about cancellation rejection
   end
 ```
 
 ## Implementation
 
-To be possible to implement and test general customer's use-cases suppliers node and common protocol functionality must be implemented first. This way it makes sense to implement the market protocol and suppliers node components before all other.
+The implementation sequence prioritizes the market protocol and supplier node components, followed by other essential parts of the system.
 
-Here is a list of high-level components in the order of implementation:
+Here's the list of high-level components in the order of implementation:
 
 - The Market Protocol Smart Contracts
-- [Supplier's Node](./node-spec.md)
-- [Supplier's Node Manager Dapp](./dapp-supplier-spec.md)
-- [Coordination Server](./server-spec.md)
-- [Client's Dapp](./dapp-client-spec.md)
+- [Supplier's Node](./spec/node-spec.md)
+- [Supplier's Node Manager Dapp](./spec/dapp-supplier-spec.md)
+- Coordination Server (specification is not required because the server is fully implemented in the frame of the SDK)
+- [Client's Dapp](./spec/dapp-client-spec.md)
 
 ### Smart Contracts
 
-During the implementation must be implemented two kinds of market protocol smart contracts configurations:
-
-- for local (or CI) development and testing
-- for live on-chain testing
-
-#### Local testing configuration
-
-This configuration can be implemented as a Docker container that includes a pre-configured smart contracts environment and contracts deployment scripts that must automatically start when the container starts.
-
-#### Live testing configuration
-
-This configuration must be prepared as a part of the market protocols smart contracts repository. Smart contracts must be deployed to the "Chiado" (Gnosis) testnet. All smart contracts must be verified and ready to support normal market protocol workflows.
+Two configurations are outlined for development and live testing, including local Docker setups and deployments on the "Chiado" testnet.
 
 ## Deployment
 
-For the MVP infrastructure deployment must be an instantiated Linux-based server with pre-configured the following features:
+A Linux-based server (Ubuntu Server LTS) with Node.js and Nginx pre-configured is recommended for MVP deployment, accompanied by a semi-automated CI workflow for application deployment:
 
-- Node-js LTS
-- Docker, docker-compose
-- Nginx
-
-CI workflow must be implemented as a Github action that consists of the deployment of the following apps:
-
-- Coordination Server (Node.js App)
-- Supplier's Node (Node.js App)
+- Coordination Server (pm2 managed Node.js App)
+- Supplier's Node (pm2 managed Node.js App)
 - Supplier's Node Manager Dapp (Web App)
 - Client Dapp (Web App)
 
-Every validated commit to the "develop" branch of the MVP repository must results in refresh of deployed instances of updated applications.
-
 ## Errors Logging
 
-On the MVP stage will be implemented logging of debug messages and errors to the system console only.
+Initially, debugging messages and errors will be logged to the system console (logs will be managed by the pm2 log rotation plugin), with further enhancements planned for future iterations.
