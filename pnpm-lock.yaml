@@ -412,8 +412,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       '@windingtree/sdk-server':
-        specifier: ^1.2.9
-        version: 1.2.9(typescript@5.3.3)
+        specifier: ^1.3.0
+        version: 1.3.0(typescript@5.3.3)
       '@windingtree/sdk-storage':
         specifier: ^1.5.0
         version: 1.5.0
@@ -5496,8 +5496,8 @@ packages:
     resolution: {integrity: sha512-3CHJshEV7kRuYaLsclYSIqKKTUtdP8Zl4uHw6g6tGaV4Tw3LIethFc6NTmiWKBWRCdrP36pxAtMKYeFddFGR+g==}
     dev: true
 
-  /@windingtree/sdk-server@1.2.9(typescript@5.3.3):
-    resolution: {integrity: sha512-8/19C8mPc7LBix8vi9lYUh63nv/95MD2M7f7p78DBhPr4KVsw8sZZ80n52q12ASy9G+7A7qbSAlDdRKDrZyUwA==}
+  /@windingtree/sdk-server@1.3.0(typescript@5.3.3):
+    resolution: {integrity: sha512-qkfVUBjehzmtEFgZxlsawTgnmUnjPZZdLAEr6q+avhT3/DtlRK924+r6VD0kOb4Hy9GKmuJ4VrdhM5XHGggYjw==}
     dependencies:
       '@chainsafe/libp2p-noise': 13.0.5
       '@chainsafe/libp2p-yamux': 5.0.4
