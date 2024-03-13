@@ -1,18 +1,10 @@
-# The MVP Docs
+# The WindingTree Market Protocol MVP Documentation
 
-- [The MVP Purpose: Pioneering Direct Coordination in Travel and Trade](./mvp-purpose.md)
+- [The MVP Purpose](./mvp-purpose.md)
 - [The WindingTree Market Protocol Overview](./protocol.md)
-- [The MVP architecture](./architecture.md):
-  - Workflows
-  - Smart contracts Layer
-  - Coordination Server
-  - Supplier’s Node
-  - Supplier’s Node Management Dapp
-  - Client’s Dapp
+- [Architecture](./architecture.md)
+- [Project Setup](./setup.md)
 - Implementation
-  - Common Configuration
-    - WalletConnect
-    - IPFS storage API
   - Smart Contracts:
     - Core Contracts
     - Test Tokens:
@@ -21,31 +13,31 @@
       - STABLE18
       - STABLE6PERMIT
       - STABLE18PERMIT
-- Coordination Server:
-  - Messages Storage
-  - Configuration and Initialization
-  - Graceful Shutdown
-  - Deployment
-- Supplier’s Node:
-  - Storages
-  - Configuration and Initialization:
-    - Node Management API: core configuration
-    - Node Management API: custom routes
-    - Core functionality configuration
-    - Handling New Deals
-    - Handling Deals States
-  - Graceful Shutdown
-  - Deployment
-- Supplier’s Node Management Dapp:
-  - Supplier’s Configuration
-  - Initial Entity Setup
-  - Entity Management
-  - Users Management
-  - Property Management (aeroplanes)
-  - Deals Management (reception)
-  - Deployment
-- Client’s Dapp
-  - Searching For Airplanes
-  - Booking
-  - Bookings Management
-  - Deployment
+  - Coordination Server:
+    - Messages Storage
+    - Configuration and Initialization
+    - Graceful Shutdown
+    - Deployment
+  - Supplier’s Node:
+    - Storages
+    - Configuration and Initialization:
+      - Node Management API: core configuration
+      - Node Management API: custom routes
+      - Core functionality configuration
+      - Handling New Deals
+      - Handling Deals States
+    - Graceful Shutdown
+    - Deployment
+  - Supplier’s Node Management Dapp:
+    - Supplier’s Configuration
+    - Initial Entity Setup
+    - Entity Management
+    - Users Management
+    - Property Management (aeroplanes)
+    - Deals Management (reception)
+    - Deployment
+  - Client’s Dapp
+    - Searching For Airplanes
+    - Booking
+    - Bookings Management
+    - Deployment
