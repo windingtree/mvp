@@ -26,7 +26,7 @@
     - Initial Entity Setup
     - Entity Management
     - Users Management
-    - Property Management (aeroplanes)
+    - Property Management (airplanes)
     - Deals Management (reception)
     - Deployment
   - Client’s Dapp
