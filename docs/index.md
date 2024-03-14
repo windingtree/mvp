@@ -6,11 +6,7 @@
 - [Project Setup](./setup.md)
 - Implementation
   - [Smart Contracts](./imp.contracts.md)
-  - Coordination Server:
-    - Messages Storage
-    - Configuration and Initialization
-    - Graceful Shutdown
-    - Deployment
+  - [Coordination Server](./imp.server.md)
   - Supplier’s Node:
     - Storages
     - Configuration and Initialization:
