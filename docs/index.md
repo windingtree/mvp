@@ -1,18 +1,11 @@
-# The WindingTree Market Protocol MVP Documentation
+# The WindingTree Market Protocol MVP
 
 - [The MVP Purpose](./mvp-purpose.md)
 - [The WindingTree Market Protocol Overview](./protocol.md)
 - [Architecture](./architecture.md)
 - [Project Setup](./setup.md)
 - Implementation
-  - Smart Contracts:
-    - Core Contracts
-    - Test Tokens:
-      - LIF
-      - STABLE6
-      - STABLE18
-      - STABLE6PERMIT
-      - STABLE18PERMIT
+  - [Smart Contracts](./imp.contracts.md)
   - Coordination Server:
     - Messages Storage
     - Configuration and Initialization
