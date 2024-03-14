@@ -7,16 +7,7 @@
 - Implementation
   - [Smart Contracts](./imp.contracts.md)
   - [Coordination Server](./imp.server.md)
-  - Supplier’s Node:
-    - Storages
-    - Configuration and Initialization:
-      - Node Management API: core configuration
-      - Node Management API: custom routes
-      - Core functionality configuration
-      - Handling New Deals
-      - Handling Deals States
-    - Graceful Shutdown
-    - Deployment
+  - [Supplier’s Node](./imp.node.md)
   - Supplier’s Node Management Dapp:
     - Supplier’s Configuration
     - Initial Entity Setup
