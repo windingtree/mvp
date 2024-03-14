@@ -94,6 +94,10 @@ const appRouter = router({
 apiServer.start(appRouter);
 ```
 
+## Custom API Router (airplanes)
+
+For details please head over [this article](./imp.node.router.md).
+
 ## Queue Management for Task Scheduling
 
 Asynchronous tasks are orderly executed using a configured queue system:
