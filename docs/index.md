@@ -21,3 +21,4 @@
     - Booking
     - Bookings Management
     - Deployment
+  - Host configuration scripts
