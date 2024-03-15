@@ -12,7 +12,6 @@
     - [Supplier’s Dapp Configuration](./imp.manager.config.md)
     - [Property Management (airplanes)](./imp.manager.prop.md)
     - Deals CheckIn
-    - Deployment
   - Client’s Dapp
     - Searching For Airplanes
     - Booking
