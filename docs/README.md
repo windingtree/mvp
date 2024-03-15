@@ -10,7 +10,7 @@
   - [Supplier’s Node](./imp.node.md)
   - Supplier’s Node Management Dapp:
     - [Supplier’s Dapp Configuration](./imp.manager.config.md)
-    - Property Management (airplanes)
+    - [Property Management (airplanes)](./imp.manager.prop.md)
     - Deals CheckIn
     - Deployment
   - Client’s Dapp
