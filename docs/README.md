@@ -9,12 +9,9 @@
   - [Coordination Server](./imp.server.md)
   - [Supplier’s Node](./imp.node.md)
   - Supplier’s Node Management Dapp:
-    - Supplier’s Configuration
-    - Initial Entity Setup
-    - Entity Management
-    - Users Management
+    - [Supplier’s Dapp Configuration](./imp.manager.config.md)
     - Property Management (airplanes)
-    - Deals Management (reception)
+    - Deals CheckIn
     - Deployment
   - Client’s Dapp
     - Searching For Airplanes
