@@ -6,10 +6,10 @@ The Client's Dapp serves as an essential interface for the WindingTree Market Pr
 
 Designed for efficiency and ease of use, the Dapp facilitates:
 
-- Browsing and reviewing available tours.
-- Requesting and booking airplanes for tours.
-- Managing booking cancellations.
-- Generating Check-In vouchers without needing wallet access, optimized for mobile devices.
+- [Browsing and reviewing available tours](./imp.client.usecases.md#browsing-and-reviewing-available-tours)
+- [Requesting and booking airplanes for tours](./imp.client.usecases.md#requesting-and-booking-airplanes-for-tours)
+- [Managing booking](./imp.client.usecases.md#managing-booking)
+- [Generating Check-In vouchers](./imp.client.usecases.md#generating-check-in-vouchers)
 
 ## Implementation Highlights
 

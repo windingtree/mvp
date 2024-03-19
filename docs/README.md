@@ -4,7 +4,7 @@
 - [The WindingTree Market Protocol Overview](./protocol.md)
 - [Architecture](./architecture.md)
 - [Project Setup](./setup.md)
-- Implementation
+- The MVP Implementation
   - [Smart Contracts](./imp.contracts.md)
   - [Coordination Server](./imp.server.md)
   - [Supplier’s Node](./imp.node.md)
@@ -15,7 +15,8 @@
       - [Deals CheckIn](./imp.manager.checkin.md)
   - [Client’s Dapp](./imp.client.md)
     - Use Cases:
-      - Searching For Airplanes
-      - Booking
-      - Bookings Management
-  - Host configuration scripts
+      - [Browsing and reviewing available tours](./imp.client.usecases.md#browsing-and-reviewing-available-tours)
+      - [Requesting and booking airplanes](./imp.client.usecases.md#requesting-and-booking-airplanes-for-tours)
+      - [Managing booking](./imp.client.usecases.md#managing-booking-processes)
+      - [Generating Check-In vouchers](./imp.client.usecases.md#generating-check-in-vouchers)
+  - [Host configuration scripts](./scripts.md)
