@@ -8,13 +8,14 @@
   - [Smart Contracts](./imp.contracts.md)
   - [Coordination Server](./imp.server.md)
   - [Supplier’s Node](./imp.node.md)
-  - Supplier’s Node Management Dapp:
-    - [Supplier’s Dapp Configuration](./imp.manager.config.md)
-    - [Property Management (airplanes)](./imp.manager.prop.md)
-    - [Deals CheckIn](./imp.manager.checkin.md)
-  - Client’s Dapp
-    - Searching For Airplanes
-    - Booking
-    - Bookings Management
-    - Deployment
+  - [Supplier’s Node Management Dapp](./imp.manager.md)
+    - Use Cases:
+      - [Supplier’s Dapp Configuration](./imp.manager.config.md)
+      - [Property Management (airplanes)](./imp.manager.prop.md)
+      - [Deals CheckIn](./imp.manager.checkin.md)
+  - [Client’s Dapp](./imp.client.md)
+    - Use Cases:
+      - Searching For Airplanes
+      - Booking
+      - Bookings Management
   - Host configuration scripts
