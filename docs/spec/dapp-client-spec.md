@@ -11,4 +11,4 @@
 5. Booking list with statuses
 6. Booking Check In page
 
-![Client Dapp Wireframes](./assets/client-dapp-wireframes.png)
+![Client Dapp Wireframes](../assets/client-dapp-wireframes.png)

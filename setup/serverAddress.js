@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-let ip, port, id;
+let env, address, port, id;
 
 const args = process.argv.slice(2);
 
@@ -9,8 +9,11 @@ for (let i = 0; i < args.length; i += 2) {
   const value = args[i + 1];
 
   switch (name) {
-    case 'ip':
-      ip = value;
+    case 'env':
+      env = value;
+      break;
+    case 'address':
+      address = value;
       break;
     case 'port':
       port = value;
@@ -23,4 +26,10 @@ for (let i = 0; i < args.length; i += 2) {
   }
 }
 
-console.log(`/ip4/${ip ?? '127.0.0.1'}/tcp/${port}/ws/p2p/${id}`);
+if (env === 'local') {
+  console.log(
+    `/ip4/${address ?? '127.0.0.1'}/tcp/${port ?? 33333}/ws/p2p/${id}`,
+  );
+} else {
+  console.log(`/dns4/${address}/tcp/443/wss/p2p/${id}`);
+}
