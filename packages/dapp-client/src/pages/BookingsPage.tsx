@@ -243,7 +243,7 @@ export const BookingsPage = () => {
               <ActionMenu
                 loading={deal.offer.id === loadingId}
                 items={{
-                  ...(![DealStatus.Created, DealStatus.Claimed].includes(
+                  ...([DealStatus.Created, DealStatus.Claimed].includes(
                     deal.status,
                   )
                     ? {
