@@ -130,9 +130,52 @@ export function useIpfs() {
 
 Fetches and normalizes entity information from smart contracts for use within the Dapp.
 
+```typescript
+import { useEntity } from '../hooks/useEntity.js';
+
+export const CustomComponent = () => {
+  const {
+    data: { kind, owner, signer, status, deposit },
+    error,
+    isLoading,
+  } = useEntity(supplierId);
+
+  return (
+    <>
+      {!isLoading && owner (
+        <p>Owner: {owner}</p>
+      )}
+    </>
+  );
+};
+```
+
 ### useProtocolConfig
 
 Retrieves and normalizes protocol configuration variables from smart contracts.
+
+```typescript
+import { useProtocolConfig } from '../hooks/useProtocolConfig.js';
+
+export const CustomComponent = () => {
+  const { stableCoins, lifAddress, minDeposit } = useProtocolConfig();
+
+  return (
+    <>
+      <p>LIF token: {lifAddress}</p>
+      <p>Min deposit value: {minDeposit}</p>
+      <p>Stablecoins:</p>
+      <ul>
+        {stableCoins.map((s, index) => (
+          <li key={index}>
+            {s.symbol}: {s.address} ({s.permit ? '(permit)' : ''})
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
+```
 
 ## Custom Components
 
