@@ -20,3 +20,4 @@
       - [Managing booking](./imp.client.usecases.md#managing-booking-processes)
       - [Generating Check-In vouchers](./imp.client.usecases.md#generating-check-in-vouchers)
   - [Host configuration scripts](./scripts.md)
+- [Notes on The WindingTree Market Protocol Decentralization](./decentralization.md)
