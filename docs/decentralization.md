@@ -18,7 +18,7 @@ The future envisioned is one where travel transcends mere transactions, embodyin
 
 The transition to a decentralized travel industry represents more than a technological upgrade; it signifies a paradigm shift toward a more just, transparent, and user-centered world. By directly addressing critical issues, transforming traditional roles, and leveraging advanced technologies, the path is paved for a future where travel is accessible and enriching for all. This journey demands collective effort, innovation, and a bold vision but leads to a reimagined travel ecosystem that awaits on the horizon.
 
-## Levels of The Protocol Decentralization
+## The Current Level of The Protocol Decentralization
 
 In the evolving landscape of the travel industry, the push towards decentralization is gaining momentum and the WindingTree marketplace protocol is consistently following this trend.
 
