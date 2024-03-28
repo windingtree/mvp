@@ -369,8 +369,8 @@ importers:
         specifier: ^1.7.3
         version: 1.7.3(typescript@5.3.3)
       '@windingtree/sdk-queue':
-        specifier: ^1.4.0
-        version: 1.4.0(typescript@5.3.3)(zod@3.22.4)
+        specifier: ^1.4.1
+        version: 1.4.1(typescript@5.3.3)(zod@3.22.4)
       '@windingtree/sdk-storage':
         specifier: ^1.5.0
         version: 1.5.0
@@ -5272,13 +5272,6 @@ packages:
   /@web3modal/siwe@3.5.7(@types/react@18.2.60)(typescript@5.3.3):
     resolution: {integrity: sha512-dV0yhJYtKq4VxKSSlTxpFgVice0qhcTPfTxrD9Z8u8O5QYw4gv8S7g6dvtFCvTce4DlHSlqNM9MZqeViB6BHpg==}
     requiresBuild: true
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      vue:
-        optional: true
     dependencies:
       '@web3modal/core': 3.5.7(@types/react@18.2.60)(react@18.2.0)
       '@web3modal/scaffold-utils': 3.5.7(@types/react@18.2.60)(react@18.2.0)
@@ -5304,15 +5297,6 @@ packages:
     peerDependencies:
       '@wagmi/core': '>=1 <2'
       viem: '>=1 <2'
-    peerDependenciesMeta:
-      '@web3modal/siwe':
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      vue:
-        optional: true
     dependencies:
       '@wagmi/core': 1.4.13(@types/react@18.2.60)(react@18.2.0)(typescript@5.3.3)(viem@1.21.4)(zod@3.22.4)
       '@web3modal/polyfills': 3.5.7
@@ -5493,14 +5477,15 @@ packages:
       - utf-8-validate
       - zod
 
-  /@windingtree/sdk-queue@1.4.0(typescript@5.3.3)(zod@3.22.4):
-    resolution: {integrity: sha512-vocjy7c97YZ/UAIeKZ1JSKb0PyyFzDhe42h6gznp4S9UftYuwEgrRtuWNbPJEPgrLlXGrxTu4+24WUQmBmKvsA==}
+  /@windingtree/sdk-queue@1.4.1(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-gw7sJ4rroLLCoEWiIle/xN650EZ/4g0UnjqSVaFV58J8zlNeU2dyBWUNiTm0QyK6ZcSnJSG7qdYMCouki60kbw==}
     dependencies:
       '@libp2p/interface': 0.1.6
       '@windingtree/contracts': 1.0.0
       '@windingtree/sdk-logger': 1.1.4
       '@windingtree/sdk-storage': 1.5.0
       '@windingtree/sdk-utils': 1.2.3(typescript@5.3.3)(zod@3.22.4)
+      superjson: 2.2.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color

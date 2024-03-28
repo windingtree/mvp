@@ -59,7 +59,7 @@
     "@windingtree/sdk-logger": "^1.1.4",
     "@windingtree/sdk-node": "^1.3.9",
     "@windingtree/sdk-node-api": "^1.7.3",
-    "@windingtree/sdk-queue": "^1.4.0",
+    "@windingtree/sdk-queue": "^1.4.1",
     "@windingtree/sdk-storage": "^1.5.0",
     "@windingtree/sdk-types": "^1.1.4",
     "@windingtree/sdk-utils": "^1.2.3",
